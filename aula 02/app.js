@@ -28,9 +28,12 @@ entradaDeDados.question("Digite o nome do aluno: ", function(nome){
                         console.log("Erro de caixa vazia")
 
                     }else if (nota1 > 100 || nota1 < 0  || nota2 > 100 || nota2 < 0 || nota3 > 100 || nota3 < 0 || nota4 > 100 || nota4 < 0 ){
-                        console.log("A nota não está entre 0 - 100")
+                        console.log("A nota não está entre 0 e 100")
 
-                    }else {
+                    }else if (isNaN(nota1) || isNaN(nota2) || isNaN(nota3) || isNaN(nota4)){
+                        console.log("Erro, alguma nota não é um número")
+                    }else
+                        {
                         let notaFinal = (Number(nota1) + Number(nota2) + Number(nota3) + Number(nota4)) /4
                     
                         console.log("O nome do aluno é: " + nomeAluno)
