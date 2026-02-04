@@ -32,20 +32,21 @@ entradaDeDados.question("Digite o nome do aluno: ", function(nome){
 
                     }else if (isNaN(nota1) || isNaN(nota2) || isNaN(nota3) || isNaN(nota4)){
                         console.log("Erro, alguma nota não é um número")
-                    }else
-                        {
+
+                    //validação se o tipo de valor da variável é número utilizando o isNaN (is Not a Number)    
+                    }else{
                         let notaFinal = (Number(nota1) + Number(nota2) + Number(nota3) + Number(nota4)) /4
-                    
-                        console.log("O nome do aluno é: " + nomeAluno)
-                        console.log("A média final do aluno é: " + notaFinal)
-    
-                        if(notaFinal >= 60 ){
-                            console.log("APROVADO")
+                        let statusAluno
+                                      
+                        if(notaFinal >= 70 ){
+                            statusAluno = "APROVADO"
                         }else if(notaFinal < 50){
-                            console.log("REPROVADO")
+                            statusAluno = "REPROVADO"
                         }else{
-                            console.log("RECUPERAÇÃO")
+                            statusAluno = "RECUPERAÇÃO"
                         }
+
+                        console.log("O aluno(a) " + nomeAluno + " Teve a média final de " + notaFinal.toFixed(2) + " e a sua situação é " + statusAluno)
                     }
                 })
             })
