@@ -59,10 +59,11 @@ const entradaDeDados = readline.createInterface({
 
 entradaDeDados.question("Digite o seu nome: ", function(nome){
     let nomeUsuario = nome
-    if(!isNaN(nomeUsuario)){
-        console.log("Não é possível ter números na caixa de nome de usuário")
-    }else if(nomeUsuario == ""){
+    if(nomeUsuario == ""){
         console.log("O campo de nome de usuário esta vazio")
+        
+    }else if(!isNaN(nomeUsuario)){
+        console.log("Não é possível ter números na caixa de nome de usuário")
     }else{
         entradaDeDados.question("Digite o nome do produto comprado: ", function(produto){
             let nomeProduto = produto
@@ -113,7 +114,6 @@ entradaDeDados.question("Digite o seu nome: ", function(nome){
             }
         })
     }
-    
 })
 
 function calcularMontante(taxaJurosUsuario, tempoMeses, valorCompraProduto, nomeUsuario, nomeProduto){
@@ -129,12 +129,12 @@ function calcularMontante(taxaJurosUsuario, tempoMeses, valorCompraProduto, nome
 
 function mostrarResultado(nomeUsuario, nomeProduto, valorCompraProduto, tempoMeses, montante, jurosFinal){
     console.log(`
-        ************************************************ [Moda Viva] ************************************************\n
+        ************************************************ [Viva Moda] ************************************************\n
         Muito obrigado por realizar a sua compra conosco Sr(a) ${nomeUsuario}.\n
         A compra do produto ${nomeProduto}, tem um valor de: R$${Number(valorCompraProduto).toFixed(2)}.\n
         A sua compra será parcelada em ${tempoMeses} vezes e o Sr(a) pagará: R$${Number(montante).toFixed(2)}.\n
         O acréscimo realizado ao valor de: R$${Number(valorCompraProduto).toFixed(2)} será de R$${Number(jurosFinal).toFixed(2)}.\n                       
-        Muito obrigado por escolher a Moda Viva.\n
+        Muito obrigado por escolher a Viva Moda.\n
         *************************************************************************************************************\n 
                 `)
 }
