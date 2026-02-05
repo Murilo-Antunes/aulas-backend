@@ -76,24 +76,34 @@ entradaDeDados.question("Digite o seu nome: ", function(nome){
                     }else if(valorCompraProduto == ""){
                         console.log("O campo de valor do produto esta vazio")
                     }else {
-                        entradaDeDados.question("digite a taxa de juros do produto: ", function(taxaJuros){
+                        entradaDeDados.question("digite a taxa de juros do produto(%): ", function(taxaJuros){
                             let taxaJurosUsuario = taxaJuros
                             if(isNaN(taxaJurosUsuario)){
                                 console.log("A taxa de juros deve ser um número")
                             }else if(taxaJurosUsuario == ""){
                                 console.log("O campo de taxa de juros esta vazio")
                             }else{
-                                entradaDeDados.question("Você deseja inserir o tempo de pagamento em Anos(digite \"a\") ou em Meses(digite \"m\")", function(tipoTempo){
-                                    if(tipoTempo != "a" || tipoTempo != "A" || tipoTempo != "m" || tipotempo != "M" ){
-                                        console.log("Entrada de dados invalida")
-                                    }else{
-                                        let tempoPagamento = tempo
-                                    
+                                entradaDeDados.question("Você deseja inserir o tempo de pagamento em Anos (digite \"a\") ou em Meses (digite \"m\"): ", function(tipoTempo){
+                                    if(tipoTempo == "a" || tipoTempo == "A" || tipoTempo == "m" || tipoTempo == "M" ){   
+                                        let tempoPagamento = tipoTempo
+
+                                        if(tempoPagamento == "m" || tempoPagamento == "M"){
+                                            entradaDeDados.question("Digite a quantidade de meses de pagamento: ", function(meses){
+                                                let tempoMeses = meses
+                                                calcularMontante(taxaJurosUsuario, tempoMeses, valorCompraProduto, nomeUsuario, nomeProduto);
+                                            })
+                                        }
+
                                         if(tempoPagamento == "a" || tempoPagamento == "A"){
                                             entradaDeDados.question("Digite a quantidade de anos de pagamento: ", function(anos){
                                                 let quantidadeAnos = anos
+                                                let tempoMeses = quantidadeAnos * 12
+                                                calcularMontante(taxaJurosUsuario, tempoMeses, valorCompraProduto, nomeUsuario, nomeProduto);
+
                                             })
                                         }
+                                    }else{
+                                        console.log("Entrada de dados invalida")
                                     }
                                 })
                             }
@@ -105,3 +115,26 @@ entradaDeDados.question("Digite o seu nome: ", function(nome){
     }
     
 })
+
+function calcularMontante(taxaJurosUsuario, tempoMeses, valorCompraProduto, nomeUsuario, nomeProduto){
+    let taxaJurosDecimal = Number(taxaJurosUsuario) / 100 
+    console.log(tempoMeses)
+
+    let montante = Number(valorCompraProduto) * (1 + Number(taxaJurosDecimal)) ** Number(tempoMeses)
+    let jurosFinal =  Number(montante) - Number(valorCompraProduto)
+
+    mostrarResultado(nomeUsuario, nomeProduto, valorCompraProduto, tempoMeses, montante, jurosFinal)
+
+}
+
+function mostrarResultado(nomeUsuario, nomeProduto, valorCompraProduto, tempoMeses, montante, jurosFinal){
+    console.log(`
+        ************************************************ [Moda Viva] ************************************************\n
+        Muito obrigado por realizar a sua compra conosco Sr(a) ${nomeUsuario}.\n
+        A compra do produto ${nomeProduto}, tem um valor de: R$${Number(valorCompraProduto).toFixed(2)}.\n
+        A sua compra será parcelada em ${tempoMeses} vezes e o Sr(a) pagará: R$${Number(montante).toFixed(2)}.\n
+        O acréscimo realizado ao valor de: R$${Number(valorCompraProduto).toFixed(2)} será de R$${Number(jurosFinal).toFixed(2)}.\n                       
+        Muito obrigado por escolher a Moda Viva.\n
+        *************************************************************************************************************\n 
+                `)
+}
