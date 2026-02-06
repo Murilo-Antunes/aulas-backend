@@ -4,119 +4,136 @@
  * Autor: Murilo
  * Versão: 1.0
 ***********************************************************************************************/
-
-/*
-Requisito 01: A empresa solicita que seja desenvolvido um sistema
-para calcular os juros compostos de uma venda parcelada.
-
-O cálculo de juros compostos é utilizado para determinar o
-montante final de um investimento ou empréstimo quando os juros
-são calculados sobre o capital inicial e também sobre os juros
-acumulados ao longo do tempo.
-
-A fórmula para calcular o montante final M com juros compostos é:
-
-M = C*(1+i)^n
-
-C é o capital inicial.
-i é a taxa de juros.
-n é o tempo para pagamento que sempre deverá ser em meses.
-*/ 
-
-/*
-Requisito 02: A saída de dados da sua aplicação deverá seguir a
-seguinte estrutura:
-
-******************* [Nome da Empresa] *******************
-Muito obrigado por realizar a sua compra conosco Sr(a) xxxxxxxxx.
-A compra do produto xxxxxxxxx, tem um valor de: xxxxxxxxx.
-A sua compra será parcelada em xx vezes e o Sr(a) pagará: xxxxxx.
-O acréscimo realizado ao valor de: xxxxxxxx será de xxxxxxxxxx.
-
-Muito obrigado por escolher a [Nome da Empresa].
-*******************************************************
-*/
-
-/* 
-● Solicite a digitação do nome do cliente e o nome do produto
-que está sendo comprado.
-● Solicite ao usuário que insira o valor da compra.
-● Solicite ao usuário que insira a taxa de juros (o sistema deverá
-calcular o percentual).
-● Solicite ao usuário que insira o tempo de pagamento.
-● Calcule o montante final utilizando a fórmula acima.
-● Exiba o montante final ao usuário.
-● É fundamental que todas as entradas de dados sejam validadas
-e convertidas conforme a necessidade.
-*/
-
+const { read } = require("fs")
 const readline = require("readline")
+const green = '\x1b[32m';
+const reset = '\x1b[0m';
 
 const entradaDeDados = readline.createInterface({
     input: process.stdin,
     output: process.stdout
 })
 
-entradaDeDados.question("Digite o seu nome: ", function(nome){
-    let nomeUsuario = nome
-    if(nomeUsuario == ""){
-        console.log("O campo de nome de usuário esta vazio")
-        
-    }else if(!isNaN(nomeUsuario)){
-        console.log("Não é possível ter números na caixa de nome de usuário")
-    }else{
-        entradaDeDados.question("Digite o nome do produto comprado: ", function(produto){
-            let nomeProduto = produto
-            if(nomeProduto == ""){
-                console.log("O campo de nome do produto esta vazio")
-            }else{
-                entradaDeDados.question("digite o valor da compra do produto " + nomeProduto + ": R$", function(valorCompra){
-                    let valorCompraProduto = valorCompra
-                    if(isNaN(valorCompraProduto)){
-                        console.log("O valor do produto deve ser um número")
-                    }else if(valorCompraProduto == ""){
-                        console.log("O campo de valor do produto esta vazio")
-                    }else {
-                        entradaDeDados.question("digite a taxa de juros do produto(%): ", function(taxaJuros){
-                            let taxaJurosUsuario = taxaJuros
-                            if(isNaN(taxaJurosUsuario)){
-                                console.log("A taxa de juros deve ser um número")
-                            }else if(taxaJurosUsuario == ""){
-                                console.log("O campo de taxa de juros esta vazio")
-                            }else{
-                                entradaDeDados.question("Você deseja inserir o tempo de pagamento em Anos (digite \"a\") ou em Meses (digite \"m\"): ", function(tipoTempo){
-                                    if(tipoTempo == "a" || tipoTempo == "A" || tipoTempo == "m" || tipoTempo == "M" ){   
-                                        let tempoPagamento = tipoTempo
-
-                                        if(tempoPagamento == "m" || tempoPagamento == "M"){
-                                            entradaDeDados.question("Digite a quantidade de meses de pagamento: ", function(meses){
-                                                let tempoMeses = meses
-                                                calcularMontante(taxaJurosUsuario, tempoMeses, valorCompraProduto, nomeUsuario, nomeProduto);
-                                            })
-                                        }
-
-                                        if(tempoPagamento == "a" || tempoPagamento == "A"){
-                                            entradaDeDados.question("Digite a quantidade de anos de pagamento: ", function(anos){
-                                                let quantidadeAnos = anos
-                                                let tempoMeses = quantidadeAnos * 12
-                                                calcularMontante(taxaJurosUsuario, tempoMeses, valorCompraProduto, nomeUsuario, nomeProduto);
-
-                                            })
-                                        }
-                                    }else{
-                                        console.log("Entrada de dados invalida")
+function perguntarNomeUsuario(){
+    entradaDeDados.question("Digite o seu nome: ", function(nome){
+        let nomeUsuario = nome
+        if(nomeUsuario == ""){
+            console.log("O campo de nome de usuário está vazio")
+            perguntarNomeUsuario()
+        }else if(!isNaN(nomeUsuario)){
+            console.log("Não é possível ter números na caixa de nome de usuário")
+            perguntarNomeUsuario()
+        }else{
+            perguntarNomeProduto()
+            function perguntarNomeProduto(){
+                entradaDeDados.question("Digite o nome do produto comprado: ", function(produto){
+                    let nomeProduto = produto
+                    if(nomeProduto == ""){
+                        console.log("O campo de nome do produto está vazio")
+                        perguntarNomeProduto()
+                    }else if(!isNaN(nomeProduto)){
+                        console.log("o nome do produto não pode ser um número")
+                        perguntarNomeProduto()
+                    }else{
+                        perguntarValorProduto()
+                        function perguntarValorProduto(){
+                            entradaDeDados.question("digite o valor da compra do produto " + nomeProduto + ": R$", function(valorCompra){
+                                let valorCompraProduto = valorCompra
+                                if(valorCompraProduto == ""){
+                                    console.log("O campo de valor do produto está vazio ")
+                                    perguntarValorProduto()
+                                }else if(isNaN(valorCompraProduto)){
+                                    console.log("O valor do produto deve ser um número")
+                                    perguntarValorProduto()
+                                }else if(valorCompraProduto <= 0){
+                                    console.log("O valor da compra deve ser maior do que 0")
+                                    perguntarValorProduto()
+                                }else {
+                                    perguntarTaxaJuros()
+                                    function perguntarTaxaJuros(){
+                                        entradaDeDados.question("digite a taxa de juros do produto(a.m %): ", function(taxaJuros){
+                                            let taxaJurosUsuario = taxaJuros
+                                            if(taxaJurosUsuario == ""){
+                                                console.log("O campo de taxa de juros está vazio")
+                                                perguntarTaxaJuros()
+                                            }else if(isNaN(taxaJurosUsuario)){
+                                                console.log("A taxa de juros deve ser um número ")
+                                                perguntarTaxaJuros()
+                                            }else if(taxaJurosUsuario <= 0){                                                
+                                                console.log("A taxa de juros deve ser maior que 0")
+                                                perguntarTaxaJuros()
+                                            }else{
+                                                perguntarTipoTempo()
+                                                function perguntarTipoTempo(){
+                                                    entradaDeDados.question("Você deseja inserir o tempo de pagamento em Anos (digite \"a\") ou em Meses (digite \"m\"): ", function(tipoTempo){
+                                                        if(tipoTempo == "a" || tipoTempo == "A" || tipoTempo == "m" || tipoTempo == "M" ){   
+                                                            let tempoPagamento = tipoTempo
+                    
+                                                            if(tempoPagamento == "m" || tempoPagamento == "M"){
+                                                                perguntarQuantidadeMeses()
+                                                                function perguntarQuantidadeMeses(){
+                                                                    entradaDeDados.question("Digite a quantidade de meses de pagamento: ", function(meses){
+                                                                        let tempoMeses = meses
+                                                                        if(tempoMeses == ""){
+                                                                            console.log("O campo de quantidade de meses está vazio")
+                                                                            perguntarQuantidadeMeses()
+                                                                        }else if(isNaN(tempoMeses)){
+                                                                            console.log("O campo de quantidade de meses tem que ser um número")
+                                                                            perguntarQuantidadeMeses()
+                                                                        }else if(tempoMeses <= 1){
+                                                                            console.log("A quantidade de meses deve ser maior que 1")
+                                                                            perguntarQuantidadeMeses()
+                                                                        }else{
+                                                                            calcularJurosComposto(taxaJurosUsuario, tempoMeses, valorCompraProduto, nomeUsuario, nomeProduto);
+                                                                            entradaDeDados.close()
+                                                                        }
+                                                                    })
+                                                                }
+                                                            }
+                    
+                                                            if(tempoPagamento == "a" || tempoPagamento == "A"){
+                                                                perguntarQuantidadeAnos()
+                                                                function perguntarQuantidadeAnos(){
+                                                                    entradaDeDados.question("Digite a quantidade de anos de pagamento: ", function(anos){
+                                                                        let quantidadeAnos = anos
+                                                                        if(quantidadeAnos == ""){
+                                                                            console.log("O campo de quantidade de anos está vazio")
+                                                                            perguntarQuantidadeAnos()
+                                                                        }else if(isNaN(quantidadeAnos)){
+                                                                            console.log("O campo de quantidade de anos tem que ser um número")
+                                                                            perguntarQuantidadeAnos()
+                                                                        }else if(quantidadeAnos <= 0){
+                                                                            console.log("A quantidade de anos deve ser maior que 0")
+                                                                            perguntarQuantidadeAnos()
+                                                                        }else{
+                                                                            let tempoMeses = quantidadeAnos * 12
+                                                                            calcularJurosComposto(taxaJurosUsuario, tempoMeses, valorCompraProduto, nomeUsuario, nomeProduto);
+                                                                            entradaDeDados.close()
+                                                                        }                                            
+                                                                    })
+                                                                }
+                                                            }
+                                                        }else{
+                                                            console.log("Entrada de dados invalida")
+                                                            perguntarTipoTempo()
+                                                        }
+                                                    })
+                                                }
+                                            }
+                                        })
                                     }
-                                })
-                            }
-                        })
+                                }
+                            })
+                        }
                     }
                 })
             }
-        })
-    }
-})
+        }
+    })
+}
 
-function calcularMontante(taxaJurosUsuario, tempoMeses, valorCompraProduto, nomeUsuario, nomeProduto){
+
+function calcularJurosComposto(taxaJurosUsuario, tempoMeses, valorCompraProduto, nomeUsuario, nomeProduto){
     let taxaJurosDecimal = Number(taxaJurosUsuario) / 100 
     console.log(tempoMeses)
 
@@ -131,10 +148,13 @@ function mostrarResultado(nomeUsuario, nomeProduto, valorCompraProduto, tempoMes
     console.log(`
         ************************************************ [Viva Moda] ************************************************\n
         Muito obrigado por realizar a sua compra conosco Sr(a) ${nomeUsuario}.\n
-        A compra do produto ${nomeProduto}, tem um valor de: R$${Number(valorCompraProduto).toFixed(2)}.\n
-        A sua compra será parcelada em ${tempoMeses} vezes e o Sr(a) pagará: R$${Number(montante).toFixed(2)}.\n
-        O acréscimo realizado ao valor de: R$${Number(valorCompraProduto).toFixed(2)} será de R$${Number(jurosFinal).toFixed(2)}.\n                       
+        A compra do produto ${nomeProduto}, tem um valor de: ${green}R$${Number(valorCompraProduto).toFixed(2) + reset}.\n
+        A sua compra será parcelada em ${tempoMeses} vezes e o Sr(a) pagará: ${green}R$${Number(montante).toFixed(2) + reset}.\n
+        O acréscimo realizado ao valor de: ${green}R$${Number(valorCompraProduto).toFixed(2) + reset} será de ${green}R$${Number(jurosFinal).toFixed(2) + reset}.\n                       
         Muito obrigado por escolher a Viva Moda.\n
         *************************************************************************************************************\n 
                 `)
+        
 }
+
+perguntarNomeUsuario()
