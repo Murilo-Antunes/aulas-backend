@@ -29,7 +29,7 @@ function calcularSoma(n1, n2){
     let primeiroNumero = n1
     let segundoNumero = n2
 
-    if( tratamento.tratarNumero(primeiroNumero) && tratamento.tratarNumero(segundoNumero)){
+    if( tratamento.verificarDuasCasas(primeiroNumero) && tratamento.verificarDuasCasas(segundoNumero) && tratamento.tratarNumero(primeiroNumero) && tratamento.tratarNumero(segundoNumero)){
         
         let soma = Number(primeiroNumero) + Number(segundoNumero)
 
