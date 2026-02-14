@@ -1,5 +1,5 @@
 /***********************************************************************************************
- * Objetivo: calculos matematicos básicos 
+ * Objetivo: calculos matemáticos básicos 
  * Data: 04/02/2026
  * Autor: Murilo
  * Versão: 1.0

@@ -2,8 +2,8 @@ const tratamento = require('./tratamento')
 
 function calcular(n1, n2, operacao){
     let operacaoRecebida = String(operacao)
-    let n1Formatado = String(n1.replace(',', '.'))
-    let n2Formatado = String(n2.replace(',', '.'))
+    let n1Formatado = tratamento.transformarVirgulaEmPonto(n1)
+    let n2Formatado = tratamento.transformarVirgulaEmPonto(n2)
 
 
     if (tratamento.verificarOperacao(operacaoRecebida)){
@@ -44,7 +44,7 @@ function calcularSubtracao(n1, n2){
     let primeiroNumero = n1
     let segundoNumero = n2
 
-    if( tratamento.tratarNumero(primeiroNumero) && tratamento.tratarNumero(segundoNumero) ){
+    if( tratamento.verificarDuasCasas(primeiroNumero) && tratamento.verificarDuasCasas(segundoNumero) && tratamento.tratarNumero(primeiroNumero) && tratamento.tratarNumero(segundoNumero) ){
         let soma = Number(primeiroNumero) - Number(segundoNumero)
 
         return soma.toFixed(2)
@@ -57,7 +57,7 @@ function calcularMultiplicacao(n1, n2){
     let primeiroNumero = n1
     let segundoNumero = n2
 
-    if( tratamento.tratarNumero(primeiroNumero) && tratamento.tratarNumero(segundoNumero)){
+    if( tratamento.verificarDuasCasas(primeiroNumero) && tratamento.verificarDuasCasas(segundoNumero) && tratamento.tratarNumero(primeiroNumero) && tratamento.tratarNumero(segundoNumero)){
         let soma = Number(primeiroNumero) * Number(segundoNumero)
 
         return soma.toFixed(2)
@@ -71,7 +71,7 @@ function calcularDivisao(n1, n2){
     let primeiroNumero = n1
     let segundoNumero = n2
 
-    if( tratamento.tratarNumero(primeiroNumero) && tratamento.tratarNumero(segundoNumero)  && segundoNumero !=0){
+    if( tratamento.verificarDuasCasas(primeiroNumero) && tratamento.verificarDuasCasas(segundoNumero) && tratamento.tratarNumero(primeiroNumero) && tratamento.tratarNumero(segundoNumero)  && segundoNumero !=0){
         let soma = Number(primeiroNumero) / Number(segundoNumero)
 
         return soma.toFixed(2)

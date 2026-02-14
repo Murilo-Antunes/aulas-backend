@@ -1,7 +1,7 @@
 function tratarNumero(dado){ //tratamento de dados para números
     let dadoRecebido = String(dado)
     if(dadoRecebido == "" || isNaN(dadoRecebido)){
-        console.log('ERRO')
+        console.log('ERRO: entrada de dados não é um número ou está vazia')
 
         return false
     }else{
@@ -19,9 +19,25 @@ function verificarOperacao(dado){
     }
 }
 
+function transformarVirgulaEmPonto(dado){
+    let dadoRecebido = String(dado)
+
+    if (dadoRecebido == ""){
+        console.log('entrada de dados vazia')
+        return false
+    }else{
+        let dadoRecebidoFormatado =  String(dadoRecebido.replace(/,/g, '.'))
+        return dadoRecebidoFormatado
+    }
+    
+}
+
 function verificarDuasCasas(dado){
     let dadoRecebido = dado
-    if(dadoRecebido.split(',').length - 1 >=2){
+    let dadoRecebidoPonto = transformarVirgulaEmPonto(dadoRecebido)
+
+    if(dadoRecebidoPonto.split('.').length - 1 >=2){
+        console.log('ERRO: entrada de dados inválida')
         return false
     }else{
         return true
@@ -31,5 +47,6 @@ function verificarDuasCasas(dado){
 module.exports = {
     tratarNumero,
     verificarOperacao,
-    verificarDuasCasas
+    verificarDuasCasas,
+    transformarVirgulaEmPonto
 }
