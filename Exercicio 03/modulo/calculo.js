@@ -2,10 +2,9 @@ const tratamento = require('./tratamento') //importa a função de tratar dados
 
 //essa função verifica qual operação matemática foi escolhida e envia os dois valores para operação em questão
 function calcular(n1, n2, operacao){
-    let operacaoRecebida = String(operacao) //guarda a operação matemática em uma string
+    let operacaoRecebida = String(operacao).toLowerCase() //guarda a operação matemática em uma string e a coloca em caixa baixa
     let n1Formatado = tratamento.transformarVirgulaEmPonto(n1) //guarda o valor do primeiro número chamando a formatação de virgula para ponto
     let n2Formatado = tratamento.transformarVirgulaEmPonto(n2) //guarda o valor do segundo número chamando a formatação de virgula para ponto
-
 
     if (tratamento.verificarOperacao(operacaoRecebida)){
         if(operacaoRecebida == "soma"){
