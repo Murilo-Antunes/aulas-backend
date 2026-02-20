@@ -15,7 +15,7 @@ function verificarOperacao(dado){
     if(dadoRecebido == "soma" || dadoRecebido == "subtração" || dadoRecebido == "divisão" || dadoRecebido == "multiplicação"){
         return true
     }else{
-        console.log('ERRO: entrada de dado inválida')
+        console.log('ERRO: entrada de tipo de operação matemática inválida')
         return false
     }
 }
@@ -25,7 +25,7 @@ function transformarVirgulaEmPonto(dado){
     let dadoRecebido = String(dado)
 
     if (dadoRecebido == ""){ //verifica se o dado recebido está vazio
-        console.log('entrada de dados vazia')
+        console.log('ERRO: entrada de dados vazia')
         return false
     }else{
         //realoca TODAS as virgulas (representado pelo "g") por pontos
