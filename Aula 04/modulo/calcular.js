@@ -25,17 +25,17 @@ const calcular = function (n1, n2, operador){
 
     switch (operadorMatematico) {
         case "somar":
-            resultado = valor1 + valor2
-            break;
-        case "subtrair":
-            resultado = valor1 - valor2
-            break;
-        case "multiplicar":
-            resultado = valor1 * valor2
+            resultado = somar(valor1, valor2)
             break
-        case "divisão":
-            resultado = valor1 / valor2
-            break;
+        case "subtrair":
+            resultado = subtrair(valor1, valor2)
+            break
+        case "multiplicar":
+            resultado = multiplicar(valor1, valor2)
+            break
+        case "dividir":
+            resultado = dividir(valor1, valor2)
+            break
         // default:
             
         //     break;
@@ -48,4 +48,18 @@ const calcular = function (n1, n2, operador){
     
 }
 
-console.log(calcular(20, 10, 'divisão'))
+//exemplo de funções baseada em seta
+//Funções para realizar as operações matemáticas 
+const somar = (n1, n2) =>   Number(n1) + Number(n2) //arrow function
+const subtrair = (n1, n2) =>   Number(n1) - Number(n2) //arrow function
+const multiplicar = (n1, n2) =>   Number(n1) * Number(n2) //arrow function
+const dividir = (n1, n2) =>   Number(n1) / Number(n2) //arrow function
+
+
+module.exports = {
+    calcular,
+    somar,
+    subtrair, 
+    multiplicar,
+    dividir
+}

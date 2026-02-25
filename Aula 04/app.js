@@ -4,3 +4,11 @@
  * Autor: Marcel
  * Versão: 1.0
 ***********************************************************************************************/
+
+const calculosMatematicos = require('./modulo/calcular.js')
+
+let resposta = calculosMatematicos.calcular(50, 50, "somar")
+console.log(resposta)
+
+let respostaSoma = calculosMatematicos.somar(50, 50)
+console.log(respostaSoma)
