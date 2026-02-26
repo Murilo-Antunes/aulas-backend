@@ -5,7 +5,7 @@
  * Versão: 1.0
 ***********************************************************************************************/
 
-const validacao = require('./validacao')
+const validacao = require('../../module/validacao.js')
 
 const classificarImc = function(imc){
     imc = validacao.transformarVirgulaEmPonto(imc)

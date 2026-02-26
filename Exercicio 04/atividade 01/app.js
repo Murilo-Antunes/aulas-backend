@@ -1,5 +1,5 @@
 /***********************************************************************************************
- * Objetivo: calculo de IMC 
+ * Objetivo: entrada e saidad de dados do calculo de imc
  * Data: 25/02/2026
  * Autor: Murilo
  * Versão: 1.0

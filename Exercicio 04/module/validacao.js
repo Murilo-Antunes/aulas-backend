@@ -40,10 +40,48 @@ const verificarDuasCasas = function(dado){
     }
 }
 
+const validarZeroCem = function (dado){
+    let dadoRecebido = dado
+    if (chamarValidacoes(dadoRecebido)){
+        if(dadoRecebido >= 0 && dadoRecebido <= 100)
+            return true
+        else
+            return false
+    }else
+        return false
+}
+
+const chamarValidacoes = function (dado){
+    let dadoRecebido = String(dado)
+
+    if(validarNumero(dadoRecebido) && validarVazio(dadoRecebido) && verificarDuasCasas(dadoRecebido))
+        return true
+    else
+        return false
+}
+
+const validarSexo = function(sexo){
+    if(validarVazio(sexo)){
+        let sexoRecebido = String(sexo).toLowerCase()
+
+        if(sexoRecebido == "feminino" || sexoRecebido == "masculino")
+            return true
+        else 
+            return false
+
+    }else{
+        return false
+    }
+}
+
 
 module.exports = {
     validarNumero,
     validarVazio,
     transformarVirgulaEmPonto,
-    verificarDuasCasas
+    verificarDuasCasas, 
+    validarZeroCem, 
+    chamarValidacoes,
+    validarSexo
 }
+
