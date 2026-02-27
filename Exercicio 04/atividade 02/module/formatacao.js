@@ -33,7 +33,8 @@ const identificarSexoAluno = function(sexo){
 
 
 const exibirSaida = function(sexoAluno, nomeAluno, disciplina, curso, sexoProfessor, nomeProfessor, n1, n2, n3, n4){
-    if(validacao.validarVazio(nomeAluno) && validacao.validarVazio(disciplina) && validacao.validarVazio(curso) && validacao.validarVazio(nomeProfessor)){
+    if(validacao.validarVazio(nomeAluno) && validacao.validarVazio(disciplina) && validacao.validarVazio(curso) && validacao.validarVazio(nomeProfessor) && validacao.validarSexo(sexoAluno) && validacao.validarSexo(sexoProfessor)){
+        
         let exbicaoSexoAluno = String(identificarSexoAluno(sexoAluno))
         let nomeAlunoRecebido = String(nomeAluno)
         let disciplinaRecebida = String(disciplina)
@@ -81,8 +82,7 @@ const exibirSaidaRecuperacao = function(sexoAluno, nomeAluno, disciplina, curso,
                         ${exibicaoSexoProf}: ${nomeProfessorRecebido}\n
                         Notas: ${nota1}, ${nota2}, ${nota3}, ${nota4}, ${notaExameRecebida}\n
                         Média Final: ${media}\n
-                        Média final do Exame: ${mediaFinalExame}
-                        `)
+                        Média final do Exame: ${mediaFinalExame}`)
     }else{
         return false
     }

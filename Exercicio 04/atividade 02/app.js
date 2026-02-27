@@ -38,23 +38,28 @@ entradaDeDados.question('Digite o sexo do aluno: ', function(sexoALuno){
 
                                         let media = aluno.calcularMedia(nota1, nota2, nota3, nota4)
                                         let status = String(aluno.definirStatus(media)).toLowerCase()
-                                        console.log(status)
-                                        let saida = false
+                                        let saida
                                         if(status == "recuperação"){
                                             entradaDeDados.question('Digite a nota do exame: ', function(exame){
                                                 let notaExame = exame
                                                 saida = formatacao.exibirSaidaRecuperacao(sexoAlunoRecebido, nomeALunoRecebido, disciplinaRecebida, nomeCurso, sexoProfessorRecebido, nomeProfessorRecebido, nota1, nota2, nota3, nota4, notaExame)
+
+                                                if(saida == undefined){
+                                                    console.log('Erro')
+                                                    entradaDeDados.close()
+                                                }else{
+                                                    console.log(saida)
+                                                }
                                             }) 
                                         }else if(status == "aprovado" || status == "reprovado"){
                                             saida = formatacao.exibirSaida(sexoAlunoRecebido, nomeALunoRecebido, disciplinaRecebida, nomeCurso, sexoProfessorRecebido, nomeProfessorRecebido, nota1, nota2, nota3, nota4)
-                                        }
-                                        
-                                        if(!saida){
-                                            console.log("ERRO")
-                                            entradaDeDados.close()
-                                        }else{
-                                            console.log(saida)
-                                            entradaDeDados.close()
+
+                                            if(saida == undefined){
+                                                console.log('Erro')
+                                                entradaDeDados.close()
+                                            }else{
+                                                console.log(saida)
+                                            }
                                         }
                                     })
                                 })
