@@ -5,15 +5,16 @@
  * Versão: 1.0
 ***********************************************************************************************/
 
-const validacao = require('../../module/validacao.js')
+const validacao = require('../../module/validacao.js') //exporta a classe de validação
 
 const classificarImc = function(imc){
-    imc = validacao.transformarVirgula(imc, ".")
+    imc = validacao.transformarVirgula(imc, ".") //chama a validação de transformar virgula em ponto
 
-    if(validacao.validarNumero(imc) && validacao.validarVazio(imc) && validacao.verificarDuasCasas(imc)){
+    if(validacao.chamarValidacoes(imc)){  //chama a validação de números
         let imcRecebido = Number(imc)
         let situacao
 
+        //condicional que classifica o peso de acordo com o imc recebido
         if(imcRecebido < 18.5)
             situacao = "Abaixo do peso"
         else if (imcRecebido >= 18.5 && imc <= 24.9)
@@ -41,17 +42,19 @@ const calcularImc = function(peso, altura){
     peso = validacao.transformarVirgula(peso, ".")
     altura = validacao.transformarVirgula(altura, ".")
 
-    if(validacao.validarNumero(peso) && validacao.validarNumero(altura) && validacao.validarVazio(peso) && validacao.validarVazio(altura) && validacao.verificarDuasCasas(peso) && validacao.verificarDuasCasas(altura)){
+    //realiza o cálculo do imc
+    if(validacao.chamarValidacoes(peso) && validacao.chamarValidacoes(altura)){
         let pesoRecebido = Number(peso)
         let alturaRecebida = Number(altura)
         let imc = pesoRecebido / (alturaRecebida**2)
 
-        return Number(imc).toFixed(2)
+        return Number(imc).toFixed(2) //retorna o imc como um número fixado em no máximo duas casas
     }else{
         return false
     }
 }
 
+//exporta as funções
 module.exports = {
     calcularImc,
     classificarImc

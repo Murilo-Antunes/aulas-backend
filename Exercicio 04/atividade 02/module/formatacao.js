@@ -1,6 +1,13 @@
-const validacao = require('../../module/validacao.js')
-const aluno = require('./Aluno.js')
+/***********************************************************************************************
+ * Objetivo: formatação da media e situação do aluno
+ * Data: 25/02/2026
+ * Autor: Murilo
+ * Versão: 1.0
+***********************************************************************************************/
+const validacao = require('../../module/validacao.js') //importa a classe de validação
+const aluno = require('./Aluno.js') //importa a classe que realiza as ações necessárias referentes ao aluno
 
+//identifica o sexo do professor para alterar a sentença com base nisso
 const identificarSexoProfessor = function(sexo){
     let sexoRecebido = String(sexo).toLowerCase()
     let exibicaoFinal
@@ -16,6 +23,7 @@ const identificarSexoProfessor = function(sexo){
     }
 }
 
+//identifica o sexo do aluno para alterar a sentença com base nisso
 const identificarSexoAluno = function(sexo){
     let sexoRecebido = String(sexo).toLowerCase()
     let exibicaoFinal
@@ -31,7 +39,7 @@ const identificarSexoAluno = function(sexo){
     }
 }
 
-
+//realiza a formatação da saida caso o aluno não esteja em recuperação
 const exibirSaida = function(sexoAluno, nomeAluno, disciplina, curso, sexoProfessor, nomeProfessor, n1, n2, n3, n4){
     if(validacao.validarVazio(nomeAluno) && validacao.validarVazio(disciplina) && validacao.validarVazio(curso) && validacao.validarVazio(nomeProfessor) && validacao.validarSexo(sexoAluno) && validacao.validarSexo(sexoProfessor)){
         
@@ -59,8 +67,9 @@ const exibirSaida = function(sexoAluno, nomeAluno, disciplina, curso, sexoProfes
     }
 }
 
+//realiza a formatação da saida caso o aluno esteja em recuperação
 const exibirSaidaRecuperacao = function(sexoAluno, nomeAluno, disciplina, curso, sexoProfessor, nomeProfessor, n1, n2, n3, n4, notaExame){
-    if(validacao.validarVazio(nomeAluno) && validacao.validarVazio(disciplina) && validacao.validarVazio(curso) && validacao.validarVazio(nomeProfessor) && validacao.chamarValidacoes(notaExame)){
+    if(validacao.validarVazio(nomeAluno) && validacao.validarVazio(disciplina) && validacao.validarVazio(curso) && validacao.validarVazio(nomeProfessor) && validacao.chamarValidacoes(notaExame)){ //valida os dados
         let exbicaoSexoAluno = String(identificarSexoAluno(sexoAluno))
         let nomeAlunoRecebido = String(nomeAluno)
         let disciplinaRecebida = String(disciplina)
@@ -88,6 +97,8 @@ const exibirSaidaRecuperacao = function(sexoAluno, nomeAluno, disciplina, curso,
     }
 }
 
+
+//exporta as funções da classe
 module.exports = {
     exibirSaida,
     exibirSaidaRecuperacao
