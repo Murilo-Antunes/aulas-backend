@@ -8,7 +8,7 @@
 const validacao = require('../../module/validacao.js')
 
 const classificarImc = function(imc){
-    imc = validacao.transformarVirgulaEmPonto(imc)
+    imc = validacao.transformarVirgula(imc, ".")
 
     if(validacao.validarNumero(imc) && validacao.validarVazio(imc) && validacao.verificarDuasCasas(imc)){
         let imcRecebido = Number(imc)
@@ -38,8 +38,8 @@ const classificarImc = function(imc){
 }
 
 const calcularImc = function(peso, altura){
-    peso = validacao.transformarVirgulaEmPonto(peso)
-    altura = validacao.transformarVirgulaEmPonto(altura)
+    peso = validacao.transformarVirgula(peso, ".")
+    altura = validacao.transformarVirgula(altura, ".")
 
     if(validacao.validarNumero(peso) && validacao.validarNumero(altura) && validacao.validarVazio(peso) && validacao.validarVazio(altura) && validacao.verificarDuasCasas(peso) && validacao.verificarDuasCasas(altura)){
         let pesoRecebido = Number(peso)
