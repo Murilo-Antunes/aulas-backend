@@ -37,7 +37,7 @@
 */
 
 //formas de criar um array
-const listaDeNomes      = ['José', 'Maria',  'João', 'Pedro', 'Andre']
+const listaDeNomes      = ['José', 'Maria',  'João', 'Pedro', 'Jake', 'Jake da silva', 'Andre', 'Carlos', 'Ana', 'Bruna', 'Jake', 'Jake']
 const listaDeClientes   = []
 
 const exibirDados = function(){
@@ -72,7 +72,7 @@ const exibirDados = function(){
     }
 
     console.log('*************** FOR EACH ***************')
-    //for each é um metodo de array que devolve os ELEMNTOS de um array por meio da função de callback
+    //for each é um metodo de array que devolve os ELEMENTOS de um array por meio da função de callback
     listaDeNomes.forEach(function(cliente){
         console.log(`O nome do cliente é: ${cliente}`)
     })
@@ -90,7 +90,7 @@ const exibirDados = function(){
     }
 
     //identifica quantos itens tem em um array
-    console.log(listaDeNomes.le)
+    console.log(listaDeNomes.length)
 }
 
 
@@ -106,7 +106,108 @@ const manipularDados = function(){
     const listaDeForncedores = []
 
     //O push permite adicionar elementos dentro do array sempre no final da lista
-    listaDeForncedores.push('Reutechzar', 'Hellmans', "Lai")
+    listaDeForncedores.push('Reutechzar', 'Hellmans', "Lai", 'paulo', 'julio',  'carlos', 'marcos')
     listaDeForncedores.forEach(cliente => console.log(cliente))
+    console.table(listaDeForncedores)
+
+    //adicionar um elemento no começo da lista por meio do unshift
+    listaDeForncedores.unshift('Ana Carolina')
+    console.table(listaDeForncedores)
+
+    //removendo o ultimo elemento de um array
+    listaDeForncedores.pop()
+    console.table(listaDeForncedores)
+    
+    //removendo o primeiro elemento de um array
+    listaDeForncedores.shift()
+    console.table(listaDeForncedores)
+
+    //apagar um elemento a partir de um indice especifico, neste caso esta pegando o indice 2 e apagando 1 elemento a partir dele, 
+        //que seria o proprio elemento 2  
+    listaDeForncedores.splice(2,1)
+    console.table(listaDeForncedores)
 }
-manipularDados()
+
+const removerElemento = function(nome){
+    console.table(listaDeNomes)
+
+   
+
+    //Apagando utilizando for in
+    //for(indice in listaDeNomes){
+        //if(nome == listaDeNomes[indice]){
+            //listaDeNomes.slice(indice,1)
+        //}
+    //}
+
+    //apagando utilizando filter, ainda é O(n) em quesito temporal mas gasta mais espaço
+    //const lista2 = listaDeNomes.filter(n => n !== nome) //cria uma lista nova de acordo com a condicional 
+
+
+    //apagando um elemento modificando o array para um Set O(1), permitindo outros comandos pois o Set 
+        //armazena valores únicos e usa hash internamente para localizar elementos 
+        /*
+            Internamente o `Set` funciona como uma **tabela hash**:
+            ```
+            "Ana"    →  hash(Ana)    →  posição 42
+            "Bruno"  →  hash(Bruno)  →  posição 17
+            "Carlos" →  hash(Carlos) →  posição 95
+        */ 
+
+    //O set so deve ser usado quando não há necessidade de uma lista ordenada ou elementos de mesmo nome
+    //Sua vantagem está no fato de que se  você chama set.delete("Ana"), 
+        // o JS calcula o hash de "Ana" e vai direto para a posição 42, sem percorrer nada. 
+        // Independente de ter 10 ou 1 milhão de elementos, o custo é o mesmo.
+    //const set = new Set(listaDeNomes)
+    //set.delete(nome)
+    //console.table(set)
+
+    let indice = listaDeNomes.indexOf(nome)
+    //Apagando utilizando indexOf, caso o indexOf não ache o elemento argumentado ele retorna -1
+    if(indice != -1){
+        listaDeNomes.splice(indice,1)
+        return listaDeNomes
+    }else{
+        return false
+    }
+}
+
+
+
+const verificarELemento = function(nome){
+
+    //verifica se um elemento existe dentro de um array utilizando include, retornando um booleno
+    let resposta = listaDeNomes.includes(nome)
+    console.log(resposta)
+
+    //retorna se um elemento existe dentro de um Set utilizando has O(1)
+    let respota2 = new Set(listaDeNomes)
+    console.log(respota2.has(nome))
+} 
+
+const quantidadeItens = function(nome){
+
+    //verificando a quantidade que um elemento aparece em um array por meio de forEach
+    let cont = 0
+    listaDeNomes.forEach(function(item){
+        if(String(item).toUpperCase() == String(nome).toUpperCase())
+            cont++
+    })
+
+    //verificando a quantidade que um elemento aparece em um array por meio de um filter
+    let quantidade = listaDeNomes.filter(n => String(n).toUpperCase() == String(nome).toUpperCase()).length
+
+    console.log(cont)
+    console.log(quantidade)
+}
+
+// let resultado = removerElemento('Maria')
+// if (resultado) {
+//     console.table(listaDeNomes)
+//     console.log('Deu certo :)')
+// }else{
+//     console.log('Deu errado :(')
+// }
+
+// verificarELemento('dasdsad')
+quantidadeItens('JAke')
