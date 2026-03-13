@@ -126,6 +126,10 @@ const manipularDados = function(){
         //que seria o proprio elemento 2  
     listaDeForncedores.splice(2,1)
     console.table(listaDeForncedores)
+
+    //permite adicionar um novo elemento em um lugar determinado no array
+    listaDeForncedores.splice(4,0,'Carlos da Silva')
+    console.table(listaDeForncedores)
 }
 
 const removerElemento = function(nome){
@@ -176,7 +180,7 @@ const removerElemento = function(nome){
 
 const verificarELemento = function(nome){
 
-    //verifica se um elemento existe dentro de um array utilizando include, retornando um booleno
+    //verifica se um elemento existe dentro de um array utilizando include, retornando um booleano
     let resposta = listaDeNomes.includes(nome)
     console.log(resposta)
 
@@ -190,16 +194,117 @@ const quantidadeItens = function(nome){
     //verificando a quantidade que um elemento aparece em um array por meio de forEach
     let cont = 0
     listaDeNomes.forEach(function(item){
-        if(String(item).toUpperCase() == String(nome).toUpperCase())
+        if(String(item).trim().toUpperCase() == String(nome).trim().toUpperCase())
             cont++
     })
 
     //verificando a quantidade que um elemento aparece em um array por meio de um filter
-    let quantidade = listaDeNomes.filter(n => String(n).toUpperCase() == String(nome).toUpperCase()).length
+    let quantidade = listaDeNomes.filter(n => String(n).trim().toUpperCase() == String(nome).trim().toUpperCase()).length
 
     console.log(cont)
     console.log(quantidade)
 }
+
+const criarDadosJSON = function(){
+    let aluno = {
+        "nome"      : 'Jose',
+        "ra"        :  123,
+        "telefone"  : '19023791',
+        "email"     : 'jose@gmail.com'
+    }
+
+    //exibindo o objeto JSON inteiro
+    console.log(aluno)
+    //exibindo apenas um objeto do JSON
+    console.log(aluno.nome)
+
+    //adicionando atributo ao objeto (so escrever um atributo que ainda não existe)
+    aluno.sexo = 'masculino'
+    console.log(aluno)
+
+    //deleta um atributo do objeto JSON
+    delete aluno.telefone
+    console.log(aluno)
+}
+
+const cadastrarProduto = function(){
+    let cores = [ 
+        {"id":1, "cor":'branco'},      //indice 0
+        {"id":2, "cor": 'verde'},      //indice 1
+        {"id":3, "cor": 'vermelho'},   //indice 2
+        {"id":4, "cor": 'azul'},       //indice 3
+        {"id":5, "cor": 'preto'}       //indice 4
+    ]
+
+    console.table(cores)
+    console.log(cores[4].nome)
+
+    let modelos = [
+        {   
+            "id"        : 1, 
+            "marca"     : "LG", 
+            "telefone"  : '00-1234567890', 
+            "email"     : 'lg@gmail.com'
+        },
+        {
+            "id"        : 2, 
+            "marca"     : "Dell", 
+            "telefone"  : '11-213876322', 
+            "email"     : 'dell@gmail.com'
+        },
+        {
+            "id"        : 3, 
+            "marca"     : "Lenovo", 
+            "telefone"  : '22-4198674', 
+            "email"     : 'lenovo@gmail.com'
+        },
+        {
+            "id"        : 4, 
+            "marca"     : "Apple", 
+            "telefone"  : '33-321322512', 
+            "email"     : 'apple@gmail.com'
+        },
+        {
+            "id"        : 5, 
+            "marca"     : "Rayzer", 
+            "telefone"  : '44-321521512', 
+            "email"     : 'rayzer@gmail.com'
+        },
+        {
+            "id"        : 6, 
+            "marca"     : "Logitec", 
+            "telefone"  : '55-321321512', 
+            "email"     : 'logitec@gmail.com' 
+        }
+    ]
+
+    let produtos = [
+        {
+            "id"        : 1,
+            "nome"      : 'monitor',
+            "descricao" : 'monitor oled 27 polegadas',
+            "marca"     : modelos[1].marca,
+            "quantidade": 20,
+            "cor"       : [cores[0], cores[4]],
+            "valor"     : 800.50
+        },
+
+        {
+            "id"        : 2
+        }
+    ]
+
+    console.log(produtos)
+    console.log(produtos[0].cor)
+    console.log(produtos[0].cor[1].cor)
+    console.table(produtos)
+
+    //loop para printar todas as cores que um produto tem
+    produtos[0].cor.forEach(function(nomeCor){
+        console.log("A cor do produto é: " + nomeCor.cor)
+    })
+}
+
 
 // let resultado = removerElemento('Maria')
 // if (resultado) {
@@ -210,4 +315,5 @@ const quantidadeItens = function(nome){
 // }
 
 // verificarELemento('dasdsad')
-quantidadeItens('JAke')
+//quantidadeItens('JAke ')
+cadastrarProduto()
