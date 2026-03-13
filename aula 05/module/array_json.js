@@ -236,8 +236,8 @@ const cadastrarProduto = function(){
         {"id":5, "cor": 'preto'}       //indice 4
     ]
 
-    console.table(cores)
-    console.log(cores[4].nome)
+    // console.table(cores)
+    // console.log(cores[4].nome)
 
     let modelos = [
         {   
@@ -283,27 +283,65 @@ const cadastrarProduto = function(){
             "id"        : 1,
             "nome"      : 'monitor',
             "descricao" : 'monitor oled 27 polegadas',
-            "marca"     : modelos[1].marca,
+            "marca"     : [modelos[1].marca],
             "quantidade": 20,
             "cor"       : [cores[0], cores[4]],
             "valor"     : 800.50
         },
 
         {
-            "id"        : 2
+            "id"        : 2,
+            "nome"      : 'teclado',
+            "descricao" : 'teclado mecanico rgba',
+            "marca"     : [modelos[5].marca],
+            "quantidade": 40,
+            "cor"       : cores,
+            "valor"     : 150
+        },
+
+        {
+            "id"        : 3,
+            "nome"      : 'mouse',
+            "descricao" : 'mouse sem fio',
+            "marca"     : [modelos[0].marca, modelos[1].marca, modelos[5].marca],
+            "quantidade": 500,
+            "cor"       : [cores[0], cores[4], cores[1]],
+            "valor"     : 80.00
         }
     ]
 
-    console.log(produtos)
-    console.log(produtos[0].cor)
-    console.log(produtos[0].cor[1].cor)
-    console.table(produtos)
+    // console.log(produtos)
+    // console.log(produtos[0].cor)
+    // console.log(produtos[0].cor[1].cor)
+    // console.table(produtos)
 
-    //loop para printar todas as cores que um produto tem
-    produtos[0].cor.forEach(function(nomeCor){
-        console.log("A cor do produto é: " + nomeCor.cor)
+    // //loop para printar todas as cores que um produto tem
+    // produtos[0].cor.forEach(function(nomeCor){
+    //     console.log("A cor do produto é: " + nomeCor.cor)
+    // })
+
+    /*
+    Produto: XXXXXXXX
+    Quantidade: xx
+    Valor: XXX
+    cores: XXX 
+    marcas: xxxx
+    */
+
+    produtos.forEach(function(objeto){
+        console.log('Produto: ' + objeto.nome)
+        console.log('Quantidade: ' + objeto.quantidade)
+        console.log('Valor: ' + objeto.valor)
+        console.log(
+                    'Cores: ' + objeto.cor.forEach(function(cores){
+                        console.log(cores.cor)
+                    })
+                )
+        console.log('Marcas: ' + objeto.marca + "\n")
+        
     })
 }
+
 
 
 // let resultado = removerElemento('Maria')
