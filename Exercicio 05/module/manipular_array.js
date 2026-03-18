@@ -74,4 +74,22 @@ const getCapitalEstado = function(sigla){
     })
     return capital
 }
-console.log(getCapitalEstado('al'))
+
+const getEstadosRegiao = function(regiao){
+    let regiaoRecebida = regiao
+    let informacoesRegiao = false
+    let arrayEstados = []
+    json.listaDeEstados.estados.forEach(function(uf){
+        if(String(uf.regiao).toLowerCase() === String(regiaoRecebida).toLowerCase()){
+            let informacoesEstado = {"uf: " : uf.sigla, "descrição: " : uf.nome }
+            arrayEstados.push(informacoesEstado)
+            informacoesRegiao = {
+                "Região" : String(regiaoRecebida).toUpperCase(),
+                "estados" : arrayEstados
+            }
+
+        }
+    })
+    return informacoesRegiao
+}
+console.log(getEstadosRegiao('sul'))
