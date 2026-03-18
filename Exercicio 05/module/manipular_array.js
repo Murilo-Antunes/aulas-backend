@@ -59,4 +59,19 @@ const getDadosEstado = function(sigla){
     return estado
 }
 
-console.log(getDadosEstado('al'))
+
+const getCapitalEstado = function(sigla){
+    let siglaRecebida = sigla
+    let capital = false
+    json.listaDeEstados.estados.forEach(function(uf){
+        if(String(uf.sigla).toLowerCase() === String(siglaRecebida).toLowerCase()){
+            capital = {
+                "uf: " : uf.sigla,
+                "descricao: " : uf.nome,
+                "capital: ": uf.capital
+            }
+        }
+    })
+    return capital
+}
+console.log(getCapitalEstado('al'))
