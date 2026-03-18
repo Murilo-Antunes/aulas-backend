@@ -36,6 +36,8 @@
                     }
 */
 
+const { stat } = require("node:fs")
+
 //formas de criar um array
 const listaDeNomes      = ['José', 'Maria',  'João', 'Pedro', 'Jake', 'Jake da silva', 'Andre', 'Carlos', 'Ana', 'Bruna', 'Jake', 'Jake']
 const listaDeClientes   = []
@@ -319,27 +321,7 @@ const cadastrarProduto = function(){
     // produtos[0].cor.forEach(function(nomeCor){
     //     console.log("A cor do produto é: " + nomeCor.cor)
     // })
-
-    /*
-    Produto: XXXXXXXX
-    Quantidade: xx
-    Valor: XXX
-    cores: XXX 
-    marcas: xxxx
-    */
-
-    produtos.forEach(function(objeto){
-        console.log('Produto: ' + objeto.nome)
-        console.log('Quantidade: ' + objeto.quantidade)
-        console.log('Valor: ' + objeto.valor)
-        console.log(
-                    'Cores: ' + objeto.cor.forEach(function(cores){
-                        console.log(cores.cor)
-                    })
-                )
-        console.log('Marcas: ' + objeto.marca + "\n")
-        
-    })
+    return produtos
 }
 
 
@@ -354,4 +336,51 @@ const cadastrarProduto = function(){
 
 // verificarELemento('dasdsad')
 //quantidadeItens('JAke ')
-cadastrarProduto()
+const objeto = cadastrarProduto()
+const mostrarProdutos = function(produtos){
+    /*
+    Produto: XXXXXXXX
+    Quantidade: xx
+    Valor: XXX
+    cores: XXX 
+    marcas: xxxx
+    */
+
+    // produtos.forEach(function(objeto){
+    //     console.log('-----------------------------------------')
+    //     console.log('Produto: ' + objeto.nome)
+    //     console.log('   Quantidade: ' + objeto.quantidade)
+    //     console.log('        Valor: ' + objeto.valor)
+    //     console.log('\n' + 'Cores: ')
+    //     objeto.cor.forEach(cor => console.log('   ' + cor.cor)) //percorre a cor dentro de cada produto
+    //     console.log('\n' + 'Marcas: ') 
+    //     objeto.marca.forEach(marca => console.log('   ' + marca)) //percorre a marca dentro de cada produto
+    // })
+
+    //pesquisando um produto pelo nome
+    let nome = 'teclado'
+    produtos.forEach(function(objeto){
+        
+        if(String(objeto.nome).toUpperCase() === String(nome).toUpperCase() ){
+            console.log(objeto)
+        }
+    })
+
+    //pesquisando um produto pela cor (que é uma string dentro do JSON)
+    let cor = 'verde'
+    let status = false
+    produtos.forEach(function(objeto){
+        objeto.cor.forEach(function(cores){
+            if(String(cores.cor).toUpperCase() === String(cor).toUpperCase()){
+                console.log(objeto)
+                status = true
+            }
+        })
+    })
+
+    if(!status)
+        console.log('ERRO')
+
+}
+
+mostrarProdutos(objeto)
