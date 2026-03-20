@@ -32,10 +32,11 @@ const json = require('./estados_cidades')
 
 const getListaDeEstados = function(){
     let sigla = []
+    let estado = false
     json.listaDeEstados.estados.forEach(function(estado){
         sigla.push(estado.sigla)
     })
-    let estado = {
+    estado = {
         'UF' : sigla,
         'Quantidade' : sigla.length
     } 
@@ -92,4 +93,48 @@ const getEstadosRegiao = function(regiao){
     })
     return informacoesRegiao
 }
-console.log(getEstadosRegiao('sul'))
+
+const getCapitalPais = function(){
+    let objeto = false
+    let arrayEstados = []
+    json.listaDeEstados.estados.forEach(function(objeto_callback){
+        if(objeto_callback.capital_pais){
+            let informacaoPais = {
+                "capital_atual: ": objeto_callback.capital_pais.capital,
+                "uf: " : objeto_callback.sigla,
+                "descrição: " : objeto_callback.nome,
+                "capital: " : objeto_callback.capital,
+                "região: " : objeto_callback.regiao,
+                "capital_pais_ano_incio: " : objeto_callback.capital_pais.ano_inicio,
+                "capital_pais_ano_termino: " : objeto_callback.capital_pais.ano_fim
+            }
+
+            arrayEstados.push(informacaoPais)
+            objeto = {"capitais: " : arrayEstados}
+        }
+    })
+    return objeto
+}
+
+const getCidades = function(sigla){
+    let siglaRecebida = sigla
+    let arrCidades = []
+    let estado = false
+    json.listaDeEstados.estados.forEach(function(uf){
+        if(String(uf.sigla).toLowerCase() === String(siglaRecebida).toLowerCase()){
+            uf.cidades.forEach(function(cidade){
+                arrCidades.push(cidade.nome)
+            })
+
+            estado = {
+                "uf: " : uf.sigla,
+                "descricao: " : uf.nome,
+                "quantidade_cidades: ": uf.cidades.length,
+                "cidades: ": arrCidades
+            }
+        }
+    })
+    return estado
+}
+console.log(getListaDeEstados('RJ'))
+
