@@ -118,4 +118,5 @@ const getCidades = function(sigla){
     return estado
 }
 
+console.log(getListaDeEstados())
 
