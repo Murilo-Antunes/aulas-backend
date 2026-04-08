@@ -27,8 +27,8 @@ app.get("/v1/whatsapp/dados/gerais", (req, res) =>{
     let funcao = getTodosDados()
     if(!funcao)
         res.status(404).json({message: "Erro na url"})
-
-    res.status(200).json(funcao)
+    else
+        res.status(200).json(funcao)
 })
 
 app.get("/v1/whatsapp/dados/profile/:numero", (req, res) =>{
@@ -37,8 +37,8 @@ app.get("/v1/whatsapp/dados/profile/:numero", (req, res) =>{
 
     if(!funcao)
         res.status(404).json({message: "Erro na url"})
-
-    res.status(200).json(funcao)
+    else
+        res.status(200).json(funcao)
 })
 
 
@@ -48,8 +48,8 @@ app.get("/v1/whatsapp/dados/pessoais/mensagens/:numero", (req, res) =>{
 
     if(!funcao)
         res.status(404).json({message: "Erro na url"})
-
-    res.status(200).json(funcao)
+    else
+        res.status(200).json(funcao)
 })
 
 app.get("/v1/whatsapp/dados/pessoais/contatos/:numero", (req, res) =>{
@@ -58,8 +58,8 @@ app.get("/v1/whatsapp/dados/pessoais/contatos/:numero", (req, res) =>{
 
     if(!funcao)
         res.status(404).json({message: "Erro na url"})
-
-    res.status(200).json(funcao)
+    else
+        res.status(200).json(funcao)
 })
 
 app.get("/v1/whatsapp/dados/pessoais/contato/mensagens/:numero", (req, res) =>{
@@ -69,8 +69,8 @@ app.get("/v1/whatsapp/dados/pessoais/contato/mensagens/:numero", (req, res) =>{
 
     if(!funcao)
         res.status(404).json({message: "Erro na url"})
-
-    res.status(200).json(funcao)
+    else
+        res.status(200).json(funcao)
 })
 
 app.get("/v1/whatsapp/dados/pessoais/mensagens/filtro/:numero", (req, res) =>{
@@ -80,8 +80,51 @@ app.get("/v1/whatsapp/dados/pessoais/mensagens/filtro/:numero", (req, res) =>{
 
     if(!funcao)
         res.status(404).json({message: "Erro na url"})
+    else
+        res.status(200).json(funcao)
+})
 
-    res.status(200).json(funcao)
+app.get('/v1/whatsapp/help', (req, res) => {
+    const docApi = {
+        "API-descripition"  : "API para manipular dados de Estados e Cidades",
+        "development"     : "Murilo Antunes",
+        "date"              : "2026-04-02",
+        "version"         : "1.0.0",
+        "endpoints": [
+            {
+                "id": 1,
+                "Rota 1" : "/v1/whatsapp/dados/gerais",
+                "obs" : "retorna todos os dados do json"
+            },
+            {
+                "id": 2,
+                "Rota 2" : "/v1/whatsapp/dados/profile/:numero",
+                "obs" : "retorna dados do profile do usuario"
+            },   
+            {
+                "id": 3,
+                "Rota 3" : "/v1/whatsapp/dados/pessoais/mensagens/:numero",
+                "obs" : "retorna as mensagens do usuário"
+            },   
+            {
+                "id": 4,
+                "Rota 4" : "/v1/whatsapp/dados/pessoais/contatos/:numero",
+                "obs" : "retorna os dados dos contatos do usuário"
+            },
+            {
+                "id": 5,
+                "Rota 5" : "/v1/whatsapp/dados/pessoais/contato/mensagens/:numero",
+                "obs" : "retorna as trocas de mensangens entre o usuário e um contato específico (query:nome)"
+            },
+            {
+                "id": 6,
+                "Rota 6" : "/v1/whatsapp/dados/pessoais/mensagens/filtro/:numero",
+                "obs" : "filtra todas as mensagens do usuário de acordo com um termo especifico (query:termo)"
+            }                  
+        ]
+    }
+
+    response.json(docApi)
 })
 
 app.get('/', (req, res) => {
