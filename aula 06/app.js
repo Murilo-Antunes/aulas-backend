@@ -46,7 +46,7 @@ app.use(cors(corsOptions))
 
 
 
-
+//esse modelo de encaminhamento de variavel e chamada de variavel via paramêtro
 app.get('/v1/senai/estados/dados/:sigla', function(request, response){
     let sigla = request.params.sigla
     let funcao = getDadosEstado(sigla)
@@ -62,8 +62,9 @@ app.get('/v1/senai/estados/dados/:sigla', function(request, response){
     
 })
 
-app.get('/v1/senai/estados/capital/:sigla', function(request, response){
-    let sigla = request.params.sigla
+//esse modelo de encaminhamento de variavel e chamada de variavel via query, permitindo utilizar um padrão que pode receber varias variáveis
+app.get('/v1/senai/estados/capital/', function(request, response){
+    let sigla = request.query.sigla
     let funcao = getCapitalEstado(sigla)
 
     if(!funcao){
