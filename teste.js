@@ -1,7 +1,6 @@
-const a = [1,2,3]
+a = {a: 2}
+b = structuredClone(a)
 
-const b = a
+b.a = 5
 
-b.pop()
-
-console.log(a)
+console.log(b)

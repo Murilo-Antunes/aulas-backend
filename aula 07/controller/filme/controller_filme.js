@@ -24,16 +24,22 @@ const inserirNovoFilme = async (filme) =>{
         //return message.ERROR_BAD_REQUEST //erro 400
     }else if(filme.data_lancamento == "" || filme.data_lancamento == null || filme.data_lancamento == undefined || filme.data_lancamento.length != 10){
         message.ERROR_BAD_REQUEST.field = '[DATA] INVÁLIDO'
+
     }else if(filme.duracao == "" || filme.duracao == null || filme.duracao == undefined || filme.duracao.length < 5){
         message.ERROR_BAD_REQUEST.field = '[DURAÇÃO] INVÁLIDO'
+
     }else if(filme.sinopse == "" || filme.sinopse == null || filme.sinopse == undefined){
         message.ERROR_BAD_REQUEST.field = '[SINOPSE] INVÁLIDO'
+
     }else if(isNaN(filme.avalicao) || filme.avalicao.length > 3){
         message.ERROR_BAD_REQUEST.field = '[AVALIAÇÃO] INVÁLIDO'
+
     }else if(filme.valor == '' || isNaN(filme.valor) || filme.valor == null || filme.valor == undefined || filme.valor.length > 5){
         message.ERROR_BAD_REQUEST.field = '[VALOR] INVÁLIDO'
+
     }else if(filme.capa.length > 255){
         message.ERROR_BAD_REQUEST.field = '[CAPA] INVÁLIDO'
+        
     }else{
         let result = await filmeDAO.insertFilme(filme)
         if(result){ //201
