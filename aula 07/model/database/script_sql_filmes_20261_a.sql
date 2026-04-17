@@ -8,7 +8,7 @@ USE db_filmes_20261_a;
 CREATE TABLE tbl_filme(
 	id 				int NOT NULL PRIMARY key AUTO_INCREMENT,
     nome 			VARCHAR(80) NOT NULL,
-    data_lancamento 	DATE NOT NULL,
+    data_lancamento DATE NOT NULL,
     duracao 		TIME NOT NULL,
     sinopse 		TEXT NOT NULL,
     avalicao 		DECIMAL(3,2) DEFAULT NULL,
@@ -33,6 +33,7 @@ VALUES ('Pulp Fiction - Tempo de Violência',
         'https://br.web.img3.acsta.net/c_310_420/medias/nmedia/18/87/16/32/19872655.jpg');
 
         
-SELECT *FROM tbl_filme
+SELECT *FROM tbl_filme;
+DELETE FROM tbl_filme WHERE id = 2;
         
         
