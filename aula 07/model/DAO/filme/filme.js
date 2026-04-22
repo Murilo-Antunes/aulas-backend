@@ -15,24 +15,32 @@ const knexConex = knex(knexConfig.development)
 
 //função para inserir dados na tabela de filme
 const insertFilme = async (filme) =>{
-    let sql = ` INSERT INTO tbl_filme (nome, data_lancamento, duracao, sinopse, avalicao, valor, capa)
+    try {
+        let sql = ` INSERT INTO tbl_filme (nome, data_lancamento, duracao, sinopse, avaliacao, valor, capa)
                 VALUES (
                 '${filme.nome}',
 		        '${filme.data_lancamento}',
 		        '${filme.duracao}',
                 '${filme.sinopse}',
-                '${filme.avalicao}',
+                if('${filme.avaliacao}' = '', null, '${filme.avaliacao}'),
                 '${filme.valor}',
                 '${filme.capa}'
                 );`
 
-    //executar o script sql no banco de dados
-    let result = await knexConex.raw(sql)
+        //executar o script sql no banco de dados
+        let result = await knexConex.raw(sql)
 
-    if(result)
-        return true
-    else
+        if(result)
+            return true
+        else
+            return false
+    } catch (error) {
+
+        // console.log(error)
         return false
+    }
+
+    
 }
 
 //função par aatualizar um filme existente na tabela
