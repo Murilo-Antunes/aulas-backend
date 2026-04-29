@@ -42,6 +42,14 @@ app.get("/v1/locadora/todosfilmes", async (req, res) =>{
     res.status(result.status_code).json(result)
 })
 
+app.get("/v1/locadora/filmebyid", async (req, res) =>{
+    let id = req.query.id
+    let result = await buscarFilme(id)
+
+
+    res.status(result.status_code).json(result)
+})
+
 app.listen(porta, function (){
     console.log("API funcionando e aguardando novas requisições")
 })

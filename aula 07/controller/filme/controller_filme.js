@@ -84,8 +84,31 @@ const listarFilme = async () =>{
 }
 
 //função para buscar um filme pelo id
-const buscarFilme = async () =>{
+const buscarFilme = async (id) =>{
+    let message = JSON.parse(JSON.stringify(message_config))
+    
+    if(isNaN(id))
+        return message.ERROR_BAD_REQUEST //status 404
 
+    try{
+        let result = await filmeDAO.selectByIdFilme(id)
+
+        if(result){
+            if(result[0].length > 0){
+                message.DEFAULT_MESSAGE.status = message.SUCESS_RESPONSE.status
+                message.DEFAULT_MESSAGE.status_code = message.SUCESS_RESPONSE.status_code
+                message.DEFAULT_MESSAGE.response = {filme : result[0]}
+
+                return message.DEFAULT_MESSAGE //status code 200
+            }
+           return message.ERROR_NOT_FOUND //status 404
+        }else{
+            return message.ERROR_INTERNAL_SERVER_MODEL //status 500
+        }
+
+    }catch(error){
+        return message.ERROR_INTERNAL_SERVER_CONTROLLER //status 500
+    }
 }
 
 //função para excluir um filme

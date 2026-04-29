@@ -40,3 +40,4 @@ ALTER TABLE tbl_filme
 	CHANGE COLUMN avaliacao avaliacao DECIMAL(4,2) DEFAULT NULL;
         
         
+SELECT * FROM tbl_filme WHERE id = 1;

@@ -68,7 +68,19 @@ const selectAllFilme = async () =>{
 
 //função para retornar os dados do filme filtrando pelo id
 const selectByIdFilme = async (id) => {
+     try{
+        //script sql para selecionar todos os filmes ordenando por id
+        let sql = `SELECT * FROM tbl_filme WHERE id = ${id} `
 
+        let result = await knexConex.raw(sql)
+
+        if(Array.isArray(result))
+            return result
+        else
+            return false
+    }catch(error){
+        return false
+    }
 }
 
 //função que deleta um filme da tabela
