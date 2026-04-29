@@ -42,12 +42,69 @@ app.get("/v1/locadora/todosfilmes", async (req, res) =>{
     res.status(result.status_code).json(result)
 })
 
-app.get("/v1/locadora/filmebyid", async (req, res) =>{
-    let id = req.query.id
+app.get("/v1/locadora/filmebyid/:id", async (req, res) =>{
+    let id = req.params.id
     let result = await buscarFilme(id)
 
 
     res.status(result.status_code).json(result)
+})
+
+app.put("/v1/locadora/atualizarfilme/:id", bodyParserJson, async (req, res) =>{
+    let id = req.params.id
+    let contentType = req.headers['content-type']
+    let filme = req.body
+    let result = await atualizarFIlme(filme, id, contentType)
+
+    res.status(result.status_code).json(result)
+})
+
+app.delete("/v1/locadora/deletarfilme/:id", async (req, res) =>{
+    let id = req.params.id
+    let result = await excluirFilme(id)
+
+    res.status(result.status_code).json(result)
+})
+
+app.get("/v1/locadora/help", (req, res) =>{
+    const docApi = {
+        "API-descripition"  : "API de CRUD para locadora de filmes",
+        "development"     : "Murilo Antunes",
+        "date"              : "2026-04-29",
+        "version"         : "1.0.0",
+        "endpoints": [
+            {
+                "id": 1,
+                "Rota 1" : "/v1/locadora/filme",
+                "obs" : "Insere um novo filme no banco de dados"
+            },
+            {
+                "id": 2,
+                "Rota 2" : "/v1/locadora/todosfilmes",
+                "obs" : "Lista todos os filmes cadastrados no banco de dados"
+            },   
+            {
+                "id": 3,
+                "Rota 3" : "/v1/locadora/filmebyid/:id",
+                "obs" : "Busca um filme por id"
+            },   
+            {
+                "id": 4,
+                "Rota 4" : "/v1/locadora/atualizarfilme/:id",
+                "obs" : "Atualiza dados de um filme no banco de dados"
+            },
+            {
+                "id": 5,
+                "Rota 5" : "/v1/locadora/deletarfilme/:id",
+                "obs" : "Deleta um filme no banco de dados pelo seu id"
+            },                
+        ]
+    }
+    res.json(docApi)
+})
+
+app.get('/', (req, res) => {
+    res.json({message: 'Api funcionando'})
 })
 
 app.listen(porta, function (){

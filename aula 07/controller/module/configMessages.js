@@ -55,9 +55,17 @@ const SUCESS_CREATED_ITEM ={
     message: 'Registros inseridos com sucesso'
 }
 
+//retornos para get
 const SUCESS_RESPONSE = {
     status: true,
-    status_code: 201
+    status_code: 200
+}
+
+//retornos para put
+const SUCESS_UPDATED_ITEM = {
+    status: true,
+    status_code: 200,
+    message: 'Registros atualizado com sucesso'
 }
 
 module.exports = {
@@ -68,5 +76,6 @@ module.exports = {
     ERROR_UNSUPORTED_MEDIA_TYPE,
     ERROR_INTERNAL_SERVER_CONTROLLER,
     ERROR_NOT_FOUND,
-    SUCESS_RESPONSE
+    SUCESS_RESPONSE,
+    SUCESS_UPDATED_ITEM
 }

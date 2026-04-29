@@ -11,7 +11,7 @@ CREATE TABLE tbl_filme(
     data_lancamento DATE NOT NULL,
     duracao 		TIME NOT NULL,
     sinopse 		TEXT NOT NULL,
-    avalicao 		DECIMAL(3,2) DEFAULT NULL,
+    avaliacao 		DECIMAL(3,2) DEFAULT NULL,
 	valor 			DECIMAL(5,2) NOT NULL DEFAULT 0,
     capa 			VARCHAR(255)
 );
@@ -34,10 +34,20 @@ VALUES ('Pulp Fiction - Tempo de Violência',
 
         
 SELECT *FROM tbl_filme;
-DELETE FROM tbl_filme WHERE id = 14;
+DELETE FROM tbl_filme WHERE id = 1;
 
 ALTER TABLE tbl_filme
 	CHANGE COLUMN avaliacao avaliacao DECIMAL(4,2) DEFAULT NULL;
         
         
 SELECT * FROM tbl_filme WHERE id = 1;
+
+UPDATE tbl_filme set 
+	nome = 'filme insano',
+    data_lancamento = '2026-04-29',
+    duracao = '02:00',
+    sinopse = 'hell yeah',
+    avaliacao = '10',
+    valor = '100',
+    capa = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRZp2v6DBoAEgsFYIylzBhlT7p5gGmN4MQM7A&s'
+ WHERE id = 1

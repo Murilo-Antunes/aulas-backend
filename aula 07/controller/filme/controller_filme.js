@@ -19,7 +19,6 @@ const inserirNovoFilme = async (filme, contentType) =>{
     let message = JSON.parse(JSON.stringify(message_config))
     
     try {
-
         if(String(contentType).toUpperCase() == 'APPLICATION/JSON'){
             //se o validar retornar um json de erro, iremos retornar ao app uma mesagem de erro (400)
             let validar = await validarDados(filme)
@@ -52,8 +51,47 @@ const inserirNovoFilme = async (filme, contentType) =>{
 }
 
 //função para atualizar um filme
-const atualizarFIlme= async () =>{
+const atualizarFIlme= async (filme, id, contentType) =>{
+    let message = JSON.parse(JSON.stringify(message_config))
 
+    try {
+        if(String(contentType).toUpperCase() == 'APPLICATION/JSON'){
+            //se o validar retornar um json de erro, iremos retornar ao app uma mesagem de erro (400)
+
+            let resultBuscarId = await buscarFilme(id)
+
+            //se a funçao buscar não encontrar o filme o atributo status no json será falso 
+                // isso siginifica que o filme não existe na base
+            if(!resultBuscarId.status)
+                return resultBuscarId //400 ou //404 ou //500
+
+            let validar = await validarDados(filme)
+            if(validar){
+                return validar //status code 400
+            }else{
+                //adiciona o atributo id do filme no json para ser enviado ao DAO
+                filme.id = id
+
+                //encaminha os dados do filme para o DAO
+                let result = await filmeDAO.updateFilme(filme)
+                if(result){ //200
+                    message.DEFAULT_MESSAGE.status      = message.SUCESS_UPDATED_ITEM.status
+                    message.DEFAULT_MESSAGE.status_code = message.SUCESS_UPDATED_ITEM.status_code //status code 200
+                    message.DEFAULT_MESSAGE.message     = message.SUCESS_UPDATED_ITEM.message
+                }else{ //500
+                    message.DEFAULT_MESSAGE.status      = message.ERROR_INTERNAL_SERVER_MODEL.status
+                    message.DEFAULT_MESSAGE.status_code = message.ERROR_INTERNAL_SERVER_MODEL.status_code //status code 500
+                    message.DEFAULT_MESSAGE.message     = message.ERROR_INTERNAL_SERVER_MODEL.message
+                }
+
+                return  message.DEFAULT_MESSAGE
+            }
+        }else{
+            return message.ERROR_UNSUPORTED_MEDIA_TYPE //status code 415
+        }
+    } catch (error) {
+        return message.ERROR_INTERNAL_SERVER_CONTROLLER //status code 500
+    }
 }
 
 //função para retornar todos os filmes
@@ -86,11 +124,13 @@ const listarFilme = async () =>{
 //função para buscar um filme pelo id
 const buscarFilme = async (id) =>{
     let message = JSON.parse(JSON.stringify(message_config))
-    
-    if(isNaN(id))
-        return message.ERROR_BAD_REQUEST //status 404
-
     try{
+        if(isNaN(id) || String(id) == '' || id == undefined || id == null){
+            //validação para id incorreto
+            message.ERROR_BAD_REQUEST.field = '[ID] Inválido'
+            return message.ERROR_BAD_REQUEST
+        }
+
         let result = await filmeDAO.selectByIdFilme(id)
 
         if(result){
@@ -105,15 +145,35 @@ const buscarFilme = async (id) =>{
         }else{
             return message.ERROR_INTERNAL_SERVER_MODEL //status 500
         }
-
     }catch(error){
         return message.ERROR_INTERNAL_SERVER_CONTROLLER //status 500
     }
 }
 
 //função para excluir um filme
-const excluirFilme = async () =>{
+const excluirFilme = async (id) =>{
+    let message = JSON.parse(JSON.stringify(message_config))
 
+    try {
+        let resultBuscarId = await buscarFilme(id)
+        if(!resultBuscarId.status)
+            return resultBuscarId
+
+        let result = filmeDAO.deleteFilme(id)
+
+        if(result){ //200
+            message.DEFAULT_MESSAGE.status      = message.SUCESS_RESPONSE.status
+            message.DEFAULT_MESSAGE.status_code = message.SUCESS_RESPONSE.status_code
+            message.DEFAULT_MESSAGE.message     = message.SUCESS_RESPONSE.message
+        }else{ //500
+            message.DEFAULT_MESSAGE.status      = message.ERROR_INTERNAL_SERVER_MODEL.status
+            message.DEFAULT_MESSAGE.status_code = message.ERROR_INTERNAL_SERVER_MODEL.status_code
+            message.DEFAULT_MESSAGE.message     = message.ERROR_INTERNAL_SERVER_MODEL.message
+        }
+        return  message.DEFAULT_MESSAGE
+    } catch (error) {
+        return message.ERROR_INTERNAL_SERVER_CONTROLLER
+    }
 }
 
 //função para validar todos os dados de filme (obrigatórios, quantidade de caracteres, etc...)
@@ -140,7 +200,7 @@ const validarDados = async (filme) =>{
     }else{
         return false
     }
-    return message.ERROR_BAD_REQUEST
+    return message.ERROR_BAD_REQUEST //status code 400
 }
 
 module.exports = {
