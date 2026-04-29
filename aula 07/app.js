@@ -2,10 +2,10 @@
 * Objetivo: Arquivo responsável pela criação dos endpoints do projeto whatsapp
 * Data: 08/04/2026  
 * Autor: Murilo
-* Instalção do body-parser: npm install body-parser --save & npm install mysql2 --save
+* Instalção do body-parser e mysql2: npm install body-parser --save & npm install mysql2 --save
 * **********************************************************************/
 
-const {inserirNovoFilme, atualizarFIlme, listaFilme, buscarFilme, excluirFilme} =  require('./controller/filme/controller_filme.js')
+const {inserirNovoFilme, atualizarFIlme, listarFilme, buscarFilme, excluirFilme} =  require('./controller/filme/controller_filme.js')
 
 const express = require('express')
 const cors = require('cors')
@@ -30,7 +30,14 @@ app.use(cors(corsOptions))
 
 app.post("/v1/locadora/filme", bodyParserJson, async (req, res) =>{
     let dados = req.body //recebe o conteudo da requsição (dentro do body)
-    let result = await inserirNovoFilme(dados)
+    let contentType = req.headers['content-type']
+    let result = await inserirNovoFilme(dados, contentType)
+
+    res.status(result.status_code).json(result)
+})
+
+app.get("/v1/locadora/todosfilmes", async (req, res) =>{
+    let result = await listarFilme()
 
     res.status(result.status_code).json(result)
 })

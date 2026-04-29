@@ -34,6 +34,9 @@ VALUES ('Pulp Fiction - Tempo de Violência',
 
         
 SELECT *FROM tbl_filme;
-DELETE FROM tbl_filme WHERE id = 2;
+DELETE FROM tbl_filme WHERE id = 14;
+
+ALTER TABLE tbl_filme
+	CHANGE COLUMN avaliacao avaliacao DECIMAL(4,2) DEFAULT NULL;
         
         
