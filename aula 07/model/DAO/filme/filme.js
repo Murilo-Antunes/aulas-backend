@@ -31,7 +31,7 @@ const insertFilme = async (filme) =>{
         let result = await knexConex.raw(sql)
 
         if(result)
-            return true
+            return result[0].insertId //retorna o id gerado no banco
         else
             return false
     } catch (error) {

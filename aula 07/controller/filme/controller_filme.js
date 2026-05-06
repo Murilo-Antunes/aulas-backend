@@ -28,9 +28,12 @@ const inserirNovoFilme = async (filme, contentType) =>{
                 //encaminha os dados do filme para o DAO
                 let result = await filmeDAO.insertFilme(filme)
                 if(result){ //201
+                    filme.id = result
+
                     message.DEFAULT_MESSAGE.status      = message.SUCESS_CREATED_ITEM.status
                     message.DEFAULT_MESSAGE.status_code = message.SUCESS_CREATED_ITEM.status_code
                     message.DEFAULT_MESSAGE.message     = message.SUCESS_CREATED_ITEM.message
+                    message.DEFAULT_MESSAGE.response    = filme 
                 }else{ //500
                     message.DEFAULT_MESSAGE.status      = message.ERROR_INTERNAL_SERVER_MODEL.status
                     message.DEFAULT_MESSAGE.status_code = message.ERROR_INTERNAL_SERVER_MODEL.status_code
@@ -78,6 +81,7 @@ const atualizarFIlme= async (filme, id, contentType) =>{
                     message.DEFAULT_MESSAGE.status      = message.SUCESS_UPDATED_ITEM.status
                     message.DEFAULT_MESSAGE.status_code = message.SUCESS_UPDATED_ITEM.status_code //status code 200
                     message.DEFAULT_MESSAGE.message     = message.SUCESS_UPDATED_ITEM.message
+                    message.DEFAULT_MESSAGE.response    = filme
                 }else{ //500
                     message.DEFAULT_MESSAGE.status      = message.ERROR_INTERNAL_SERVER_MODEL.status
                     message.DEFAULT_MESSAGE.status_code = message.ERROR_INTERNAL_SERVER_MODEL.status_code //status code 500
