@@ -86,7 +86,7 @@ app.get("/v1/whatsapp/dados/pessoais/mensagens/filtro/:numero", (req, res) =>{
 
 app.get('/v1/whatsapp/help', (req, res) => {
     const docApi = {
-        "API-descripition"  : "API para manipular dados de Estados e Cidades",
+        "API-descripition"  : "API para manipular dados de contatos no whatsapp",
         "development"     : "Murilo Antunes",
         "date"              : "2026-04-02",
         "version"         : "1.0.0",
