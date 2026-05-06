@@ -68,6 +68,12 @@ const SUCESS_UPDATED_ITEM = {
     message: 'Registros atualizado com sucesso'
 }
 
+const SUCESS_DELETED_ITEM = {
+    status: true,
+    status_code: 200,
+    message: 'Registros deletado com sucesso'
+}
+
 module.exports = {
     DEFAULT_MESSAGE,
     ERROR_BAD_REQUEST,
@@ -77,5 +83,6 @@ module.exports = {
     ERROR_INTERNAL_SERVER_CONTROLLER,
     ERROR_NOT_FOUND,
     SUCESS_RESPONSE,
-    SUCESS_UPDATED_ITEM
+    SUCESS_UPDATED_ITEM,
+    SUCESS_DELETED_ITEM
 }
