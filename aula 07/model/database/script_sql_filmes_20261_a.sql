@@ -16,6 +16,57 @@ CREATE TABLE tbl_filme(
     capa 			VARCHAR(255)
 );
 
+-- Tabela Classificação Indicativa --
+CREATE TABLE tbl_classificacao_indicativa(
+	id	INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    classificacao VARCHAR(3) NOT NULL
+);
+
+INSERT INTO tbl_classificacao_indicativa (classificacao)
+VALUES("L");
+
+
+-- Tabela Genero -- 
+CREATE TABLE tbl_genero (
+	id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    genero VARCHAR(25) NOT NULL
+);
+
+-- Tabela Nacionalidade --
+CREATE TABLE tbl_nacionalidade(
+	id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    pais VARCHAR(40) NOT NULL,
+    sigla VARCHAR(5) NOT NULL
+);
+
+-- Tabela Diretor -- 
+CREATE TABLE tbl_diretor(
+	id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    nome VARCHAR(80) NOT NULL,
+    data_nascimento DATE NOT NULL,
+    data_inicio_carreira DATE NOT NULL,
+    data_falecimento DATE,
+    data_termino_carreira DATE,
+    biografia TEXT
+);
+
+-- Tabela Ator -- 
+CREATE TABLE tbl_ator(
+	id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    nome VARCHAR(80) NOT NULL,
+    data_nascimento DATE NOT NULL,
+    data_inicio_carreira DATE NOT NULL,
+    data_falecimento DATE,
+    data_termino_carreira DATE,
+    biografia TEXT
+);
+
+-- Tabela Atividade -- 
+CREATE TABLE tbl_atividade(
+	id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    atividade VARCHAR(45) NOT NULL
+);
+
 DROP TABLE tbl_filme;
 
 SHOW TABLES;
@@ -33,7 +84,7 @@ VALUES ('Pulp Fiction - Tempo de Violência',
         'https://br.web.img3.acsta.net/c_310_420/medias/nmedia/18/87/16/32/19872655.jpg');
 
         
-SELECT *FROM tbl_filme;
+SELECT *FROM tbl_classificacao_indicativa;
 DELETE FROM tbl_filme WHERE id = 1;
 
 ALTER TABLE tbl_filme
