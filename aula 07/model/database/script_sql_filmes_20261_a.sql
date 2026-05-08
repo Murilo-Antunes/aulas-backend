@@ -35,6 +35,7 @@ SELECT * FROM tbl_classificacao_indicativa WHERE id = 2;
 DELETE FROM tbl_classificacao_indicativa WHERE id = 1;
 
 DROP TABLE tbl_classificacao_indicativa;
+
 -- Tabela Genero -- 
 CREATE TABLE tbl_genero (
 	id 		INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
