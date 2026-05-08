@@ -5,7 +5,8 @@
 * Instalção do body-parser e mysql2: npm install body-parser --save & npm install mysql2 --save
 * **********************************************************************/
 
-const {inserirNovoFilme, atualizarFIlme, listarFilme, buscarFilme, excluirFilme} =  require('./controller/filme/controller_filme.js')
+const filme =  require('./controller/filme/controller_filme.js')
+const classificacao = require('./controller/classificacao_indicativa/controller_classificacao_indicativa.js')
 
 const express = require('express')
 const cors = require('cors')
@@ -28,43 +29,85 @@ const corsOptions = {
 
 app.use(cors(corsOptions))
 
+// -------------------------- ROTAS FILME --------------------------  
+
 app.post("/v1/locadora/filme", bodyParserJson, async (req, res) =>{
     let dados = req.body //recebe o conteudo da requsição (dentro do body)
     let contentType = req.headers['content-type']
-    let result = await inserirNovoFilme(dados, contentType)
+    let result = await filme.inserirNovoFilme(dados, contentType)
 
     res.status(result.status_code).json(result)
 })
 
 app.get("/v1/locadora/todosfilmes", async (req, res) =>{
-    let result = await listarFilme()
+    let result = await filme.listarFilme()
 
     res.status(result.status_code).json(result)
 })
 
 app.get("/v1/locadora/filmebyid/:id", async (req, res) =>{
     let id = req.params.id
-    let result = await buscarFilme(id)
+    let result = await filme.buscarFilme(id)
 
 
     res.status(result.status_code).json(result)
 })
 
-app.put("/v1/locadora/atualizarfilme/:id", bodyParserJson, async (req, res) =>{
+app.put("/v1/locadora/filme/:id", bodyParserJson, async (req, res) =>{
     let id = req.params.id
     let contentType = req.headers['content-type']
     let filme = req.body
-    let result = await atualizarFIlme(filme, id, contentType)
+    let result = await filme.atualizarFIlme(filme, id, contentType)
+    
 
     res.status(result.status_code).json(result)
 })
 
-app.delete("/v1/locadora/deletarfilme/:id", async (req, res) =>{
+app.delete("/v1/locadora/filme/:id", async (req, res) =>{
     let id = req.params.id
-    let result = await excluirFilme(id)
+    let result = await filme.excluirFilme(id)
 
     res.status(result.status_code).json(result)
 })
+
+// -------------------------- ROTAS CLASSIFICAÇÃO -------------------------- 
+
+app.post("/v1/locadora/classificacao", bodyParserJson, async (req, res) =>{
+    let dados = req.body
+    let contentType = req.headers['content-type']
+    let result = await classificacao.inserirNovaClassificacaoIndicativa(dados, contentType)
+
+    res.status(result.status_code).json(result)
+})
+
+app.get("/v1/locadora/todasclassificacoes", async (req,res) =>{
+    let result = await classificacao.listarClassificacaoIndicativa()
+    res.status(result.status_code).json(result)
+})
+
+app.get("/v1/locadora/classifcacaobyid/:id", async (req, res) =>{
+    let id = req.params.id
+    let result = await classificacao.buscarClassificacaoIndicativa(id)
+
+    res.status(result.status_code).json(result)
+})
+
+app.put("/v1/locadora/classificacao/:id", bodyParserJson, async(req, res) =>{
+    let dados = req.body
+    let contentType = req.headers['content-type']
+    let id = req.params.id
+    let result = await classificacao.atualizarClassificacaoIndicativa(dados, id, contentType)
+
+    res.status(result.status_code).json(result)
+})
+
+app.delete("/v1/locadora/classificacao/:id", async (req,res) =>{
+    let id = req.params.id
+    let result = await classificacao.excluirClassificacaoIndicativa(id)
+
+    res.status(result.status_code).json(result)
+})
+
 
 app.get("/v1/locadora/help", (req, res) =>{
     const docApi = {
