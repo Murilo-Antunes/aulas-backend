@@ -11,10 +11,12 @@ CREATE TABLE tbl_filme(
     data_lancamento DATE NOT NULL,
     duracao 		TIME NOT NULL,
     sinopse 		TEXT NOT NULL,
-    avaliacao 		DECIMAL(3,2) DEFAULT NULL,
+    avaliacao 		DECIMAL(4,2) DEFAULT NULL,
 	valor 			DECIMAL(5,2) NOT NULL DEFAULT 0,
     capa 			VARCHAR(255)
 );
+
+DROP TABLE tbl_filme;
 
 -- Tabela Classificação Indicativa --
 CREATE TABLE tbl_classificacao_indicativa(
@@ -70,6 +72,11 @@ CREATE TABLE tbl_ator(
     data_termino_carreira 	DATE,
     biografia 				TEXT
 );
+
+SELECT * FROM tbl_ator;
+
+SHOW TABLES;
+desc tbl_ator;
 
 -- Tabela Atividade -- 
 CREATE TABLE tbl_atividade(

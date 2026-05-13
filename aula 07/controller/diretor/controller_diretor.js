@@ -1,5 +1,5 @@
 /*******************************************************************************************************************************
- * Objetivo: Arquivo responsável pela validação, tratamento e manipulação de dados para o CRUD de classificção indicativa
+ * Objetivo: Arquivo responsável pela validação, tratamento e manipulação de dados para o CRUD de diretor
  * Data: 06/05/2026
  * Autor: Murilo
  * Versão: 1.0
@@ -9,29 +9,29 @@
 const configMessages = require('../module/configMessages.js')
 
 //importa o model da classificação indicativa
-const classificacaoIndicativaDAO = require('../../model/DAO/classificacao_indicativa/classificacao_indicativa.js')
+const diretorDAO = require('../../model/DAO/diretor/diretor.js')
 
-const inserirNovaClassificacaoIndicativa = async (classificacao, contentType) =>{
+const inserirNovoDiretor = async (diretor, contentType) =>{
     // let message = JSON.parse(JSON.stringify(configMessages))
     let message = JSON.parse(JSON.stringify(configMessages))
     
     try {
         if(String(contentType).toUpperCase() == 'APPLICATION/JSON'){
-            let validarClassicacao = validacao(classificacao)
-            if(validarClassicacao)
-                return validarClassicacao //400
+            let validarDiretor = validacao(diretor)
+            if(validarDiretor)
+                return validarDiretor //400
             
 
-            let result = await classificacaoIndicativaDAO.insertClassificacaoIndicativa(classificacao)
+            let result = await diretorDAO.insertDiretor(diretor)
             
 
             if(result){ //201
-                classificacao.id = result
+                diretor.id = result
 
                 message.DEFAULT_MESSAGE.status = message.SUCESS_CREATED_ITEM.status
                 message.DEFAULT_MESSAGE.status_code = message.SUCESS_CREATED_ITEM.status_code
                 message.DEFAULT_MESSAGE.message = message.SUCESS_CREATED_ITEM.message
-                message.DEFAULT_MESSAGE.response = classificacao
+                message.DEFAULT_MESSAGE.response = diretor
 
                 return message.DEFAULT_MESSAGE
             }else{ //erro da model
@@ -40,22 +40,22 @@ const inserirNovaClassificacaoIndicativa = async (classificacao, contentType) =>
         }else
             return message.ERROR_UNSUPORTED_MEDIA_TYPE
     } catch (error) { //erro da controller
-        
+        console.log(error)
         return message.ERROR_INTERNAL_SERVER_CONTROLLER //500
     }
 }
 
-const listarClassificacaoIndicativa = async () =>{
+const listarDiretor = async () =>{
     let message = JSON.parse(JSON.stringify(configMessages))
     try {
-        let result = await classificacaoIndicativaDAO.selectAllClassificacaoIndicativa()
+        let result = await diretorDAO.selectAllDiretor()
         
 
         if(result){
             if(result.length > 0){ 
                 message.DEFAULT_MESSAGE.status = message.SUCESS_RESPONSE.status
                 message.DEFAULT_MESSAGE.status_code = message.SUCESS_RESPONSE.status_code
-                message.DEFAULT_MESSAGE.response = {classificacao : result[0]}
+                message.DEFAULT_MESSAGE.response = {diretor : result[0]}
                 
                 return message.DEFAULT_MESSAGE //200
             }
@@ -69,9 +69,8 @@ const listarClassificacaoIndicativa = async () =>{
     }
 }
 
-const buscarClassificacaoIndicativa = async (id) =>{
+const buscarDiretor = async (id) =>{
     let message = JSON.parse(JSON.stringify(configMessages))
-    
 
     try {
         //verifica se o id é válido
@@ -80,13 +79,13 @@ const buscarClassificacaoIndicativa = async (id) =>{
             return message.ERROR_BAD_REQUEST //400
         }
 
-        let result = await classificacaoIndicativaDAO.selectByIdClassificacaoIndicativa(id)
+        let result = await diretorDAO.selectByIdDiretor(id)
 
         if(result){
             if(result[0].length > 0){
                 message.DEFAULT_MESSAGE.status = message.SUCESS_RESPONSE.status
                 message.DEFAULT_MESSAGE.status_code = message.SUCESS_RESPONSE.status_code
-                message.DEFAULT_MESSAGE.response = {classificacao: result[0]}
+                message.DEFAULT_MESSAGE.response = {diretor: result[0]}
 
                 return message.DEFAULT_MESSAGE
             }else
@@ -99,16 +98,16 @@ const buscarClassificacaoIndicativa = async (id) =>{
     }
 }
 
-const excluirClassificacaoIndicativa = async (id) =>{
+const excluirDiretor = async (id) =>{
     let message = JSON.parse(JSON.stringify(configMessages))
 
     try {
-        let resultBuscarId = await buscarClassificacaoIndicativa(id) 
+        let resultBuscarId = await buscarDiretor(id) 
 
         if(!resultBuscarId.status)
             return resultBuscarId //400 ou 500 ou 404
 
-        let result = await classificacaoIndicativaDAO.deleteClassificacaoIndicativa(id)
+        let result = await diretorDAO.deleteDiretor(id)
 
         if(result){ //200
             message.DEFAULT_MESSAGE.status = message.SUCESS_DELETED_ITEM.status
@@ -124,14 +123,13 @@ const excluirClassificacaoIndicativa = async (id) =>{
     }
 }
 
-const atualizarClassificacaoIndicativa = async (classificacao, id, contentType) =>{
+const atualizarDiretor = async (diretor, id, contentType) =>{
     let message = JSON.parse(JSON.stringify(configMessages))
 
     try {
         if(String(contentType).toUpperCase() == "APPLICATION/JSON"){
-            let resultBuscarId = await buscarClassificacaoIndicativa(id)
-            let validarClassicacao = validacao(classificacao)
-            console.log(classificacao)
+            let resultBuscarId = await buscarDiretor(id)
+            let validarClassicacao = validacao(diretor)
 
             if(!resultBuscarId.status)
                 return resultBuscarId //400 ou 404 ou 500
@@ -140,13 +138,13 @@ const atualizarClassificacaoIndicativa = async (classificacao, id, contentType) 
             if(validarClassicacao)
                 return validarClassicacao
 
-            let result = await classificacaoIndicativaDAO.updateClassificacaoIndicativa(classificacao, id)
-            console.log(result)
+
+            let result = await diretorDAO.updateDiretor(diretor, id)
 
             if(result){
                 message.DEFAULT_MESSAGE.status = message.SUCESS_UPDATED_ITEM.status
                 message.DEFAULT_MESSAGE.status_code = message.SUCESS_UPDATED_ITEM.status_code
-                message.DEFAULT_MESSAGE.response = classificacao
+                message.DEFAULT_MESSAGE.response = diretor
 
                 return message.DEFAULT_MESSAGE
             }else //error na model
@@ -160,22 +158,40 @@ const atualizarClassificacaoIndicativa = async (classificacao, id, contentType) 
     }
 }
 
-const validacao = (classificacao) =>{
+const validacao = (diretor) =>{
     let message = JSON.parse(JSON.stringify(configMessages))
-    classificacao = classificacao.classificacao
+    
 
-    if(String(classificacao).toUpperCase() == "L" || String(classificacao) == "10" || String(classificacao) == "12" || String(classificacao) == "14" || String(classificacao) == "16" || String(classificacao) == "18")
+    const data_nascimento = new Date(diretor.data_nascimento)
+    const data_inicio_carreira = new Date(diretor.data_inicio_carreira)
+    const data_falecimento = diretor.data_falecimento ? new Date(diretor.data_falecimento) : null
+    const data_termino_carreia = diretor.data_termino_carreia ? new Date(diretor.data_termino_carreia) : null
+
+
+    
+
+    //validação de dados para os atributos do diretor que retorna um 400
+    if(diretor.nome == undefined || diretor.nome == "" || diretor.nome.length > 80  || diretor.nome == null){
+        message.ERROR_BAD_REQUEST.field = '[NOME] INVÁLIDO'
+        //return message.ERROR_BAD_REQUEST //erro 400
+    }else if(data_nascimento == undefined || data_nascimento == "" || data_nascimento == null || isNaN(data_nascimento.getTime())){
+        message.ERROR_BAD_REQUEST.field = '[DATA NASCIMENTO] INVÁLIDO'
+    }else if(data_inicio_carreira == undefined || data_inicio_carreira == "" || data_inicio_carreira == null || isNaN(data_inicio_carreira.getTime())){
+        message.ERROR_BAD_REQUEST.field = '[DATA INICIO CARREIRA] INVÁLIDA'
+    }else if(data_falecimento != undefined && data_falecimento != null && data_falecimento != "" && isNaN(data_falecimento.getTime())){
+        message.ERROR_BAD_REQUEST.field = '[DATA FALECIMENTO] INVÁLIDA'
+    }else if(data_termino_carreia != undefined && data_termino_carreia != null && data_termino_carreia != "" && isNaN(data_termino_carreia.getTime())){
+        message.ERROR_BAD_REQUEST.field = '[DATA TERMINO CARREIRA] INVÁLIDO'
+    }else{
         return false
-    else
-        message.ERROR_BAD_REQUEST.field = "[Classificação Indicativa] Inválido"
-
-    return message.ERROR_BAD_REQUEST
+    }
+    return message.ERROR_BAD_REQUEST //status code 400
 }
 
 module.exports = {
-    inserirNovaClassificacaoIndicativa,
-    listarClassificacaoIndicativa,
-    buscarClassificacaoIndicativa,
-    excluirClassificacaoIndicativa,
-    atualizarClassificacaoIndicativa
+    inserirNovoDiretor,
+    listarDiretor,
+    buscarDiretor,
+    excluirDiretor,
+    atualizarDiretor
 }
