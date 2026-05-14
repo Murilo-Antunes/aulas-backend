@@ -8,23 +8,23 @@
 //importa o arquivo de configurações de mensagens
 const configMessages = require('../module/configMessages.js')
 
-//importa o model da classificação indicativa
+//importa o model de genero indicativa
 const generoDAO = require('../../model/DAO/genero/genero.js')
 
 const inserirNovoGenero = async (genero, contentType) =>{
     // let message = JSON.parse(JSON.stringify(configMessages))
     let message = JSON.parse(JSON.stringify(configMessages))
-    
     try {
         if(String(contentType).toUpperCase() == 'APPLICATION/JSON'){
-            let validarGenero = validacao(genero)
+            let validarGenero = await validacao(genero)
+            
+
             if(validarGenero)
                 return validarGenero //400
-            
 
             let result = await generoDAO.insertGenero(genero)
             
-
+            
             if(result){ //201
                 genero.id = result
 
@@ -45,17 +45,17 @@ const inserirNovoGenero = async (genero, contentType) =>{
     }
 }
 
-const listarClassificacaoIndicativa = async () =>{
+const listarGenero = async () =>{
     let message = JSON.parse(JSON.stringify(configMessages))
     try {
-        let result = await classificacaoIndicativaDAO.selectAllClassificacaoIndicativa()
+        let result = await generoDAO.selectAllGenero()
         
 
         if(result){
             if(result.length > 0){ 
                 message.DEFAULT_MESSAGE.status = message.SUCESS_RESPONSE.status
                 message.DEFAULT_MESSAGE.status_code = message.SUCESS_RESPONSE.status_code
-                message.DEFAULT_MESSAGE.response = {classificacao : result[0]}
+                message.DEFAULT_MESSAGE.response = {genero : result[0]}
                 
                 return message.DEFAULT_MESSAGE //200
             }
@@ -69,7 +69,7 @@ const listarClassificacaoIndicativa = async () =>{
     }
 }
 
-const buscarClassificacaoIndicativa = async (id) =>{
+const buscarGenero = async (id) =>{
     let message = JSON.parse(JSON.stringify(configMessages))
     
 
@@ -80,13 +80,13 @@ const buscarClassificacaoIndicativa = async (id) =>{
             return message.ERROR_BAD_REQUEST //400
         }
 
-        let result = await classificacaoIndicativaDAO.selectByIdClassificacaoIndicativa(id)
+        let result = await generoDAO.selectByIdGenero(id)
 
         if(result){
             if(result[0].length > 0){
                 message.DEFAULT_MESSAGE.status = message.SUCESS_RESPONSE.status
                 message.DEFAULT_MESSAGE.status_code = message.SUCESS_RESPONSE.status_code
-                message.DEFAULT_MESSAGE.response = {classificacao: result[0]}
+                message.DEFAULT_MESSAGE.response = {genero: result[0]}
 
                 return message.DEFAULT_MESSAGE
             }else
@@ -99,16 +99,16 @@ const buscarClassificacaoIndicativa = async (id) =>{
     }
 }
 
-const excluirClassificacaoIndicativa = async (id) =>{
+const excluirGenero = async (id) =>{
     let message = JSON.parse(JSON.stringify(configMessages))
 
     try {
-        let resultBuscarId = await buscarClassificacaoIndicativa(id) 
+        let resultBuscarId = await buscarGenero(id) 
 
         if(!resultBuscarId.status)
             return resultBuscarId //400 ou 500 ou 404
 
-        let result = await classificacaoIndicativaDAO.deleteClassificacaoIndicativa(id)
+        let result = await generoDAO.deleteGenero(id)
 
         if(result){ //200
             message.DEFAULT_MESSAGE.status = message.SUCESS_DELETED_ITEM.status
@@ -124,28 +124,27 @@ const excluirClassificacaoIndicativa = async (id) =>{
     }
 }
 
-const atualizarClassificacaoIndicativa = async (classificacao, id, contentType) =>{
+const atualizarGenero = async (genero, id, contentType) =>{
     let message = JSON.parse(JSON.stringify(configMessages))
 
     try {
         if(String(contentType).toUpperCase() == "APPLICATION/JSON"){
-            let resultBuscarId = await buscarClassificacaoIndicativa(id)
-            let validarClassicacao = validacao(classificacao)
+            let resultBuscarId = await buscarGenero(id)
+            let validarGenero = await validacao(genero)
 
             if(!resultBuscarId.status)
                 return resultBuscarId //400 ou 404 ou 500
 
 
-            if(validarClassicacao)
-                return validarClassicacao
+            if(validarGenero)
+                return validarGenero
 
-            let result = await classificacaoIndicativaDAO.updateClassificacaoIndicativa(classificacao, id)
-            console.log(result)
+            let result = await generoDAO.updateGenero(genero, id)
 
             if(result){
                 message.DEFAULT_MESSAGE.status = message.SUCESS_UPDATED_ITEM.status
                 message.DEFAULT_MESSAGE.status_code = message.SUCESS_UPDATED_ITEM.status_code
-                message.DEFAULT_MESSAGE.response = classificacao
+                message.DEFAULT_MESSAGE.response = genero
 
                 return message.DEFAULT_MESSAGE
             }else //error na model
@@ -154,27 +153,36 @@ const atualizarClassificacaoIndicativa = async (classificacao, id, contentType) 
         }else //erro no content type
             return message.ERROR_UNSUPORTED_MEDIA_TYPE //415
     } catch (error) { //error na controle
-        
         return message.ERROR_INTERNAL_SERVER_CONTROLLER //500
     }
 }
 
-const validacao = (classificacao) =>{
+const validacao = async (genero) =>{
     let message = JSON.parse(JSON.stringify(configMessages))
-    classificacao = classificacao.classificacao
+    let contador = 0
+    genero = genero.genero
+    
+    let generosCadastrados = await generoDAO.selectAllGenero()
 
-    if(String(classificacao).toUpperCase() == "L" || String(classificacao) == "10" || String(classificacao) == "12" || String(classificacao) == "14" || String(classificacao) == "16" || String(classificacao) == "18")
-        return false
-    else
+    if(genero == undefined || genero == "" || genero == null || genero.trim().length > 25){
         message.ERROR_BAD_REQUEST.field = "[Gênero] Inválido"
+        return message.ERROR_BAD_REQUEST
+    }
 
-    return message.ERROR_BAD_REQUEST
+    for(let i = 0; generosCadastrados[0].length > i; i++){
+        if(generosCadastrados[0][i].genero == String(genero).toUpperCase()){
+            message.ERROR_BAD_REQUEST.field = "[Gênero] Já cadastrado"
+            return message.ERROR_BAD_REQUEST
+        }
+    }
+
+    return false
 }
 
 module.exports = {
-    inserirNovaClassificacaoIndicativa,
-    listarClassificacaoIndicativa,
-    buscarClassificacaoIndicativa,
-    excluirClassificacaoIndicativa,
-    atualizarClassificacaoIndicativa
+    inserirNovoGenero,
+    listarGenero,
+    buscarGenero,
+    atualizarGenero,
+    excluirGenero
 }

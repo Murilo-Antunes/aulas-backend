@@ -7,6 +7,8 @@
 
 const filme =  require('./controller/filme/controller_filme.js')
 const classificacao = require('./controller/classificacao_indicativa/controller_classificacao_indicativa.js')
+const genero = require('./controller/genero/controller_genero.js')
+const nacionalidade = require("./controller/nacionalidade/controller_nacionalidade.js")
 
 const express = require('express')
 const cors = require('cors')
@@ -108,6 +110,81 @@ app.delete("/v1/locadora/classificacao/:id", async (req,res) =>{
     res.status(result.status_code).json(result)
 })
 
+// -------------------------- ROTAS GÊNERO --------------------------
+
+app.post("/v1/locadora/genero", bodyParserJson, async (req, res) =>{
+    let dados = req.body
+    let contentType = req.headers['content-type']
+    let result = await genero.inserirNovoGenero(dados, contentType)    
+
+    res.status(result.status_code).json(result)
+})
+
+app.get("/v1/locadora/todosgeneros", async (req,res)=>{
+    let result = await genero.listarGenero()
+    res.status(result.status_code).json(result)
+})
+
+app.get("/v1/locadora/generobyid/:id", async(req,res) =>{
+    let id = req.params.id
+    let result = await genero.buscarGenero(id)
+
+    res.status(result.status_code).json(result)
+})
+
+app.put("/v1/locadora/genero/:id", bodyParserJson, async (req,res) =>{
+    let id = req.params.id
+    let contentType = req.headers['content-type']
+    let dados = req.body
+    let result = await genero.atualizarGenero(dados, id, contentType)
+
+    res.status(result.status_code).json(result)
+})
+
+app.delete("/v1/locadora/genero/:id", async (req,res) =>{
+    let id = req.params.id
+    let result = await genero.excluirGenero(id)
+
+    res.status(result.status_code).json(result)
+})
+
+// -------------------------- ROTAS NACIONALIDADE --------------------------
+
+app.post("/v1/locadora/nacionalidade", bodyParserJson, async (req, res) =>{
+    let dados = req.body
+    let contentType = req.headers['content-type']
+    let result = await nacionalidade.inserirNovaNacionalidade(dados, contentType)
+
+    res.status(result.status_code).json(result)
+})
+
+app.get("/v1/locadora/todasnacionalidades", async (req,res)=>{
+    let result = await nacionalidade.listarNacionalidade()
+    res.status(result.status_code).json(result)
+})
+
+app.get("/v1/locadora/nacionalidadebyid/:id", async(req,res) =>{
+    let id = req.params.id
+    let result = await nacionalidade.buscarNacionalidade(id)
+
+    res.status(result.status_code).json(result)
+})
+
+app.put("/v1/locadora/nacionalidade/:id", bodyParserJson, async (req,res) =>{
+    let id = req.params.id
+    let contentType = req.headers['content-type']
+    let dados = req.body
+    let result = await nacionalidade.atualizarNacionalidade(dados, id, contentType)
+
+    res.status(result.status_code).json(result)
+})
+
+app.delete("/v1/locadora/nacionalidade/:id", async (req,res) =>{
+    let id = req.params.id
+    let result = await nacionalidade.excluirNacionalidade(id)
+
+    res.status(result.status_code).json(result)
+})
 
 app.get("/v1/locadora/help", (req, res) =>{
     const docApi = {

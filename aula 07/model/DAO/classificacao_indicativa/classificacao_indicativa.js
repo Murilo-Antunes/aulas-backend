@@ -16,9 +16,8 @@ const knexConex = knex(knexConfig.development)
 const insertClassificacaoIndicativa = async (classificacao) =>{
     try {
         let sql = ` INSERT INTO tbl_classificacao_indicativa (classificacao) VALUES ('${classificacao.classificacao}');`
-        
+
         let result = await knexConex.raw(sql)
-        
 
         if(result)
             return result[0].insertId
@@ -36,8 +35,6 @@ const updateClassificacaoIndicativa = async (classificacao, id) =>{
                    WHERE id = ${id}`
         let result = await knexConex.raw(sql)
 
-        
-
         if(result)
             return true
         else
@@ -54,6 +51,7 @@ const selectAllClassificacaoIndicativa = async () => {
         let sql = `SELECT * FROM tbl_classificacao_indicativa`
 
         let result = await knexConex.raw(sql)
+        console.log(result)
 
         if(Array.isArray(result))
             return result
@@ -70,6 +68,7 @@ const selectByIdClassificacaoIndicativa = async (id) =>{
         let sql = `SELECT * FROM tbl_classificacao_indicativa WHERE id = ${id}`
 
         let result = await knexConex.raw(sql)
+        
 
         if(Array.isArray(result))
             return result
