@@ -91,5 +91,27 @@ ALTER TABLE tbl_filme
 		FOREIGN KEY (id_classificacao)
 		REFERENCES tbl_classificacao_indicativa(id);
         
+desc tbl_classificacao_indicativa;
+        
 SELECT * FROM tbl_filme;
+
+#Adicionando dados entre tabelas relacionadas
+SELECT tbl_filme.nome as nome_filme, tbl_filme.sinopse, tbl_filme.data_lancamento, tbl_filme.capa, tbl_classificacao_indicativa.classificacao as nome_classificacao
+FROM tbl_filme
+	inner join tbl_classificacao_indicativa
+		on tbl_classificacao_indicativa.id = tbl_filme.id_classificacao;
+
+
 DELETE FROM tbl_filme;
+
+INSERT INTO tbl_filme (nome, data_lancamento, duracao, sinopse, avaliacao, valor, capa, id_classificacao)
+                VALUES (
+					"O Poderoso Chefão",
+                    "1972-03-24",
+                    "02:55:00",
+                    "Don Vito Corleone (Marlon Brando) é o chefe de uma família de Nova York que está feliz, pois Connie (Talia Shire), sua filha, se casou com Carlo (Gianni Russo). Porém, durante a festa, Bonasera (Salvatore Corsitto) é visto no escritório de Don Corleone pedindo justiça, vingança na verdade contra membros de uma quadrilha, que espancaram barbaramente sua filha por ela ter se recusado a fazer sexo para preservar a honra. ",
+                    "6",
+                    "100",
+                    "https://br.web.img3.acsta.net/c_310_420/medias/nmedia/18/90/93/20/20120876.jpg",
+                    12
+                );
