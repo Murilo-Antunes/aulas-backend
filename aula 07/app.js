@@ -7,6 +7,8 @@
 
 const filme =  require('./controller/filme/controller_filme.js')
 const classificacao = require('./controller/classificacao_indicativa/controller_classificacao_indicativa.js')
+const ator = require('./controller/ator/controller_ator.js')
+const diretor = require('./controller/diretor/controller_diretor.js')
 const genero = require('./controller/genero/controller_genero.js')
 const nacionalidade = require("./controller/nacionalidade/controller_nacionalidade.js")
 
@@ -58,8 +60,8 @@ app.get("/v1/locadora/filmebyid/:id", async (req, res) =>{
 app.put("/v1/locadora/filme/:id", bodyParserJson, async (req, res) =>{
     let id = req.params.id
     let contentType = req.headers['content-type']
-    let filme = req.body
-    let result = await filme.atualizarFIlme(filme, id, contentType)
+    let dados = req.body
+    let result = await filme.atualizarFIlme(dados, id, contentType)
     
 
     res.status(result.status_code).json(result)
@@ -77,6 +79,7 @@ app.delete("/v1/locadora/filme/:id", async (req, res) =>{
 app.post("/v1/locadora/classificacao", bodyParserJson, async (req, res) =>{
     let dados = req.body
     let contentType = req.headers['content-type']
+
     let result = await classificacao.inserirNovaClassificacaoIndicativa(dados, contentType)
 
     res.status(result.status_code).json(result)
@@ -110,6 +113,84 @@ app.delete("/v1/locadora/classificacao/:id", async (req,res) =>{
     res.status(result.status_code).json(result)
 })
 
+// -------------------------- ROTAS ATOR -------------------------- 
+app.post("/v1/locadora/ator", bodyParserJson, async (req, res) =>{
+    let dados = req.body //recebe o conteudo da requsição (dentro do body)
+    let contentType = req.headers['content-type']
+    let result = await ator.inserirNovoAtor(dados, contentType)
+    res.status(result.status_code).json(result)
+})
+
+app.get("/v1/locadora/todosatores", async (req, res) =>{
+    let result = await ator.listarAtor()
+
+    res.status(result.status_code).json(result)
+})
+
+app.get("/v1/locadora/atorbyid/:id", async (req, res) =>{
+    let id = req.params.id
+    let result = await ator.buscarAtor(id)
+
+
+    res.status(result.status_code).json(result)
+})
+
+app.put("/v1/locadora/ator/:id", bodyParserJson, async (req, res) =>{
+    let id = req.params.id
+    let contentType = req.headers['content-type']
+    let dados = req.body
+    let result = await ator.atualizarAtor(dados, id, contentType)
+    
+
+    res.status(result.status_code).json(result)
+})
+
+app.delete("/v1/locadora/ator/:id", async (req, res) =>{
+    let id = req.params.id
+    let result = await ator.excluirAtor(id)
+
+    res.status(result.status_code).json(result)
+})
+
+
+// -------------------------- ROTAS DIRETOR -------------------------- 
+app.post("/v1/locadora/diretor", bodyParserJson, async (req, res) =>{
+    let dados = req.body //recebe o conteudo da requsição (dentro do body)
+    let contentType = req.headers['content-type']
+    let result = await diretor.inserirNovoDiretor(dados, contentType)
+    res.status(result.status_code).json(result)
+})
+
+app.get("/v1/locadora/todosdiretores", async (req, res) =>{
+    let result = await diretor.listarDiretor()
+
+    res.status(result.status_code).json(result)
+})
+
+app.get("/v1/locadora/diretorbyid/:id", async (req, res) =>{
+    let id = req.params.id
+    let result = await diretor.buscarDiretor(id)
+
+
+    res.status(result.status_code).json(result)
+})
+
+app.put("/v1/locadora/diretor/:id", bodyParserJson, async (req, res) =>{
+    let id = req.params.id
+    let contentType = req.headers['content-type']
+    let dados = req.body
+    let result = await diretor.atualizarDiretor(dados, id, contentType)
+    
+
+    res.status(result.status_code).json(result)
+})
+
+app.delete("/v1/locadora/diretor/:id", async (req, res) =>{
+    let id = req.params.id
+    let result = await diretor.excluirDiretor(id)
+
+    res.status(result.status_code).json(result)
+})
 // -------------------------- ROTAS GÊNERO --------------------------
 
 app.post("/v1/locadora/genero", bodyParserJson, async (req, res) =>{
