@@ -51,7 +51,6 @@ const selectAllClassificacaoIndicativa = async () => {
         let sql = `SELECT * FROM tbl_classificacao_indicativa`
 
         let result = await knexConex.raw(sql)
-        console.log(result)
 
         if(Array.isArray(result))
             return result
