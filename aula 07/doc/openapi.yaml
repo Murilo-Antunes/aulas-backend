@@ -10,14 +10,15 @@ externalDocs:
 servers:
   - url: http://
 paths:
+  #-------------- FILME -------------- 
   /v1/locadora/filme:
     post:
       tags:
-        - aluno
-      summary: Adiciona um novo Aluno
-      description: Adiciona um novo Aluno
+        - filme
+      summary: Adiciona um novo Filme
+      description: Adiciona um novo Filme
       requestBody:
-        description: JSON contendo os dados do anovo aluno a ser inserido no sistema
+        description: JSON contendo os dados do novo filme a ser inserido no banco
         content:
           application/json:
             schema:
@@ -29,9 +30,37 @@ paths:
         '400':
           description: Invalid input
         '500':
-          description: Error model
+          description: Error model/controller
+        '415' :
+          description: Unsuported media type
+  /v1/locadora/filmebyid/{id}:
+    get:
+      tags:
+        - filme
+      summary: Busca um filme pelo ID
+      description: Retorna um filme pelo ID
+      parameters:
+        - name: id
+          in: path
+          description: ID para retornar o filme
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Filme'          
+        '400':
+          description: Envalid ID supplied
+        '404':
+          description: Filme not found
         '500':
-          description: Error controller
+          description: Error model/controller
+  /v1/locadora/todosfilmes:
     get:
       tags:
         - filme
@@ -49,31 +78,9 @@ paths:
            
         '404':
           description: Not Found
-  /v1/filme/{id}:
-    get:
-      tags:
-        - filme
-      summary: Busca um filme pelo ID
-      description: Retorna um filme pelo ID
-      parameters:
-        - name: id
-          in: path
-          description: ID para retornar o filme
-          required: true
-          schema:
-            type: integer
-            format: int64
-      responses:
-        '200':
-          description: successful operation
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Filme'          
-        '400':
-          description: Invalid ID supplied
-        '404':
-          description: Filme not found
+        '500':
+          description: error model/controller
+  /v1/locadora/filme/{id}:
     put:
       tags:
         - filme
@@ -100,7 +107,9 @@ paths:
         '400':
           description: Invalid ID supplied
         '404':
-          description: Pet not found
+          description: ID not found
+        '500':
+          description: Error model/controller
     delete:
       tags:
         - filme
@@ -116,19 +125,763 @@ paths:
             format: int64
       responses:
         '200':
-          description: successful operation
+          description: Successful operation
         '400':
           description: Invalid ID supplied
         '404':
-          description: Pet not found
-  
+          description: ID not found
+        '500':
+          description: Error model/controller
+
+  #-------------- CLASSIFICACAO --------------
+  /v1/locadora/classificacao:
+    post:
+      tags:
+        - classificacao
+      summary: Adicionar Classificacao
+      description: Adiciona uma nova classificacao no banco de dados
+      requestBody:
+        description: JSON contendo os dados da nova classificacao a ser inserida no banco
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Classificacao'
+        required: true
+      responses:
+        '201':
+          description: Successful operation
+        '400':
+          description: Invalid input
+        '500':
+          description: Error model/controller
+        '415' :
+          description: Unsuported media type
+  /v1/locadora/classificacaobyid/{id}:
+    get:
+      tags:
+        - classificacao
+      summary: Busca uma classificacao pelo ID
+      description: Retorna uma classificacao pelo ID
+      parameters:
+        - name: id
+          in: path
+          description: ID para retornar a classificacao
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Classificacao'          
+        '400':
+          description: Envalid ID supplied
+        '404':
+          description: Classificacao not found
+        '500':
+          description: Error model/controller
+  /v1/locadora/todasclassificacoes:
+    get:
+      tags:
+        - classificacao
+      summary: Listar todas as Classificacoes
+      description: Listagem de todas as classificacoes registradas no sistema
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Filme'          
+           
+        '404':
+          description: Not Found
+        '500':
+          description: error model/controller
+  /v1/locadora/classificacao/{id}:
+    put:
+      tags:
+        - classificacao
+      summary: Atualizar uma classificacao pelo ID
+      description: Atualizar uma classificacao pelo ID
+      parameters:
+        - name: id
+          in: path
+          description: ID para localizar e atualizar a classificacao
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        description: Dados para atualizar a classificacao
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Classificacao'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: ID not found
+        '500':
+          description: Error model/controller
+    delete:
+      tags:
+        - classificacao
+      summary: Delete classificacao
+      description: Excluir uma classificacao pelo id
+      parameters:
+        - name: id
+          in: path
+          description: ID para localizar uma classificacao
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Successful operation
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: ID not found
+        '500':
+          description: Error model/controller
+
+  #-------------- ATOR --------------
+  /v1/locadora/ator:
+    post:
+      tags:
+        - ator
+      summary: Adicionar Ator
+      description: Adiciona um novo ator no banco de dados
+      requestBody:
+        description: JSON contendo os dados de um novo ator a ser inserida no banco
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Ator'
+        required: true
+      responses:
+        '201':
+          description: Successful operation
+        '400':
+          description: Invalid input
+        '500':
+          description: Error model/controller
+        '415' :
+          description: Unsuported media type
+  /v1/locadora/atorbyid/{id}:
+    get:
+      tags:
+        - ator
+      summary: Busca um ator pelo ID
+      description: Retorna um ator pelo ID
+      parameters:
+        - name: id
+          in: path
+          description: ID para retornar o ator
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Ator'          
+        '400':
+          description: Envalid ID supplied
+        '404':
+          description: Ator not found
+        '500':
+          description: Error model/controller
+  /v1/locadora/todosatores:
+    get:
+      tags:
+        - ator
+      summary: Listar todos os atores
+      description: Listagem de todos os atores registrados no sistema
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Ator'          
+           
+        '404':
+          description: Not Found
+        '500':
+          description: error model/controller
+  /v1/locadora/ator/{id}:
+    put:
+      tags:
+        - ator
+      summary: Atualizar um ator pelo ID
+      description: Atualizar um ator pelo ID
+      parameters:
+        - name: id
+          in: path
+          description: ID para localizar e atualizar o ator
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        description: Dados para atualizar o ator
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Ator'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: ID not found
+        '500':
+          description: Error model/controller
+    delete:
+      tags:
+        - ator
+      summary: Delete ator
+      description: Excluir um ator pelo id
+      parameters:
+        - name: id
+          in: path
+          description: ID para localizar um ator
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Successful operation
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: ID not found
+        '500':
+          description: Error model/controller
+
+  #-------------- DIRETOR  --------------
+  /v1/locadora/diretor:
+    post:
+      tags:
+        - diretor
+      summary: Adicionar diretor
+      description: Adiciona um novo diretor no banco de dados
+      requestBody:
+        description: JSON contendo os dados de um novo diretor a ser inserido no banco
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Diretor'
+        required: true
+      responses:
+        '201':
+          description: Successful operation
+        '400':
+          description: Invalid input
+        '500':
+          description: Error model/controller
+        '415' :
+          description: Unsuported media type
+  /v1/locadora/diretorbyid/{id}:
+    get:
+      tags:
+        - diretor
+      summary: Busca um diretor pelo ID
+      description: Retorna um diretor pelo ID
+      parameters:
+        - name: id
+          in: path
+          description: ID para retornar o diretor
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Diretor'          
+        '400':
+          description: Envalid ID supplied
+        '404':
+          description: Diretor not found
+        '500':
+          description: Error model/controller
+  /v1/locadora/todosdiretores:
+    get:
+      tags:
+        - diretor
+      summary: Listar todos os diretores
+      description: Listagem de todos os diretores registrados no sistema
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Diretor'          
+           
+        '404':
+          description: Not Found
+        '500':
+          description: error model/controller
+  /v1/locadora/diretor/{id}:
+    put:
+      tags:
+        - diretor
+      summary: Atualizar um diretor pelo ID
+      description: Atualizar um diretor pelo ID
+      parameters:
+        - name: id
+          in: path
+          description: ID para localizar e atualizar o diretor
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        description: Dados para atualizar o diretor
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Diretor'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: ID not found
+        '500':
+          description: Error model/controller
+    delete:
+      tags:
+        - diretor
+      summary: Delete diretor
+      description: Excluir um diretor pelo id
+      parameters:
+        - name: id
+          in: path
+          description: ID para localizar um diretor
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Successful operation
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: ID not found
+        '500':
+          description: Error model/controller
+
+  #-------------- GENERO  --------------
+  /v1/locadora/genero:
+    post:
+      tags:
+        - genero
+      summary: Adicionar genero
+      description: Adiciona um novo genero no banco de dados
+      requestBody:
+        description: JSON contendo os dados de um novo genero a ser inserido no banco
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Genero'
+        required: true
+      responses:
+        '201':
+          description: Successful operation
+        '400':
+          description: Invalid input
+        '500':
+          description: Error model/controller
+        '415' :
+          description: Unsuported media type
+  /v1/locadora/generobyid/{id}:
+    get:
+      tags:
+        - genero
+      summary: Busca um genero pelo ID
+      description: Retorna um genero pelo ID
+      parameters:
+        - name: id
+          in: path
+          description: ID para retornar o genero
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Genero'          
+        '400':
+          description: Envalid ID supplied
+        '404':
+          description: genero not found
+        '500':
+          description: Error model/controller
+  /v1/locadora/todosgeneros:
+    get:
+      tags:
+        - genero
+      summary: Listar todos os generos
+      description: Listagem de todos os generos registrados no sistema
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Genero'          
+           
+        '404':
+          description: Not Found
+        '500':
+          description: error model/controller
+  /v1/locadora/genero/{id}:
+    put:
+      tags:
+        - genero
+      summary: Atualizar um genero pelo ID
+      description: Atualizar um genero pelo ID
+      parameters:
+        - name: id
+          in: path
+          description: ID para localizar e atualizar o genero
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        description: Dados para atualizar o genero
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Genero'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: ID not found
+        '500':
+          description: Error model/controller
+    delete:
+      tags:
+        - genero
+      summary: Delete genero
+      description: Excluir um genero pelo id
+      parameters:
+        - name: id
+          in: path
+          description: ID para localizar um genero
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Successful operation
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: ID not found
+        '500':
+          description: Error model/controller
+
+  #-------------- NACIONALIDADE  --------------
+  /v1/locadora/nacionalidade:
+    post:
+      tags:
+        - nacionalidade
+      summary: Adicionar nacionalidade
+      description: Adiciona uma nova nacionalidade no banco de dados
+      requestBody:
+        description: JSON contendo os dados de uma nova nacionalidade a ser inserido no banco
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Nacionalidade'
+        required: true
+      responses:
+        '201':
+          description: Successful operation
+        '400':
+          description: Invalid input
+        '500':
+          description: Error model/controller
+        '415' :
+          description: Unsuported media type
+  /v1/locadora/nacionalidadebyid/{id}:
+    get:
+      tags:
+        - nacionalidade
+      summary: Busca uma nacionalidade pelo ID
+      description: Retorna uma nacionalidade pelo ID
+      parameters:
+        - name: id
+          in: path
+          description: ID para retornar a nacionalidade
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Nacionalidade'          
+        '400':
+          description: Envalid ID supplied
+        '404':
+          description: Nacionalidade not found
+        '500':
+          description: Error model/controller
+  /v1/locadora/todasnacionalidades:
+    get:
+      tags:
+        - nacionalidade
+      summary: Listar todas as nacionalidades
+      description: Listagem de todas as nacionalidades registradas no sistema
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Nacionalidade'          
+           
+        '404':
+          description: Not Found
+        '500':
+          description: error model/controller
+  /v1/locadora/nacionalidade/{id}:
+    put:
+      tags:
+        - nacionalidade
+      summary: Atualizar uma nacionalidade pelo ID
+      description: Atualizar uma nacionalidade pelo ID
+      parameters:
+        - name: id
+          in: path
+          description: ID para localizar e atualizar a nacionalidade
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        description: Dados para atualizar a nacionalidade
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Nacionalidade'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: ID not found
+        '500':
+          description: Error model/controller
+    delete:
+      tags:
+        - nacionalidade
+      summary: Delete nacionalidade
+      description: Excluir uma nacionalidade pelo id
+      parameters:
+        - name: id
+          in: path
+          description: ID para localizar uma nacionalidade
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Successful operation
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: ID not found
+        '500':
+          description: Error model/controller
+
+ #-------------- ATIVIDADE  --------------
+  /v1/locadora/atividade:
+    post:
+      tags:
+        - atividade
+      summary: Adicionar atividade
+      description: Adiciona uma nova atividade no banco de dados
+      requestBody:
+        description: JSON contendo os dados de uma nova atividade a ser inserido no banco
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Atividade'
+        required: true
+      responses:
+        '201':
+          description: Successful operation
+        '400':
+          description: Invalid input
+        '500':
+          description: Error model/controller
+        '415' :
+          description: Unsuported media type
+  /v1/locadora/atividadebyid/{id}:
+    get:
+      tags:
+        - atividade
+      summary: Busca uma atividade pelo ID
+      description: Retorna uma atividade pelo ID
+      parameters:
+        - name: id
+          in: path
+          description: ID para retornar a atividade
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Atividade'          
+        '400':
+          description: Envalid ID supplied
+        '404':
+          description: atividade not found
+        '500':
+          description: Error model/controller
+  /v1/locadora/todasatividades:
+    get:
+      tags:
+        - atividade
+      summary: Listar todas as atividades
+      description: Listagem de todas as atividades registradas no sistema
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Atividade'          
+           
+        '404':
+          description: Not Found
+        '500':
+          description: error model/controller
+  /v1/locadora/atividade/{id}:
+    put:
+      tags:
+        - atividade
+      summary: Atualizar uma atividade pelo ID
+      description: Atualizar uma atividade pelo ID
+      parameters:
+        - name: id
+          in: path
+          description: ID para localizar e atualizar a atividade
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        description: Dados para atualizar a atividade
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Atividade'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: ID not found
+        '500':
+          description: Error model/controller
+    delete:
+      tags:
+        - atividade
+      summary: Delete atividade
+      description: Excluir uma atividade pelo id
+      parameters:
+        - name: id
+          in: path
+          description: ID para localizar uma atividade
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Successful operation
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: ID not found
+        '500':
+          description: Error model/controller
+
 
 components:
   schemas:
     Filme:
       required:
         - nome
+        - data_lancamento
+        - duracao
         - sinopse
+        - valor
+
       type: object
       properties:
         id:
@@ -142,24 +895,93 @@ components:
         duracao:
           type: string
         valor:
-          type: decimal
+          type: integer
         avaliacao:
-          type: decimal
+          type: integer
         capa:
           type: string
-    a:
+    Classificacao:
+      required:
+        - classificao
+      type: object
+      properties:
+        id:
+          type: integer
+        classificacao:
+          type: string
+    Ator:
       required:
         - nome
+        - data_nascimento
+        - data_inicio_carreira
       type: object
       properties:
         id:
           type: integer
         nome:
           type: string
-        celular:
+        data_nascimento:
           type: string
-        email:
+        data_inicio_carreira:
           type: string
+        data_falecimento:
+          type: string
+        data_termino_carreira:
+          type: string
+        biografia:
+          type: string
+    Diretor:
+      required:
+        - nome
+        - data_nascimento
+        - data_inicio_carreira
+      type: object
+      properties:
+        id:
+          type: integer
+        nome:
+          type: string
+        data_nascimento:
+          type: string
+        data_inicio_carreira:
+          type: string
+        data_falecimento:
+          type: string
+        data_termino_carreira:
+          type: string
+        biografia:
+          type: string
+    Genero:
+      required:
+        - genero
+      type: object
+      properties:
+        id:
+          type: integer
+        genero:
+          type: string
+    Nacionalidade:
+      required:
+        - pais
+        - sigla
+      type: object
+      properties:
+        id:
+          type: integer
+        pais:
+          type: string
+        sigla:
+          type: string
+    Atividade:
+      required:
+        - atividade
+      type: object
+      properties:
+        id:
+          type: integer
+        atividade:
+          type: string
+    
   requestBodies:
     Filme:
       description: Objeto que deve ser enviado no Body das requisicoes com os dados do filme
@@ -167,4 +989,39 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/Filme'
-    
+    Classificacao: 
+      description: Objeto que deve ser enviado no Body das requisicoes com os dados da classificacao
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Classificacao'
+    Ator: 
+      description: Objeto que deve ser enviado no Body das requisicoes com os dados do Ator
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Ator'
+    Diretor: 
+      description: Objeto que deve ser enviado no Body das requisicoes com os dados do Diretor
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Diretor'
+    Genero: 
+      description: Objeto que deve ser enviado no Body das requisicoes com os dados do Genero
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Genero'  
+    Nacionalidade: 
+      description: Objeto que deve ser enviado no Body das requisicoes com os dados da Nacionalidade
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Nacionalidade'
+    Atividade: 
+      description: Objeto que deve ser enviado no Body das requisicoes com os dados da Atividade
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Atividade'

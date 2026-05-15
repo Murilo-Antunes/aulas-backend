@@ -40,7 +40,6 @@ const inserirNovaAtividade = async (atividade, contentType) =>{
         }else
             return message.ERROR_UNSUPORTED_MEDIA_TYPE
     } catch (error) { //erro da controller
-        console.log(error)
         return message.ERROR_INTERNAL_SERVER_CONTROLLER //500
     }
 }
@@ -131,7 +130,6 @@ const atualizarAtividade = async (atividade, id, contentType) =>{
         if(String(contentType).toUpperCase() == "APPLICATION/JSON"){
             let resultBuscarId = await buscarAtividade(id)
             let validarAtividade = await validacao(atividade)
-            console.log(validarAtividade)
 
             if(!resultBuscarId.status)
                 return resultBuscarId //400 ou 404 ou 500
@@ -177,6 +175,7 @@ const validacao = async (atividade) =>{
             return message.ERROR_BAD_REQUEST
         }
     }
+
     return false
 }
 
