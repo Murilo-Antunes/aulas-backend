@@ -166,10 +166,7 @@ const validacao = (ator) =>{
     const data_inicio_carreira = new Date(ator.data_inicio_carreira)
     const data_falecimento = ator.data_falecimento ? new Date(ator.data_falecimento) : null
     const data_termino_carreia = ator.data_termino_carreia ? new Date(ator.data_termino_carreia) : null
-
-
     
-
     //validação de dados para os atributos do ator que retorna um 400
     if(ator.nome == undefined || ator.nome == "" || ator.nome.length > 80  || ator.nome == null){
         message.ERROR_BAD_REQUEST.field = '[NOME] INVÁLIDO'
@@ -185,6 +182,7 @@ const validacao = (ator) =>{
     }else{
         return false
     }
+
     return message.ERROR_BAD_REQUEST //status code 400
 }
 

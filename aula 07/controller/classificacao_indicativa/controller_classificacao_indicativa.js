@@ -158,16 +158,25 @@ const atualizarClassificacaoIndicativa = async (classificacao, id, contentType) 
     }
 }
 
-const validacao = (classificacao) =>{
+const validacao = async (classificacao) =>{
     let message = JSON.parse(JSON.stringify(configMessages))
     classificacao = classificacao.classificacao
+    let classificacaoCadastradas = await classificacaoIndicativaDAO.selectAllClassificacaoIndicativa()
 
-    if(String(classificacao).toUpperCase() == "L" || String(classificacao) == "10" || String(classificacao) == "12" || String(classificacao) == "14" || String(classificacao) == "16" || String(classificacao) == "18")
-        return false
-    else
+    if(String(classificacao).toUpperCase() != "L" || String(classificacao) != "10" || String(classificacao) != "12" || String(classificacao) != "14" || String(classificacao) != "16" || String(classificacao) != "18"){
         message.ERROR_BAD_REQUEST.field = "[Classificação Indicativa] Inválido"
+        return message.ERROR_BAD_REQUEST
+    }
 
-    return message.ERROR_BAD_REQUEST
+    //identifica se a classificação já foi cadastrada anteriormente
+    for(let i = 0; [0].length > i; i++){
+        if(String(classificacaoCadastradas[0][i].classificacao).toUpperCase() == String(classificacao).toUpperCase()){
+            message.ERROR_BAD_REQUEST.field = "[CLASSIFICAÇÃO] Já cadastrada"
+            return message.ERROR_BAD_REQUEST
+        }
+    }
+
+    return false
 }
 
 module.exports = {

@@ -159,7 +159,6 @@ const atualizarGenero = async (genero, id, contentType) =>{
 
 const validacao = async (genero) =>{
     let message = JSON.parse(JSON.stringify(configMessages))
-    let contador = 0
     genero = genero.genero
     
     let generosCadastrados = await generoDAO.selectAllGenero()
