@@ -11,6 +11,7 @@ const ator = require('./controller/ator/controller_ator.js')
 const diretor = require('./controller/diretor/controller_diretor.js')
 const genero = require('./controller/genero/controller_genero.js')
 const nacionalidade = require("./controller/nacionalidade/controller_nacionalidade.js")
+const atividade = require("./controller/atividade/controller_atividade.js")
 
 const express = require('express')
 const cors = require('cors')
@@ -263,6 +264,44 @@ app.put("/v1/locadora/nacionalidade/:id", bodyParserJson, async (req,res) =>{
 app.delete("/v1/locadora/nacionalidade/:id", async (req,res) =>{
     let id = req.params.id
     let result = await nacionalidade.excluirNacionalidade(id)
+
+    res.status(result.status_code).json(result)
+})
+
+// -------------------------- ROTAS ATIVIDADE --------------------------
+
+app.post("/v1/locadora/atividade", bodyParserJson, async (req, res) =>{
+    let dados = req.body
+    let contentType = req.headers['content-type']
+    let result = await atividade.inserirNovaAtividade(dados, contentType)
+
+    res.status(result.status_code).json(result)
+})
+
+app.get("/v1/locadora/todasatividades", async (req,res)=>{
+    let result = await atividade.listarAtividade()
+    res.status(result.status_code).json(result)
+})
+
+app.get("/v1/locadora/atividadebyid/:id", async(req,res) =>{
+    let id = req.params.id
+    let result = await atividade.buscarAtividade(id)
+
+    res.status(result.status_code).json(result)
+})
+
+app.put("/v1/locadora/atividade/:id", bodyParserJson, async (req,res) =>{
+    let id = req.params.id
+    let contentType = req.headers['content-type']
+    let dados = req.body
+    let result = await atividade.atualizarAtividade(dados, id, contentType)
+
+    res.status(result.status_code).json(result)
+})
+
+app.delete("/v1/locadora/atividade/:id", async (req,res) =>{
+    let id = req.params.id
+    let result = await atividade.excluirAtividade(id)
 
     res.status(result.status_code).json(result)
 })

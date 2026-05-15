@@ -1,5 +1,5 @@
 /*******************************************************************************************************************************
- * Objetivo: Arquivo responsável pela validação, tratamento e manipulação de dados para o CRUD de Gênero
+ * Objetivo: Arquivo responsável pela validação, tratamento e manipulação de dados para o CRUD de Genero
  * Data: 06/05/2026
  * Autor: Murilo
  * Versão: 1.0
@@ -8,29 +8,30 @@
 //importa o arquivo de configurações de mensagens
 const configMessages = require('../module/configMessages.js')
 
-//importa o model de genero indicativa
-const diretorDAO = require('../../model/DAO/diretor')
+//importa o model de atividade
+const atividadeDAO = require('../../model/DAO/atividade/atividade.js')
 
-const inserirNovoDiretor = async (diretor, contentType) =>{
+const inserirNovaAtividade = async (atividade, contentType) =>{
     // let message = JSON.parse(JSON.stringify(configMessages))
     let message = JSON.parse(JSON.stringify(configMessages))
-
     try {
         if(String(contentType).toUpperCase() == 'APPLICATION/JSON'){
-            let validarDiretor = await validacao(diretor)
+            let validarAtividade = await validacao(atividade)
+            
 
-            if(validarGenero)
-                return validarGenero //400
+            if(validarAtividade)
+                return validarAtividade //400
 
-            let result = await diretorDAO
+            let result = await atividadeDAO.insertAtividade(atividade)
+            
             
             if(result){ //201
-                genero.id = result
+                atividade.id = result
 
                 message.DEFAULT_MESSAGE.status = message.SUCESS_CREATED_ITEM.status
                 message.DEFAULT_MESSAGE.status_code = message.SUCESS_CREATED_ITEM.status_code
                 message.DEFAULT_MESSAGE.message = message.SUCESS_CREATED_ITEM.message
-                message.DEFAULT_MESSAGE.response = diretor
+                message.DEFAULT_MESSAGE.response = atividade
 
                 return message.DEFAULT_MESSAGE
             }else{ //erro da model
@@ -39,21 +40,22 @@ const inserirNovoDiretor = async (diretor, contentType) =>{
         }else
             return message.ERROR_UNSUPORTED_MEDIA_TYPE
     } catch (error) { //erro da controller
-        
+        console.log(error)
         return message.ERROR_INTERNAL_SERVER_CONTROLLER //500
     }
 }
 
-const listarGenero = async () =>{
+const listarAtividade = async () =>{
     let message = JSON.parse(JSON.stringify(configMessages))
     try {
-        let result = await generoDAO.selectAllGenero()
+        let result = await atividadeDAO.selectAllAtividade()
+        
 
         if(result){
             if(result.length > 0){ 
                 message.DEFAULT_MESSAGE.status = message.SUCESS_RESPONSE.status
                 message.DEFAULT_MESSAGE.status_code = message.SUCESS_RESPONSE.status_code
-                message.DEFAULT_MESSAGE.response = {genero : result[0]}
+                message.DEFAULT_MESSAGE.response = {atividade : result[0]}
                 
                 return message.DEFAULT_MESSAGE //200
             }
@@ -67,8 +69,9 @@ const listarGenero = async () =>{
     }
 }
 
-const buscarGenero = async (id) =>{
+const buscarAtividade = async (id) =>{
     let message = JSON.parse(JSON.stringify(configMessages))
+    
 
     try {
         //verifica se o id é válido
@@ -77,13 +80,13 @@ const buscarGenero = async (id) =>{
             return message.ERROR_BAD_REQUEST //400
         }
 
-        let result = await generoDAO.selectByIdGenero(id)
+        let result = await atividadeDAO.selectByIdAtividade(id)
 
         if(result){
             if(result[0].length > 0){
                 message.DEFAULT_MESSAGE.status = message.SUCESS_RESPONSE.status
                 message.DEFAULT_MESSAGE.status_code = message.SUCESS_RESPONSE.status_code
-                message.DEFAULT_MESSAGE.response = {genero: result[0]}
+                message.DEFAULT_MESSAGE.response = {atividade: result[0]}
 
                 return message.DEFAULT_MESSAGE
             }else
@@ -96,16 +99,16 @@ const buscarGenero = async (id) =>{
     }
 }
 
-const excluirGenero = async (id) =>{
+const excluirAtividade = async (id) =>{
     let message = JSON.parse(JSON.stringify(configMessages))
 
     try {
-        let resultBuscarId = await buscarGenero(id) 
+        let resultBuscarId = await buscarAtividade(id) 
 
         if(!resultBuscarId.status)
             return resultBuscarId //400 ou 500 ou 404
 
-        let result = await generoDAO.deleteGenero(id)
+        let result = await atividadeDAO.deleteAtividade(id)
 
         if(result){ //200
             message.DEFAULT_MESSAGE.status = message.SUCESS_DELETED_ITEM.status
@@ -121,27 +124,28 @@ const excluirGenero = async (id) =>{
     }
 }
 
-const atualizarGenero = async (genero, id, contentType) =>{
+const atualizarAtividade = async (atividade, id, contentType) =>{
     let message = JSON.parse(JSON.stringify(configMessages))
 
     try {
         if(String(contentType).toUpperCase() == "APPLICATION/JSON"){
-            let resultBuscarId = await buscarGenero(id)
-            let validarGenero = await validacao(genero)
+            let resultBuscarId = await buscarAtividade(id)
+            let validarAtividade = await validacao(atividade)
+            console.log(validarAtividade)
 
             if(!resultBuscarId.status)
                 return resultBuscarId //400 ou 404 ou 500
 
 
-            if(validarGenero)
-                return validarGenero
+            if(validarAtividade)
+                return validarAtividade
 
-            let result = await generoDAO.updateGenero(genero, id)
+            let result = await atividadeDAO.updateAtividade(atividade, id)
 
             if(result){
                 message.DEFAULT_MESSAGE.status = message.SUCESS_UPDATED_ITEM.status
                 message.DEFAULT_MESSAGE.status_code = message.SUCESS_UPDATED_ITEM.status_code
-                message.DEFAULT_MESSAGE.response = genero
+                message.DEFAULT_MESSAGE.response = atividade
 
                 return message.DEFAULT_MESSAGE
             }else //error na model
@@ -154,32 +158,32 @@ const atualizarGenero = async (genero, id, contentType) =>{
     }
 }
 
-const validacao = async (genero) =>{
+const validacao = async (atividade) =>{
     let message = JSON.parse(JSON.stringify(configMessages))
-    let contador = 0
-    genero = genero.genero
+    atividade = atividade.atividade
     
-    let generosCadastrados = await generoDAO.selectAllGenero()
+    let atividadesCadastradas = await atividadeDAO.selectAllAtividade()
 
-    if(genero == undefined || genero == "" || genero == null || genero.trim().length > 25){
-        message.ERROR_BAD_REQUEST.field = "[Gênero] Inválido"
+    //verifica se a atividade é válida
+    if(atividade == undefined || atividade == "" || atividade == null || atividade.trim().length > 45){
+        message.ERROR_BAD_REQUEST.field = "[Atividade] Inválido"
         return message.ERROR_BAD_REQUEST
     }
 
-    for(let i = 0; generosCadastrados[0].length > i; i++){
-        if(generosCadastrados[0][i].genero == String(genero).toUpperCase()){
-            message.ERROR_BAD_REQUEST.field = "[Gênero] Já cadastrado"
+    //identifica se a atividade já foi cadastrada anteriormente
+    for(let i = 0; atividadesCadastradas[0].length > i; i++){
+        if(String(atividadesCadastradas[0][i].atividade).toUpperCase() == String(atividade).toUpperCase()){
+            message.ERROR_BAD_REQUEST.field = "[Atividade] Já cadastrada"
             return message.ERROR_BAD_REQUEST
         }
     }
-
     return false
 }
 
 module.exports = {
-    inserirNovoGenero,
-    listarGenero,
-    buscarGenero,
-    atualizarGenero,
-    excluirGenero
+    inserirNovaAtividade,
+    listarAtividade,
+    buscarAtividade,
+    atualizarAtividade,
+    excluirAtividade
 }
