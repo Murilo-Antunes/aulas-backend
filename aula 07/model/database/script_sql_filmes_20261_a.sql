@@ -4,6 +4,10 @@ CREATE DATABASE db_filmes_20261_a;
 #Ativa o uso do database de filmes
 USE db_filmes_20261_a;
 
+show tables;
+
+drop table tbl_categoria;
+
 #Cria a tabela de filmes
 CREATE TABLE tbl_filme(
 	id 				int NOT NULL PRIMARY key AUTO_INCREMENT,
