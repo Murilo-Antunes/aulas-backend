@@ -14,6 +14,7 @@ const nacionalidade = require("./controller/nacionalidade/controller_nacionalida
 const atividade = require("./controller/atividade/controller_atividade.js")
 
 const filmeGenero = require('./controller/filme_genero/controller_filme_genero.js')
+const filmeDiretor = require('./controller/filme_diretor/controller_filme_diretor.js')
 
 const express = require('express')
 const cors = require('cors')
@@ -341,6 +342,43 @@ app.put("/v1/locadora/filmegenero/:id", bodyParserJson, async (req,res) =>{
 app.delete("/v1/locadora/filmegenero/:id", async (req,res) =>{
     let id = req.params.id
     let result = await filmeGenero.excluirFilmeGenero(id)
+
+    res.status(result.status_code).json(result)
+})
+
+// -------------------------- ROTAS FILME DIRETOR --------------------------
+app.post("/v1/locadora/filmeDiretor", bodyParserJson, async (req, res) =>{
+    let dados = req.body
+    let contentType = req.headers['content-type']
+    let result = await filmeDiretor.inserirNovoFilmeDiretor(dados, contentType)    
+
+    res.status(result.status_code).json(result)
+})
+
+app.get("/v1/locadora/todosfilmesdiretores", async (req,res)=>{
+    let result = await filmeDiretor.listarFilmeDiretor()
+    res.status(result.status_code).json(result)
+})
+
+app.get("/v1/locadora/filmediretorbyid/:id", async(req,res) =>{
+    let id = req.params.id
+    let result = await filmeDiretor.buscarFilmeDiretor(id)
+
+    res.status(result.status_code).json(result)
+})
+
+app.put("/v1/locadora/filmediretor/:id", bodyParserJson, async (req,res) =>{
+    let id = req.params.id
+    let contentType = req.headers['content-type']
+    let dados = req.body
+    let result = await filmeDiretor.atualizarFilmeDiretor(dados, id, contentType)
+
+    res.status(result.status_code).json(result)
+})
+
+app.delete("/v1/locadora/filmediretor/:id", async (req,res) =>{
+    let id = req.params.id
+    let result = await filmeDiretor.excluirFilmeDiretor(id)
 
     res.status(result.status_code).json(result)
 })
