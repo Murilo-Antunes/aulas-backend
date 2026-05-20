@@ -13,6 +13,8 @@ const genero = require('./controller/genero/controller_genero.js')
 const nacionalidade = require("./controller/nacionalidade/controller_nacionalidade.js")
 const atividade = require("./controller/atividade/controller_atividade.js")
 
+const filmeGenero = require('./controller/filme_genero/controller_filme_genero.js')
+
 const express = require('express')
 const cors = require('cors')
 const bodyParser = require('body-parser')
@@ -302,6 +304,43 @@ app.put("/v1/locadora/atividade/:id", bodyParserJson, async (req,res) =>{
 app.delete("/v1/locadora/atividade/:id", async (req,res) =>{
     let id = req.params.id
     let result = await atividade.excluirAtividade(id)
+
+    res.status(result.status_code).json(result)
+})
+
+// -------------------------- ROTAS FILME GENERO --------------------------
+app.post("/v1/locadora/filmeGenero", bodyParserJson, async (req, res) =>{
+    let dados = req.body
+    let contentType = req.headers['content-type']
+    let result = await filmeGenero.inserirNovoFilmeGenero(dados, contentType)    
+
+    res.status(result.status_code).json(result)
+})
+
+app.get("/v1/locadora/todosfilmesgeneros", async (req,res)=>{
+    let result = await filmeGenero.listarFilmeGenero()
+    res.status(result.status_code).json(result)
+})
+
+app.get("/v1/locadora/filmegenerobyid/:id", async(req,res) =>{
+    let id = req.params.id
+    let result = await filmeGenero.buscarFilmeGenero(id)
+
+    res.status(result.status_code).json(result)
+})
+
+app.put("/v1/locadora/filmegenero/:id", bodyParserJson, async (req,res) =>{
+    let id = req.params.id
+    let contentType = req.headers['content-type']
+    let dados = req.body
+    let result = await filmeGenero.atualizarFilmeGenero(dados, id, contentType)
+
+    res.status(result.status_code).json(result)
+})
+
+app.delete("/v1/locadora/filmegenero/:id", async (req,res) =>{
+    let id = req.params.id
+    let result = await filmeGenero.excluirFilmeGenero(id)
 
     res.status(result.status_code).json(result)
 })

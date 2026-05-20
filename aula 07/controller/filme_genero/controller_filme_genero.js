@@ -1,5 +1,5 @@
 /*******************************************************************************************************************************
- * Objetivo: Arquivo responsável pela validação, tratamento e manipulação de dados para o CRUD de Genero
+ * Objetivo: Arquivo responsável pela validação, tratamento e manipulação de dados para o CRUD de filmeGenero
  * Data: 06/05/2026
  * Autor: Murilo
  * Versão: 1.0
@@ -8,30 +8,47 @@
 //importa o arquivo de configurações de mensagens
 const configMessages = require('../module/configMessages.js')
 
-//importa o model de genero indicativa
-const generoDAO = require('../../model/DAO/genero/genero.js')
+//importa o model de filmeGenero indicativa
+const filmeGeneroDAO = require('../../model/DAO/filme_genero/filme_genero.js')
 
-const inserirNovoGenero = async (genero, contentType) =>{
+//import das controllers
+const filmeController = require('../filme/controller_filme.js')
+const generoController = require('../genero/controller_genero.js')
+
+const inserirNovoFilmeGenero = async (filmeGenero, contentType) =>{
     // let message = JSON.parse(JSON.stringify(configMessages))
     let message = JSON.parse(JSON.stringify(configMessages))
     try {
         if(String(contentType).toUpperCase() == 'APPLICATION/JSON'){
-            let validarGenero = await validacao(genero)
+            // --------------- VALIDAÇÃO GENERO ---------------
+            let resultBuscarIdGenero = await generoController.buscarGenero(filmeGenero.id_genero)
             
 
-            if(validarGenero)
-                return validarGenero //400
+            if(!resultBuscarIdGenero.status)
+                return resultBuscarIdGenero //400 ou 404 ou 500
 
-            let result = await generoDAO.insertGenero(genero)
+            // --------------- VALIDAÇÃO FILME ---------------
+            let resultBuscarIdFilme = await filmeController.buscarFilme(filmeGenero.id_filme)
+
+            if(!resultBuscarIdFilme.status)
+                return resultBuscarIdFilme //400 ou 404 ou 500
+
+            // --------------- VALIDAÇÃO FILME_GENERO ---------------
+            let validarFilmeGenero = await validacao(filmeGenero)
+            
+            if(validarFilmeGenero)
+                return validarFilmeGenero //400
+
+            let result = await filmeGeneroDAO.insertFilmeGenero(filmeGenero)
             
             
             if(result){ //201
-                genero.id = result
+                filmeGenero.id = result
 
                 message.DEFAULT_MESSAGE.status = message.SUCESS_CREATED_ITEM.status
                 message.DEFAULT_MESSAGE.status_code = message.SUCESS_CREATED_ITEM.status_code
                 message.DEFAULT_MESSAGE.message = message.SUCESS_CREATED_ITEM.message
-                message.DEFAULT_MESSAGE.response = genero
+                message.DEFAULT_MESSAGE.response = filmeGenero
 
                 return message.DEFAULT_MESSAGE
             }else{ //erro da model
@@ -40,22 +57,23 @@ const inserirNovoGenero = async (genero, contentType) =>{
         }else
             return message.ERROR_UNSUPORTED_MEDIA_TYPE
     } catch (error) { //erro da controller
-        
+        console.log(error)
         return message.ERROR_INTERNAL_SERVER_CONTROLLER //500
     }
 }
 
-const listarGenero = async () =>{
+const listarFilmeGenero = async () =>{
     let message = JSON.parse(JSON.stringify(configMessages))
     try {
-        let result = await generoDAO.selectAllGenero()
+        let result = await filmeGeneroDAO.selectAllFilmeGenero()
         
 
         if(result){
             if(result.length > 0){ 
+
                 message.DEFAULT_MESSAGE.status = message.SUCESS_RESPONSE.status
                 message.DEFAULT_MESSAGE.status_code = message.SUCESS_RESPONSE.status_code
-                message.DEFAULT_MESSAGE.response = {genero : result[0]}
+                message.DEFAULT_MESSAGE.response = {filmeGenero : result[0]}
                 
                 return message.DEFAULT_MESSAGE //200
             }
@@ -69,7 +87,7 @@ const listarGenero = async () =>{
     }
 }
 
-const buscarGenero = async (id) =>{
+const buscarFilmeGenero = async (id) =>{
     let message = JSON.parse(JSON.stringify(configMessages))
     
 
@@ -80,13 +98,13 @@ const buscarGenero = async (id) =>{
             return message.ERROR_BAD_REQUEST //400
         }
 
-        let result = await generoDAO.selectByIdGenero(id)
+        let result = await filmeGeneroDAO.selectByIdFilmeGenero(id)
 
         if(result){
             if(result[0].length > 0){
                 message.DEFAULT_MESSAGE.status = message.SUCESS_RESPONSE.status
                 message.DEFAULT_MESSAGE.status_code = message.SUCESS_RESPONSE.status_code
-                message.DEFAULT_MESSAGE.response = {genero: result[0]}
+                message.DEFAULT_MESSAGE.response = {filmeGenero: result[0]}
 
                 return message.DEFAULT_MESSAGE
             }else
@@ -99,16 +117,16 @@ const buscarGenero = async (id) =>{
     }
 }
 
-const excluirGenero = async (id) =>{
+const excluirFilmeGenero = async (id) =>{
     let message = JSON.parse(JSON.stringify(configMessages))
 
     try {
-        let resultBuscarId = await buscarGenero(id) 
+        let resultBuscarId = await buscarFilmeGenero(id) 
 
         if(!resultBuscarId.status)
             return resultBuscarId //400 ou 500 ou 404
 
-        let result = await generoDAO.deleteGenero(id)
+        let result = await filmeGeneroDAO.deleteFilmeGenero(id)
 
         if(result){ //200
             message.DEFAULT_MESSAGE.status = message.SUCESS_DELETED_ITEM.status
@@ -124,27 +142,40 @@ const excluirGenero = async (id) =>{
     }
 }
 
-const atualizarGenero = async (genero, id, contentType) =>{
+const atualizarFilmeGenero = async (filmeGenero, id, contentType) =>{
     let message = JSON.parse(JSON.stringify(configMessages))
 
     try {
         if(String(contentType).toUpperCase() == "APPLICATION/JSON"){
-            let resultBuscarId = await buscarGenero(id)
-            let validarGenero = await validacao(genero)
+            // --------------- VALIDAÇÃO GENERO ---------------
+            let resultBuscarIdGenero = await generoController.buscarGenero(filmeGenero.id_genero)
+            
 
-            if(!resultBuscarId.status)
-                return resultBuscarId //400 ou 404 ou 500
+            if(!resultBuscarIdGenero.status)
+                return resultBuscarIdGenero //400 ou 404 ou 500
 
+            // --------------- VALIDAÇÃO FILME ---------------
+            let resultBuscarIdFilme = await filmeController.buscarFilme(filmeGenero.id_filme)
 
-            if(validarGenero)
-                return validarGenero
+            if(!resultBuscarIdFilme.status)
+                return resultBuscarIdFilme //400 ou 404 ou 500
 
-            let result = await generoDAO.updateGenero(genero, id)
+            // --------------- VALIDAÇÃO FILME_GENERO ---------------
+            let resultBuscarIdFilmeGenero = await buscarFilmeGenero(id)
+            let validarFilmeGenero = await validacao(filmeGenero)
+
+            if(!resultBuscarIdFilmeGenero.status)
+                return resultBuscarIdFilmeGenero //400 ou 404 ou 500
+            
+            if(validarFilmeGenero)
+                return validarFilmeGenero
+
+            let result = await filmeGeneroDAO.updateFilmeGenero(filmeGenero, id)
 
             if(result){
                 message.DEFAULT_MESSAGE.status = message.SUCESS_UPDATED_ITEM.status
                 message.DEFAULT_MESSAGE.status_code = message.SUCESS_UPDATED_ITEM.status_code
-                message.DEFAULT_MESSAGE.response = genero
+                message.DEFAULT_MESSAGE.response = filmeGenero
 
                 return message.DEFAULT_MESSAGE
             }else //error na model
@@ -157,32 +188,23 @@ const atualizarGenero = async (genero, id, contentType) =>{
     }
 }
 
-const validacao = async (genero) =>{
+const validacao = async (filmeGenero) =>{
     let message = JSON.parse(JSON.stringify(configMessages))
-    genero = genero.genero
-    
-    let generosCadastrados = await generoDAO.selectAllGenero()
 
-    if(genero == undefined || genero == "" || genero == null || genero.trim().length > 25){
-        message.ERROR_BAD_REQUEST.field = "[Gênero] Inválido"
-        return message.ERROR_BAD_REQUEST
-    }
+    if(filmeGenero.id_filme == undefined || filmeGenero.id_filme == "" || filmeGenero.id_filme == null || isNaN(filmeGenero.id_filme)|| filmeGenero.id_filme <= 0){
+        message.ERROR_BAD_REQUEST.field = "[ID_FILME] Inválido"
+    }else if(filmeGenero.id_genero == undefined || filmeGenero.id_genero == "" || filmeGenero.id_genero == null || isNaN(filmeGenero.id_genero)|| filmeGenero.id_genero <= 0){
+        message.ERROR_BAD_REQUEST.filmeGenero = "[ID_GENERO] Inválido"
+    }else
+        return false
 
-    for(let i = 0; generosCadastrados[0].length > i; i++){
-        if(generosCadastrados[0][i].genero == String(genero).toUpperCase()){
-            message.ERROR_BAD_REQUEST.field = "[Gênero] Já cadastrado"
-            return message.ERROR_BAD_REQUEST
-        }
-    }
-
-    return false
+    return message.ERROR_BAD_REQUEST
 }
 
 module.exports = {
-    inserirNovoGenero,
-    listarGenero,
-    buscarGenero,
-    atualizarGenero,
-    excluirGenero, 
-    validacao
+    inserirNovoFilmeGenero,
+    listarFilmeGenero,
+    buscarFilmeGenero,
+    atualizarFilmeGenero,
+    excluirFilmeGenero
 }
