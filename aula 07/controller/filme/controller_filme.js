@@ -9,6 +9,8 @@ const message_config = require('../module/configMessages.js')
 
 //import do arquivo DAO para fazer o CRUD do filme no banco de dados
 const filmeDAO = require('../../model/DAO/filme/filme.js')
+//import de arquivos de controller
+const classifcacaoController = require('../classificacao_indicativa/controller_classificacao_indicativa.js')
 
 //função para inserir um novo filme
 const inserirNovoFilme = async (filme, contentType) =>{
@@ -109,6 +111,19 @@ const listarFilme = async () =>{
 
         if(result){
             if(result.length > 0){
+                //percorre o array de filmes para identificar os dados da classificação
+                for (filme of result[0]){
+                    let resultClassificacao = await classifcacaoController.buscarClassificacaoIndicativa(filme.id_classificacao)
+                    
+
+
+                    if(resultClassificacao.status){
+                        filme.classifcacao = resultClassificacao.response.classificacao
+                        delete filme.id_classificacao
+                    }
+                }
+
+
                 message.DEFAULT_MESSAGE.status = message.SUCESS_RESPONSE.status
                 message.DEFAULT_MESSAGE.status_code = message.SUCESS_RESPONSE.status_code
                 message.DEFAULT_MESSAGE.response = {filme : result[0]}
@@ -139,6 +154,18 @@ const buscarFilme = async (id) =>{
 
         if(result){
             if(result[0].length > 0){
+                //percorre o array de filmes para identificar os dados da classificação
+                for (filme of result[0]){
+                    let resultClassificacao = await classifcacaoController.buscarClassificacaoIndicativa(filme.id_classificacao)
+                    
+
+
+                    if(resultClassificacao.status){
+                        filme.classifcacao = resultClassificacao.response.classificacao
+                        delete filme.id_classificacao
+                    }
+                }
+                
                 message.DEFAULT_MESSAGE.status = message.SUCESS_RESPONSE.status
                 message.DEFAULT_MESSAGE.status_code = message.SUCESS_RESPONSE.status_code
                 message.DEFAULT_MESSAGE.response = {filme : result[0]}
@@ -201,6 +228,10 @@ const validarDados = async (filme) =>{
         message.ERROR_BAD_REQUEST.field = '[VALOR] INVÁLIDO'
     }else if(filme.capa.length > 255){
         message.ERROR_BAD_REQUEST.field = '[CAPA] INVÁLIDO'
+
+    //Validação para a FK da classificação
+    }else if(filme.id_classificacao == undefined || filme.id_classificacao == "" || filme.id_classificacao == null || isNaN(filme.id_classificacao) || filme.id_classificacao <= 0){
+        message.ERROR_BAD_REQUEST.field = '[ID_CLASSIFICAÇÃO] INVÁLIDO'
     }else{
         return false
     }

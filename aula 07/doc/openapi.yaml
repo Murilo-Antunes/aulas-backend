@@ -881,6 +881,7 @@ components:
         - duracao
         - sinopse
         - valor
+        - id_classificacao
 
       type: object
       properties:
@@ -900,6 +901,9 @@ components:
           type: integer
         capa:
           type: string
+        id_classificacao:
+          type: integer
+          
     Classificacao:
       required:
         - classificao
