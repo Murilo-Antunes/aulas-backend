@@ -130,7 +130,6 @@ const atualizarClassificacaoIndicativa = async (classificacao, id, contentType) 
         if(String(contentType).toUpperCase() == "APPLICATION/JSON"){
             let resultBuscarId = await buscarClassificacaoIndicativa(id)
             let validarClassicacao = validacao(classificacao)
-            console.log(classificacao)
 
             if(!resultBuscarId.status)
                 return resultBuscarId //400 ou 404 ou 500

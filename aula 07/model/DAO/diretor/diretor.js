@@ -33,7 +33,6 @@ const insertDiretor = async (diretor) =>{
         else
             return false
     } catch (error) {
-        console.log(error)
         return false
     }
 
@@ -62,7 +61,6 @@ const updateDiretor = async (diretor, id) =>{
             return false
 
     }catch(error){
-        console.log(error)
         return false
     }
     

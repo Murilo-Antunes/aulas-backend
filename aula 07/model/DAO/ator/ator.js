@@ -33,7 +33,6 @@ const insertAtor = async (ator) =>{
         else
             return false
     } catch (error) {
-        console.log(error)
         return false
     }
 
@@ -62,7 +61,6 @@ const updateAtor = async (ator, id) =>{
             return false
 
     }catch(error){
-        console.log(error)
         return false
     }
     

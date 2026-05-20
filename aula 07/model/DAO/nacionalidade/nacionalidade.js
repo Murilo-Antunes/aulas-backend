@@ -27,7 +27,6 @@ const insertNacionalidade = async (nacionalidade) =>{
         else
             return false
     } catch (error) {
-        console.log(error)
         return false
     }
 }

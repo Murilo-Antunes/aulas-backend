@@ -45,7 +45,6 @@ const updateGenero = async (genero, id) =>{
             return false
 
     } catch (error) {
-        console.log(error)
         return false
     }
 }

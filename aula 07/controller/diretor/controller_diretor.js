@@ -40,7 +40,6 @@ const inserirNovoDiretor = async (diretor, contentType) =>{
         }else
             return message.ERROR_UNSUPORTED_MEDIA_TYPE
     } catch (error) { //erro da controller
-        console.log(error)
         return message.ERROR_INTERNAL_SERVER_CONTROLLER //500
     }
 }
