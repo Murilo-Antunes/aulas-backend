@@ -16,6 +16,11 @@ CREATE TABLE IF NOT EXISTS tbl_filme_genero(
     REFERENCES tbl_genero(id)
 );
 
+INSERT INTO tbl_filme_genero(id_filme, id_genero) VALUES(
+	8,
+    2
+);
+
 CREATE TABLE IF NOT EXISTS tbl_filme_diretor(
 	id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     id_filme INT NOT NULL,
@@ -29,6 +34,21 @@ CREATE TABLE IF NOT EXISTS tbl_filme_diretor(
     FOREIGN KEY (id_diretor)
     REFERENCES tbl_diretor(id)
 );
+
+CREATE TABLE IF NOT EXISTS tbl_filme_ator(
+	id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    id_filme INT NOT NULL,
+    id_ator INT NOT NULL,
+    
+    CONSTRAINT FK_FILME_FILMEATOR
+    FOREIGN KEY (id_filme)
+    REFERENCES tbl_filme(id),
+    
+    CONSTRAINT FK_ATOR_FILMEATOR
+    FOREIGN KEY (id_ator)
+    REFERENCES tbl_ator(id)
+);
+
 CREATE TABLE IF NOT EXISTS tbl_diretor_atividade(
 	id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     id_diretor INT NOT NULL,
@@ -91,7 +111,7 @@ ALTER TABLE tbl_filme
 		FOREIGN KEY (id_classificacao)
 		REFERENCES tbl_classificacao_indicativa(id);
         
-desc tbl_classificacao_indicativa;
+desc tbl_filme;
         
 SELECT * FROM tbl_filme;
 
@@ -113,5 +133,5 @@ INSERT INTO tbl_filme (nome, data_lancamento, duracao, sinopse, avaliacao, valor
                     "6",
                     "100",
                     "https://br.web.img3.acsta.net/c_310_420/medias/nmedia/18/90/93/20/20120876.jpg",
-                    12
+                    6
                 );
