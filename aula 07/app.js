@@ -13,9 +13,6 @@ const genero = require('./controller/genero/controller_genero.js')
 const nacionalidade = require("./controller/nacionalidade/controller_nacionalidade.js")
 const atividade = require("./controller/atividade/controller_atividade.js")
 
-const filmeGenero = require('./controller/filme_genero/controller_filme_genero.js')
-const filmeDiretor = require('./controller/filme_diretor/controller_filme_diretor.js')
-
 const express = require('express')
 const cors = require('cors')
 const bodyParser = require('body-parser')
@@ -118,6 +115,7 @@ app.delete("/v1/locadora/classificacao/:id", async (req,res) =>{
 })
 
 // -------------------------- ROTAS ATOR -------------------------- 
+
 app.post("/v1/locadora/ator", bodyParserJson, async (req, res) =>{
     let dados = req.body //recebe o conteudo da requsição (dentro do body)
     let contentType = req.headers['content-type']
@@ -307,117 +305,6 @@ app.delete("/v1/locadora/atividade/:id", async (req,res) =>{
     let result = await atividade.excluirAtividade(id)
 
     res.status(result.status_code).json(result)
-})
-
-// -------------------------- ROTAS FILME GENERO --------------------------
-app.post("/v1/locadora/filmeGenero", bodyParserJson, async (req, res) =>{
-    let dados = req.body
-    let contentType = req.headers['content-type']
-    let result = await filmeGenero.inserirNovoFilmeGenero(dados, contentType)    
-
-    res.status(result.status_code).json(result)
-})
-
-app.get("/v1/locadora/todosfilmesgeneros", async (req,res)=>{
-    let result = await filmeGenero.listarFilmeGenero()
-    res.status(result.status_code).json(result)
-})
-
-app.get("/v1/locadora/filmegenerobyid/:id", async(req,res) =>{
-    let id = req.params.id
-    let result = await filmeGenero.buscarFilmeGenero(id)
-
-    res.status(result.status_code).json(result)
-})
-
-app.put("/v1/locadora/filmegenero/:id", bodyParserJson, async (req,res) =>{
-    let id = req.params.id
-    let contentType = req.headers['content-type']
-    let dados = req.body
-    let result = await filmeGenero.atualizarFilmeGenero(dados, id, contentType)
-
-    res.status(result.status_code).json(result)
-})
-
-app.delete("/v1/locadora/filmegenero/:id", async (req,res) =>{
-    let id = req.params.id
-    let result = await filmeGenero.excluirFilmeGenero(id)
-
-    res.status(result.status_code).json(result)
-})
-
-// -------------------------- ROTAS FILME DIRETOR --------------------------
-app.post("/v1/locadora/filmeDiretor", bodyParserJson, async (req, res) =>{
-    let dados = req.body
-    let contentType = req.headers['content-type']
-    let result = await filmeDiretor.inserirNovoFilmeDiretor(dados, contentType)    
-
-    res.status(result.status_code).json(result)
-})
-
-app.get("/v1/locadora/todosfilmesdiretores", async (req,res)=>{
-    let result = await filmeDiretor.listarFilmeDiretor()
-    res.status(result.status_code).json(result)
-})
-
-app.get("/v1/locadora/filmediretorbyid/:id", async(req,res) =>{
-    let id = req.params.id
-    let result = await filmeDiretor.buscarFilmeDiretor(id)
-
-    res.status(result.status_code).json(result)
-})
-
-app.put("/v1/locadora/filmediretor/:id", bodyParserJson, async (req,res) =>{
-    let id = req.params.id
-    let contentType = req.headers['content-type']
-    let dados = req.body
-    let result = await filmeDiretor.atualizarFilmeDiretor(dados, id, contentType)
-
-    res.status(result.status_code).json(result)
-})
-
-app.delete("/v1/locadora/filmediretor/:id", async (req,res) =>{
-    let id = req.params.id
-    let result = await filmeDiretor.excluirFilmeDiretor(id)
-
-    res.status(result.status_code).json(result)
-})
-
-app.get("/v1/locadora/help", (req, res) =>{
-    const docApi = {
-        "API-descripition"  : "API de CRUD para locadora de filmes",
-        "development"     : "Murilo Antunes",
-        "date"              : "2026-04-29",
-        "version"         : "1.0.0",
-        "endpoints": [
-            {
-                "id": 1,
-                "Rota 1" : "/v1/locadora/filme",
-                "obs" : "Insere um novo filme no banco de dados"
-            },
-            {
-                "id": 2,
-                "Rota 2" : "/v1/locadora/todosfilmes",
-                "obs" : "Lista todos os filmes cadastrados no banco de dados"
-            },   
-            {
-                "id": 3,
-                "Rota 3" : "/v1/locadora/filmebyid/:id",
-                "obs" : "Busca um filme por id"
-            },   
-            {
-                "id": 4,
-                "Rota 4" : "/v1/locadora/atualizarfilme/:id",
-                "obs" : "Atualiza dados de um filme no banco de dados"
-            },
-            {
-                "id": 5,
-                "Rota 5" : "/v1/locadora/deletarfilme/:id",
-                "obs" : "Deleta um filme no banco de dados pelo seu id"
-            },                
-        ]
-    }
-    res.json(docApi)
 })
 
 app.get('/', (req, res) => {

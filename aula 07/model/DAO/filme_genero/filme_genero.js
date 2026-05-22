@@ -1,5 +1,5 @@
 /*******************************************************************************************************************************
- * Objetivo: Arquivo responsável pelo CRUD no banco de dados MySQL na tabela gênero
+ * Objetivo: Arquivo responsável pelo CRUD no banco de dados MySQL na tabela filme_gênero
  * Data: 08/05/2026
  * Autor: Murilo
  * Versão: 1.0
@@ -15,7 +15,7 @@ const knexConex = knex(knexConfig.development)
 //funcao de inserir uma nova classificação indicativa
 const insertFilmeGenero = async (filmeGenero) =>{
     try {
-        let sql = ` INSERT INTO tbl_filme_genero (id_filme, id_genero) VALUES (${filmeGenero.id_filme + ',' + filmeGenero.id_genero});`
+        let sql = ` INSERT INTO tbl_filme_genero (id_filme, id_genero) VALUES (${filmeGenero.id_filme}, ${filmeGenero.id_genero});`
         
         let result = await knexConex.raw(sql)
         
@@ -30,7 +30,6 @@ const insertFilmeGenero = async (filmeGenero) =>{
 
 const updateFilmeGenero = async (filmeGenero, id) =>{
     try {
-        console.log(filmeGenero)
         let sql = `UPDATE tbl_filme_genero set 
                     id_filme = ${filmeGenero.id_filme},
                     id_genero = ${filmeGenero.id_genero}
@@ -44,7 +43,6 @@ const updateFilmeGenero = async (filmeGenero, id) =>{
             return false
 
     } catch (error) {
-        console.log(error)
         return false
     }
 }
@@ -81,6 +79,50 @@ const selectByIdFilmeGenero = async (id) =>{
 
 }
 
+const selectFilmesByIdGenero = async (idGenero) =>{
+    try {
+        let sql = `SELECT tbl_filme.* 
+                    FROM tbl_filme
+                        INNER JOIN tbl_filme_genero 
+                            ON tbl_filme.id = tbl_filme_genero.id_filme
+                        INNER JOIN tbl_genero
+                            ON tbl_genero.id = tbl_filme_genero.id_genero
+                    WHERE tbl_genero.id = ${idGenero}`
+
+        let result = await knexConex.raw(sql)
+
+        if(Array.isArray(result))
+            return result
+        else
+            return false
+    } catch (error) {
+        return false
+    }
+
+}
+
+const selectGenerosByIdFilme = async (idFilme) =>{
+    try {
+        let sql = `SELECT tbl_filme.* 
+                    FROM tbl_filme
+                        INNER JOIN tbl_filme_genero 
+                            ON tbl_filme.id = tbl_filme_genero.id_filme
+                        INNER JOIN tbl_genero
+                            ON tbl_genero.id = tbl_filme_genero.id_genero
+                    WHERE tbl_filme.id = ${idFilme}`
+
+        let result = await knexConex.raw(sql)
+
+        if(Array.isArray(result))
+            return result
+        else
+            return false
+    } catch (error) {
+        return false
+    }
+
+}
+
 const deleteFilmeGenero = async (id) => {
     try {
         let sql = `DELETE FROM tbl_filme_genero WHERE id = ${id}`
@@ -101,5 +143,7 @@ module.exports = {
     updateFilmeGenero,
     selectAllFilmeGenero,
     selectByIdFilmeGenero,
-    deleteFilmeGenero
+    deleteFilmeGenero,
+    selectFilmesByIdGenero,
+    selectGenerosByIdFilme
 }

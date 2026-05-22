@@ -15,7 +15,7 @@ const knexConex = knex(knexConfig.development)
 //funcao de inserir uma nova classificação indicativa
 const insertFilmeDiretor = async (filmeDiretor) =>{
     try {
-        let sql = ` INSERT INTO tbl_filme_diretor (id_filme, id_diretor) VALUES (${filmediretor.id_filme + ',' + filmediretor.id_diretor});`
+        let sql = ` INSERT INTO tbl_filme_diretor (id_filme, id_diretor) VALUES (${filmeDiretor.id_filme + ',' + filmeDiretor.id_diretor});`
         
         let result = await knexConex.raw(sql)
         
@@ -30,7 +30,6 @@ const insertFilmeDiretor = async (filmeDiretor) =>{
 
 const updateFilmeDiretor = async (filmeDiretor, id) =>{
     try {
-        console.log(filmeDiretor)
         let sql = `UPDATE tbl_filme_diretor set 
                     id_filme = ${filmeDiretor.id_filme},
                     id_diretor = ${filmeDiretor.id_diretor}
@@ -44,7 +43,6 @@ const updateFilmeDiretor = async (filmeDiretor, id) =>{
             return false
 
     } catch (error) {
-        console.log(error)
         return false
     }
 }

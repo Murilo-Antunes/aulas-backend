@@ -12,7 +12,7 @@ const configMessages = require('../module/configMessages.js')
 const filmeDiretorDAO = require('../../model/DAO/filme_diretor/filme_diretor.js')
 
 //import das controllers
-const filmeController = require('../filme/controller_filme.js')
+const filmeController = require('./controller_filme.js')
 const diretorController = require('../diretor/controller_diretor.js')
 
 const inserirNovoFilmeDiretor = async (filmeDiretor, contentType) =>{

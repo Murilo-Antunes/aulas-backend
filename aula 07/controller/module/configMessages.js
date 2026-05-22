@@ -55,6 +55,13 @@ const SUCESS_CREATED_ITEM ={
     message: 'Registros inseridos com sucesso'
 }
 
+//mensagem de sucesso da api
+const SUCESS_CREATED_WARNING ={
+    status: true,
+    status_code: 201,
+    message: 'Os dados principais foram inseridos com sucesso, porém alguns dados apresentaram problemas'
+}
+
 //retornos para get
 const SUCESS_RESPONSE = {
     status: true,
@@ -84,5 +91,6 @@ module.exports = {
     ERROR_NOT_FOUND,
     SUCESS_RESPONSE,
     SUCESS_UPDATED_ITEM,
-    SUCESS_DELETED_ITEM
+    SUCESS_DELETED_ITEM,
+    SUCESS_CREATED_WARNING
 }
