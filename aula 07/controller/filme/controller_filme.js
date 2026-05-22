@@ -11,10 +11,10 @@ const message_config = require('../module/configMessages.js')
 const filmeDAO = require('../../model/DAO/filme/filme.js')
 //import de arquivos de controller
 const classifcacaoController = require('../classificacao_indicativa/controller_classificacao_indicativa.js')
+const filmeGeneroController = require('./controller_filme_genero.js')
 
 //função para inserir um novo filme
 const inserirNovoFilme = async (filme, contentType) =>{
-
     //realiza uma copia da estrutura do JSON de forma que não modifica para o original
     //Pars => transforma o JSON em uma string
     //Stringfy => converte os objeto para string 
@@ -32,6 +32,20 @@ const inserirNovoFilme = async (filme, contentType) =>{
                 if(result){ //201
                     filme.id = result
 
+                    //manipulação de dados para inserir os gêneros do filme
+                    for(genero of filme.genero){
+                        //cria o objeto json com os ids do filme e do genero
+                        let filmeGeneroId = {
+                            "id_genero":genero.id,
+                            "id_filme": filme.id
+                        }
+
+                        // Chama a controller para inserir filme_genero novo
+                        let resultInsertGenero = await filmeGeneroController.inserirNovoFilmeGenero(filmeGeneroId)
+                        
+                        if(!resultInsertGenero.status)
+                            return message.SUCESS_CREATED_WARNING
+                    }
                     message.DEFAULT_MESSAGE.status      = message.SUCESS_CREATED_ITEM.status
                     message.DEFAULT_MESSAGE.status_code = message.SUCESS_CREATED_ITEM.status_code
                     message.DEFAULT_MESSAGE.message     = message.SUCESS_CREATED_ITEM.message
@@ -51,8 +65,6 @@ const inserirNovoFilme = async (filme, contentType) =>{
     } catch (error) {
         return  message.ERROR_INTERNAL_SERVER_CONTROLLER
     }
-
-   
 }
 
 //função para atualizar um filme
@@ -121,6 +133,13 @@ const listarFilme = async () =>{
                         filme.classifcacao = resultClassificacao.response.classificacao
                         delete filme.id_classificacao
                     }
+
+                    //cria objeto de genero relacionados ao filme
+                    let resultGenero = await filmeGeneroController.buscarGeneroIdFilme(filme.id)
+
+                    //ta errado resolve ai kkkkkkk
+                    if(resultGenero.status)
+                        filme.genero = resultGenero.response.filmeGenero
                 }
 
 

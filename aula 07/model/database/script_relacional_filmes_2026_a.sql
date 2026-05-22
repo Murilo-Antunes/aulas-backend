@@ -2,6 +2,10 @@ USE db_filmes_20261_a;
 
 show tables;
 
+SELECT * FROM tbl_genero;
+INSERT INTO tbl_filme_genero (id_filme, id_genero) VALUES (11, 1);
+DELETE FROM tbl_filme_genero WHERE id = 2;
+
 CREATE TABLE IF NOT EXISTS tbl_filme_genero(
 	id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     id_filme INT NOT NULL,
@@ -16,9 +20,18 @@ CREATE TABLE IF NOT EXISTS tbl_filme_genero(
     REFERENCES tbl_genero(id)
 );
 
-INSERT INTO tbl_filme_genero(id_filme, id_genero) VALUES(
-	8,
-    2
+CREATE TABLE IF NOT EXISTS tbl_filme_ator(
+	id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    id_filme INT NOT NULL,
+    id_ator INT NOT NULL,
+    
+    CONSTRAINT FK_FILME_FILMEATOR
+    FOREIGN KEY (id_filme)
+    REFERENCES tbl_filme(id),
+    
+    CONSTRAINT FK_ATOR_FILMEATOR
+    FOREIGN KEY (id_ator)
+    REFERENCES tbl_ator(id)
 );
 
 CREATE TABLE IF NOT EXISTS tbl_filme_diretor(
