@@ -12,6 +12,8 @@ const knexConfig = require('../../database_config_knex/knexFile.js')
 //criar a conexão com o banco de dados mySQL
 const knexConex = knex(knexConfig.development)
 
+const diretorNacionalidadeDAO = require('../diretor_nacionalidade/diretor_nacionalidade.js')
+
 //funcao de inserir uma nova classificação indicativa
 const insertNacionalidade = async (nacionalidade) =>{
     try {
@@ -86,14 +88,17 @@ const selectByIdNacionalidade = async (id) =>{
 
 const deleteNacionalidade = async (id) => {
     try {
-        let sql = `DELETE FROM tbl_nacionalidade WHERE id = ${id}`
+        let deletarRelacionaisDiretor = await diretorNacionalidadeDAO.deleteDiretorByIdNacionalidade(id)
+        
+        if(deletarRelacionaisDiretor){
+            let sql = `DELETE FROM tbl_nacionalidade WHERE id = ${id}`
 
-        let result = await knexConex.raw(sql)
+            let result = await knexConex.raw(sql)
 
-        if(result)
-            return true
-        else
-            return false
+            if(result)
+                return true
+        }
+        return false
     } catch (error) {
         return false
     }

@@ -12,6 +12,7 @@ const knexConfig = require('../../database_config_knex/knexFile.js')
 const knexConex = knex(knexConfig.development)
 
 const filmeDiretorDAO = require('../filme_diretor/filme_diretor.js')
+const diretorNacionalidadeDAO = require('../diretor_nacionalidade/diretor_nacionalidade.js')
 
 
 //função para inserir dados na tabela de diretor
@@ -108,9 +109,10 @@ const selectByIdDiretor = async (id) => {
 //função que deleta um diretor da tabela
 const deleteDiretor = async (id) => {
     try {
-        let deletarRelacionais = await filmeDiretorDAO.deleteFilmeByIdDiretor(id)
+        let deletarRelacionaisFilme = await filmeDiretorDAO.deleteFilmeByIdDiretor(id)
+        let deletarRelacionalNacionalidade = await diretorNacionalidadeDAO.deleteNacionalidadeByIdDiretor(id)
         
-        if(deletarRelacionais){
+        if(deletarRelacionaisFilme && deletarRelacionalNacionalidade){
             let sql = `DELETE FROM tbl_diretor WHERE id = ${id}`
 
             let result = await knexConex.raw(sql)

@@ -127,7 +127,7 @@ const atualizarFIlme= async (filme, id, contentType) =>{
                     let resultDeleteAtor = await filmeAtorController.excluirAtorByIdFilme(filme.id)
 
                     //após a exclusão de todos os gêneros relacionados ao filme
-                    if(resultDeleteGenero.status && resultDeleteDiretor && resultDeleteAtor){
+                    if(resultDeleteGenero.status && resultDeleteDiretor.status && resultDeleteAtor.status){
                         //manipulação de dados para inserir os gêneros do filme
                         for(genero of filme.genero){
                             //cria o objeto json com os ids do filme e do genero

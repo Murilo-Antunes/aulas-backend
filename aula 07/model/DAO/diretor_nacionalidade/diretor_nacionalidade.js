@@ -79,7 +79,7 @@ const selectByIdDiretorNacionalidade = async (id) =>{
 
 }
 
-const selectNacionalidadesByIdDiretor = async (idNacionalidade) =>{
+const selectDiretoresByIdNacionalidade = async (idNacionalidade) =>{
     try {
         let sql = `SELECT tbl_diretor.* 
                     FROM tbl_diretor
@@ -101,7 +101,7 @@ const selectNacionalidadesByIdDiretor = async (idNacionalidade) =>{
 
 }
 
-const selectDiretoresByIdNacionalidade = async (idDiretor) =>{
+const selectNacionalidadesByIdDiretor = async (idDiretor) =>{
     try {
         let sql = `SELECT tbl_nacionalidade.* 
                     FROM tbl_diretor
@@ -156,6 +156,8 @@ const deleteDiretorByIdNacionalidade = async (idNacionalidade) =>{
 const deleteNacionalidadeByIdDiretor = async (idDiretor) => {
     try {
         let sql = `DELETE FROM tbl_diretor_nacionalidade WHERE id_diretor = ${idDiretor}`
+
+        
 
         let result = await knexConex.raw(sql)
 

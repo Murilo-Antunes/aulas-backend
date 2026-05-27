@@ -10,6 +10,10 @@ const configMessages = require('../module/configMessages.js')
 
 //importa o model da classificação indicativa
 const diretorDAO = require('../../model/DAO/diretor/diretor.js')
+const diretorNacionalidadeDAO = require('../../model/DAO/diretor_nacionalidade/diretor_nacionalidade.js')
+
+const diretorNacionalidadeController = require('./controller_diretor_nacionalidade.js')
+
 
 const inserirNovoDiretor = async (diretor, contentType) =>{
     // let message = JSON.parse(JSON.stringify(configMessages))
@@ -27,6 +31,22 @@ const inserirNovoDiretor = async (diretor, contentType) =>{
 
             if(result){ //201
                 diretor.id = result
+
+                 //manipulação de dados para inserir os gêneros do diretor
+                for(nacionalidade of diretor.nacionalidade){
+                    //cria o objeto json com os ids do diretor e do nacionalidade
+                    let diretorNacionalidadeId = {
+                        "id_nacionalidade": nacionalidade.id,
+                        "id_diretor": diretor.id
+                    }
+
+                    // Chama a controller para inserir diretor_nacionalidade novo
+                    let resultInsertNacionalidade = await diretorNacionalidadeController.inserirNovoDiretorNacionalidade(diretorNacionalidadeId)
+
+                    
+                    if(!resultInsertNacionalidade.status)
+                        return message.SUCESS_CREATED_WARNING
+                }
 
                 message.DEFAULT_MESSAGE.status = message.SUCESS_CREATED_ITEM.status
                 message.DEFAULT_MESSAGE.status_code = message.SUCESS_CREATED_ITEM.status_code
@@ -52,6 +72,15 @@ const listarDiretor = async () =>{
 
         if(result){
             if(result.length > 0){ 
+
+                for(diretor of result[0]){
+                    //cria objeto de Nacionalidade relacionados ao diretor
+                    let resultNacionalidade = await diretorNacionalidadeController.buscarNacionalidadeIdDiretor(diretor.id)
+
+                    if(resultNacionalidade.status)
+                        diretor.Nacionalidade = resultNacionalidade.response.diretorNacionalidade
+                }
+
                 message.DEFAULT_MESSAGE.status = message.SUCESS_RESPONSE.status
                 message.DEFAULT_MESSAGE.status_code = message.SUCESS_RESPONSE.status_code
                 message.DEFAULT_MESSAGE.response = {diretor : result[0]}
@@ -82,6 +111,15 @@ const buscarDiretor = async (id) =>{
 
         if(result){
             if(result[0].length > 0){
+
+                for(diretor of result[0]){
+                    //cria objeto de Nacionalidade relacionados ao diretor
+                    let resultNacionalidade = await diretorNacionalidadeController.buscarNacionalidadeIdDiretor(diretor.id)
+
+                    if(resultNacionalidade.status)
+                        diretor.Nacionalidade = resultNacionalidade.response.diretorNacionalidade
+                }
+
                 message.DEFAULT_MESSAGE.status = message.SUCESS_RESPONSE.status
                 message.DEFAULT_MESSAGE.status_code = message.SUCESS_RESPONSE.status_code
                 message.DEFAULT_MESSAGE.response = {diretor: result[0]}
@@ -141,6 +179,25 @@ const atualizarDiretor = async (diretor, id, contentType) =>{
             let result = await diretorDAO.updateDiretor(diretor, id)
 
             if(result){
+
+                let resultDeleteNacionalidade = await diretorNacionalidadeController.excluirNacionalidadeByIdDiretor(id)
+
+                if(resultDeleteNacionalidade){
+                    for(nacionalidade of diretor.nacionalidade){
+                        
+                        let diretorNacionalidadeId = {
+                            "id_nacionalidade"    : nacionalidade.id,
+                            "id_diretor"      : id
+                        }
+
+                        // Chama a controller para inserir diretor_nacionalidade novo
+                        let resultInsertNacionalidade = await diretorNacionalidadeController.inserirNovoDiretorNacionalidade(diretorNacionalidadeId)
+
+                        if(!resultInsertNacionalidade.status)
+                            return message.SUCESS_CREATED_WARNING
+                    }
+                }
+
                 message.DEFAULT_MESSAGE.status = message.SUCESS_UPDATED_ITEM.status
                 message.DEFAULT_MESSAGE.status_code = message.SUCESS_UPDATED_ITEM.status_code
                 message.DEFAULT_MESSAGE.response = diretor
