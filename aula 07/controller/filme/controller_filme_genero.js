@@ -39,7 +39,6 @@ const inserirNovoFilmeGenero = async (filmeGenero) =>{
             return message.ERROR_INTERNAL_SERVER_MODEL //500
         }
     } catch (error) { //erro da controller
-        console.log(error)
         return message.ERROR_INTERNAL_SERVER_CONTROLLER //500
     }
 }
@@ -229,6 +228,27 @@ const buscarGeneroIdFilme = async (idFilme) =>{
     }
 }
 
+//função para excluir os genero relacionados com o filme
+const excluirGenerosByIdFilme = async (idFilme) =>{
+    let message = JSON.parse(JSON.stringify(configMessages))
+
+    try {
+        let result = await filmeGeneroDAO.deleteGeneroByIdFilme(idFilme)
+
+        if(result){ //200
+            message.DEFAULT_MESSAGE.status = message.SUCESS_DELETED_ITEM.status
+            message.DEFAULT_MESSAGE.status_code = message.SUCESS_DELETED_ITEM.status_code
+            message.DEFAULT_MESSAGE.message = message.SUCESS_DELETED_ITEM.message
+
+            return message.DEFAULT_MESSAGE
+        }else //error na model
+            message.ERROR_INTERNAL_SERVER_MODEL // 500
+
+    } catch (error) { //error na controle
+        message.ERROR_INTERNAL_SERVER_CONTROLLER //500
+    }
+}
+
 
 module.exports = {
     inserirNovoFilmeGenero,
@@ -237,5 +257,6 @@ module.exports = {
     atualizarFilmeGenero,
     excluirFilmeGenero,
     buscarFilmeIdGenero,
-    buscarGeneroIdFilme
+    buscarGeneroIdFilme,
+    excluirGenerosByIdFilme
 }

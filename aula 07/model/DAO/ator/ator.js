@@ -11,6 +11,8 @@ const knexConfig = require('../../database_config_knex/knexFile.js')
 
 const knexConex = knex(knexConfig.development)
 
+const filmeAtorDAO = require('../filme_ator/filme_ator.js')
+
 
 //função para inserir dados na tabela de ator
 const insertAtor = async (ator) =>{
@@ -106,14 +108,18 @@ const selectByIdAtor = async (id) => {
 //função que deleta um ator da tabela
 const deleteAtor = async (id) => {
     try {
-        let sql = `DELETE FROM tbl_ator WHERE id = ${id}`
+        let deletarRelacionais = await filmeAtorDAO.deleteFilmeByIdAtor(id)
+                
+        if(deletarRelacionais){
+            let sql = `DELETE FROM tbl_ator WHERE id = ${id}`
 
-        let result = await knexConex.raw(sql)
+            let result = await knexConex.raw(sql)
 
-        if(result)
-            return true
-        else
-            return false
+            if(result)
+                return true
+        }
+
+        return false
     } catch (error) {
         return false
     }

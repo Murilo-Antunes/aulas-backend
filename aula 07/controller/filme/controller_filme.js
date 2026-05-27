@@ -12,6 +12,8 @@ const filmeDAO = require('../../model/DAO/filme/filme.js')
 //import de arquivos de controller
 const classifcacaoController = require('../classificacao_indicativa/controller_classificacao_indicativa.js')
 const filmeGeneroController = require('./controller_filme_genero.js')
+const filmeDiretorController = require('./controller_filme_diretor.js')
+const filmeAtorController = require('./controller_filme_ator.js')
 
 //função para inserir um novo filme
 const inserirNovoFilme = async (filme, contentType) =>{
@@ -44,6 +46,32 @@ const inserirNovoFilme = async (filme, contentType) =>{
                         let resultInsertGenero = await filmeGeneroController.inserirNovoFilmeGenero(filmeGeneroId)
                         
                         if(!resultInsertGenero.status)
+                            return message.SUCESS_CREATED_WARNING
+                    }
+
+                    for(diretor of filme.diretor){
+                        let filmeDiretorId = {
+                            "id_diretor"    : diretor.id,
+                            "id_filme"      : filme.id
+                        }
+
+                        // Chama a controller para inserir filme_diretor novo
+                        let resultInsertDiretor = await filmeDiretorController.inserirNovoFilmeDiretor(filmeDiretorId)
+
+                        if(!resultInsertDiretor.status)
+                            return message.SUCESS_CREATED_WARNING
+                    }
+
+                    for(ator of filme.ator){
+                        let filmeAtorId = {
+                            "id_ator"    : ator.id,
+                            "id_filme"      : filme.id
+                        }
+
+                        // Chama a controller para inserir filme_ator novo
+                        let resultInsertAtor = await filmeAtorController.inserirNovoFilmeAtor(filmeAtorId)
+
+                        if(!resultInsertAtor.status)
                             return message.SUCESS_CREATED_WARNING
                     }
                     message.DEFAULT_MESSAGE.status      = message.SUCESS_CREATED_ITEM.status
@@ -92,6 +120,58 @@ const atualizarFIlme= async (filme, id, contentType) =>{
                 //encaminha os dados do filme para o DAO
                 let result = await filmeDAO.updateFilme(filme)
                 if(result){ //200
+
+                    //Manipulaçao de dados na tabela de relação entre filme e gênero
+                    let resultDeleteGenero = await filmeGeneroController.excluirGenerosByIdFilme(filme.id) 
+                    let resultDeleteDiretor = await filmeDiretorController.excluirDiretorByIdFilme(filme.id)
+                    let resultDeleteAtor = await filmeAtorController.excluirAtorByIdFilme(filme.id)
+
+                    //após a exclusão de todos os gêneros relacionados ao filme
+                    if(resultDeleteGenero.status && resultDeleteDiretor && resultDeleteAtor){
+                        //manipulação de dados para inserir os gêneros do filme
+                        for(genero of filme.genero){
+                            //cria o objeto json com os ids do filme e do genero
+                            let filmeGeneroId = {
+                                "id_genero":genero.id,
+                                "id_filme": filme.id
+                            }
+
+                            // Chama a controller para inserir filme_genero novo
+                            let resultInsertGenero = await filmeGeneroController.inserirNovoFilmeGenero(filmeGeneroId)
+                            
+                            if(!resultInsertGenero.status)
+                                return message.SUCESS_CREATED_WARNING
+                        }
+
+                        for(diretor of filme.diretor){
+                            let filmeDiretorId = {
+                                "id_diretor"    : diretor.id,
+                                "id_filme"      : filme.id
+                            }
+    
+                            // Chama a controller para inserir filme_diretor novo
+                            let resultInsertDiretor = await filmeDiretorController.inserirNovoFilmeDiretor(filmeDiretorId)
+    
+                            if(!resultInsertDiretor.status)
+                                return message.SUCESS_CREATED_WARNING
+                        }
+    
+                        for(ator of filme.ator){
+                            let filmeAtorId = {
+                                "id_ator"    : ator.id,
+                                "id_filme"      : filme.id
+                            }
+    
+                            // Chama a controller para inserir filme_ator novo
+                            let resultInsertAtor = await filmeAtorController.inserirNovoFilmeAtor(filmeAtorId)
+    
+                            if(!resultInsertAtor.status)
+                                return message.SUCESS_CREATED_WARNING
+                        }
+                    }
+
+
+
                     message.DEFAULT_MESSAGE.status      = message.SUCESS_UPDATED_ITEM.status
                     message.DEFAULT_MESSAGE.status_code = message.SUCESS_UPDATED_ITEM.status_code //status code 200
                     message.DEFAULT_MESSAGE.message     = message.SUCESS_UPDATED_ITEM.message
@@ -126,8 +206,6 @@ const listarFilme = async () =>{
                 //percorre o array de filmes para identificar os dados da classificação
                 for (filme of result[0]){
                     let resultClassificacao = await classifcacaoController.buscarClassificacaoIndicativa(filme.id_classificacao)
-                    
-
 
                     if(resultClassificacao.status){
                         filme.classifcacao = resultClassificacao.response.classificacao
@@ -137,9 +215,20 @@ const listarFilme = async () =>{
                     //cria objeto de genero relacionados ao filme
                     let resultGenero = await filmeGeneroController.buscarGeneroIdFilme(filme.id)
 
-                    //ta errado resolve ai kkkkkkk
                     if(resultGenero.status)
                         filme.genero = resultGenero.response.filmeGenero
+
+                    //cria objeto de diretor relacionados ao filme
+                    let resultDiretor = await filmeDiretorController.buscarDiretorIdFilme(filme.id)
+
+                    if(resultDiretor.status)
+                        filme.Diretor = resultDiretor.response.filmeDiretor
+
+                    //cria objeto de ator relacionados ao filme
+                    let resultAtor = await filmeAtorController.buscarAtorIdFilme(filme.id)
+
+                    if(resultAtor.status)
+                        filme.Ator = resultAtor.response.filmeAtor
                 }
 
 
@@ -183,6 +272,24 @@ const buscarFilme = async (id) =>{
                         filme.classifcacao = resultClassificacao.response.classificacao
                         delete filme.id_classificacao
                     }
+
+                    //cria objeto de genero relacionados ao filme
+                    let resultGenero = await filmeGeneroController.buscarGeneroIdFilme(filme.id)
+
+                    if(resultGenero.status)
+                        filme.genero = resultGenero.response.filmeGenero
+
+                    //cria objeto de diretor relacionados ao filme
+                    let resultDiretor = await filmeDiretorController.buscarDiretorIdFilme(filme.id)
+
+                    if(resultDiretor.status)
+                        filme.Diretor = resultDiretor.response.filmeDiretor
+
+                    //cria objeto de ator relacionados ao filme
+                    let resultAtor = await filmeAtorController.buscarAtorIdFilme(filme.id)
+
+                    if(resultAtor.status)
+                        filme.Ator = resultAtor.response.filmeAtor
                 }
                 
                 message.DEFAULT_MESSAGE.status = message.SUCESS_RESPONSE.status
@@ -209,7 +316,7 @@ const excluirFilme = async (id) =>{
         if(!resultBuscarId.status)
             return resultBuscarId //400 ou //404 ou //500
 
-        let result = filmeDAO.deleteFilme(id)
+        let result = await filmeDAO.deleteFilme(id)
 
         if(result){ //200
             message.DEFAULT_MESSAGE.status      = message.SUCESS_DELETED_ITEM.status

@@ -12,6 +12,8 @@ const knexConfig = require('../../database_config_knex/knexFile.js')
 //criar a conexão com o banco de dados mySQL
 const knexConex = knex(knexConfig.development)
 
+const filmeGeneroDAO = require('../filme_genero/filme_genero.js')
+
 //funcao de inserir uma nova classificação indicativa
 const insertGenero = async (genero) =>{
     try {
@@ -83,14 +85,18 @@ const selectByIdGenero = async (id) =>{
 
 const deleteGenero = async (id) => {
     try {
-        let sql = `DELETE FROM tbl_genero WHERE id = ${id}`
+        let deletarRelacionais = await filmeGeneroDAO.deleteGeneroRelacionalFilme(id)
 
-        let result = await knexConex.raw(sql)
+        if(deletarRelacionais){
+            let sql = `DELETE FROM tbl_genero WHERE id = ${id}`
 
-        if(result)
-            return true
-        else
-            return false
+            let result = await knexConex.raw(sql)
+
+            if(result)
+                return true
+        }
+
+        return false
     } catch (error) {
         return false
     }
