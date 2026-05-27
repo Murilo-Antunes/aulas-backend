@@ -83,11 +83,11 @@ const selectFilmesByIdAtor = async (idAtor) =>{
     try {
         let sql = `SELECT tbl_filme.* 
                     FROM tbl_filme
-                        INNER JOIN tbl_filme_filme 
-                            ON tbl_filme.id = tbl_filme_filme.id_filme
-                        INNER JOIN tbl_filme
-                            ON tbl_filme.id = tbl_filme_filme.id_filme
-                    WHERE tbl_filme.id = ${idAtor}`
+                        INNER JOIN tbl_filme_ator 
+                            ON tbl_filme.id = tbl_filme_ator.id_filme
+                        INNER JOIN tbl_ator
+                            ON tbl_ator.id = tbl_filme_ator.id_ator
+                    WHERE tbl_ator.id = ${idAtor}`
 
         let result = await knexConex.raw(sql)
 
