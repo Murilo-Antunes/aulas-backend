@@ -11,6 +11,9 @@ const knexConfig = require('../../database_config_knex/knexFile.js')
 //criar a conexão com o banco de dados mySQL
 const knexConex = knex(knexConfig.development)
 
+const filmeGeneroDAO = require('../filme_genero/filme_genero.js')
+const filmeAtorDAO = require('../filme_ator/filme_ator.js')
+const filmeDiretorDAO = require('../filme_diretor/filme_diretor.js')
 
 //função para inserir dados na tabela de filme
 const insertFilme = async (filme) =>{
@@ -111,14 +114,20 @@ const selectByIdFilme = async (id) => {
 //função que deleta um filme da tabela
 const deleteFilme = async (id) => {
     try {
-        let sql = `DELETE FROM tbl_filme WHERE id = ${id}`
+        let deletarRelacionalGenero = await filmeGeneroDAO.deleteGeneroByIdFilme(id)
+        let deletarRelacionalAtor = await filmeAtorDAO.deleteAtorByIdFilme(id)
+        let deletarRelacionalDiretor = await filmeDiretorDAO.deleteDiretorByIdFilme(id)
 
-        let result = await knexConex.raw(sql)
 
-        if(result)
-            return true
-        else
-            return false
+        if(deletarRelacionalGenero && deletarRelacionalAtor && deletarRelacionalDiretor){
+            let sql = `DELETE FROM tbl_filme WHERE id = ${id}`
+
+            let result = await knexConex.raw(sql)
+
+            if(result)
+                return true
+        }
+        return false
     } catch (error) {
         return false
     }

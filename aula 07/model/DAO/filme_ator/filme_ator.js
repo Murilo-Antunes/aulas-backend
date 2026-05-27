@@ -1,5 +1,5 @@
 /*******************************************************************************************************************************
- * Objetivo: Arquivo responsável pelo CRUD no banco de dados MySQL na tabela filme_gênero
+ * Objetivo: Arquivo responsável pelo CRUD no banco de dados MySQL na tabela filme_ator
  * Data: 08/05/2026
  * Autor: Murilo
  * Versão: 1.0
@@ -12,10 +12,10 @@ const knexConfig = require('../../database_config_knex/knexFile.js')
 //criar a conexão com o banco de dados mySQL
 const knexConex = knex(knexConfig.development)
 
-//funcao de inserir uma nova classificação indicativa
-const insertFilmeGenero = async (filmeGenero) =>{
+//funcao de inserir um novo filme_ator
+const insertFilmeAtor = async (filmeAtor) =>{
     try {
-        let sql = ` INSERT INTO tbl_filme_genero (id_filme, id_genero) VALUES (${filmeGenero.id_filme}, ${filmeGenero.id_genero});`
+        let sql = ` INSERT INTO tbl_filme_ator (id_filme, id_ator) VALUES (${filmeAtor.id_filme + ',' + filmeAtor.id_ator});`
         
         let result = await knexConex.raw(sql)
         
@@ -28,11 +28,11 @@ const insertFilmeGenero = async (filmeGenero) =>{
     }
 }
 
-const updateFilmeGenero = async (filmeGenero, id) =>{
+const updateFilmeAtor = async (filmeAtor, id) =>{
     try {
-        let sql = `UPDATE tbl_filme_genero set 
-                    id_filme = ${filmeGenero.id_filme},
-                    id_genero = ${filmeGenero.id_genero}
+        let sql = `UPDATE tbl_filme_ator set 
+                    id_filme = ${filmeAtor.id_filme},
+                    id_ator = ${filmeAtor.id_ator}
                    WHERE id = ${id}`
         let result = await knexConex.raw(sql)
         
@@ -47,9 +47,9 @@ const updateFilmeGenero = async (filmeGenero, id) =>{
     }
 }
 
-const selectAllFilmeGenero = async () => {
+const selectAllFilmeAtor = async () => {
     try {
-        let sql = `SELECT * FROM tbl_filme_genero`
+        let sql = `SELECT * FROM tbl_filme_ator`
 
         let result = await knexConex.raw(sql)
 
@@ -63,9 +63,9 @@ const selectAllFilmeGenero = async () => {
 
 }
 
-const selectByIdFilmeGenero = async (id) =>{
+const selectByIdFilmeAtor = async (id) =>{
     try {
-        let sql = `SELECT * FROM tbl_filme_genero WHERE id = ${id}`
+        let sql = `SELECT * FROM tbl_filme_ator WHERE id = ${id}`
 
         let result = await knexConex.raw(sql)
 
@@ -79,15 +79,15 @@ const selectByIdFilmeGenero = async (id) =>{
 
 }
 
-const selectFilmesByIdGenero = async (idGenero) =>{
+const selectFilmesByIdAtor = async (idAtor) =>{
     try {
         let sql = `SELECT tbl_filme.* 
                     FROM tbl_filme
-                        INNER JOIN tbl_filme_genero 
-                            ON tbl_filme.id = tbl_filme_genero.id_filme
-                        INNER JOIN tbl_genero
-                            ON tbl_genero.id = tbl_filme_genero.id_genero
-                    WHERE tbl_genero.id = ${idGenero}`
+                        INNER JOIN tbl_filme_filme 
+                            ON tbl_filme.id = tbl_filme_filme.id_filme
+                        INNER JOIN tbl_filme
+                            ON tbl_filme.id = tbl_filme_filme.id_filme
+                    WHERE tbl_filme.id = ${idAtor}`
 
         let result = await knexConex.raw(sql)
 
@@ -101,14 +101,14 @@ const selectFilmesByIdGenero = async (idGenero) =>{
 
 }
 
-const selectGenerosByIdFilme = async (idFilme) =>{
+const selectAtoresByIdFilme = async (idFilme) =>{
     try {
-        let sql = `SELECT tbl_genero.* 
+        let sql = `SELECT tbl_ator.* 
                     FROM tbl_filme
-                        INNER JOIN tbl_filme_genero 
-                            ON tbl_filme.id = tbl_filme_genero.id_filme
-                        INNER JOIN tbl_genero
-                            ON tbl_genero.id = tbl_filme_genero.id_genero
+                        INNER JOIN tbl_filme_ator 
+                            ON tbl_filme.id = tbl_filme_ator.id_filme
+                        INNER JOIN tbl_ator
+                            ON tbl_ator.id = tbl_filme_ator.id_ator
                     WHERE tbl_filme.id = ${idFilme}`
 
         let result = await knexConex.raw(sql)
@@ -123,9 +123,9 @@ const selectGenerosByIdFilme = async (idFilme) =>{
 
 }
 
-const deleteFilmeGenero = async (id) => {
+const deleteFilmeAtor = async (id) => {
     try {
-        let sql = `DELETE FROM tbl_filme_genero WHERE id = ${id}`
+        let sql = `DELETE FROM tbl_filme_ator WHERE id = ${id}`
 
         let result = await knexConex.raw(sql)
 
@@ -138,12 +138,9 @@ const deleteFilmeGenero = async (id) => {
     }
 }
 
-//Função para deletar gênero pelo id do filme 
-//Essa função será utilizada no update, pois precisa apagar todos os gêneros para 
-//inserir novas relções
-const deleteGeneroByIdFilme = async (idFilme) =>{
+const deleteAtorByIdFilme = async (idFilme) =>{
     try {
-        let sql = `DELETE FROM tbl_filme_genero WHERE id_filme = ${idFilme}`
+        let sql = `DELETE FROM tbl_filme_ator WHERE id_filme = ${idFilme}`
 
         let result = await knexConex.raw(sql)
 
@@ -156,24 +153,9 @@ const deleteGeneroByIdFilme = async (idFilme) =>{
     }
 }
 
-const deleteGeneroRelacionalFilme = async (idGenero) => {
+const deleteFilmeByIdAtor = async (idAtor) => {
     try {
-        let sql = `DELETE FROM tbl_filme_genero WHERE id_genero = ${idGenero}`
-
-        let result = await knexConex.raw(sql)
-
-        if(result)
-            return true
-        else
-            return false
-    } catch (error) {
-        return false
-    }
-}
-
-const deleteFilmeRelacionalGenero = async (idFilme) => {
-    try {
-        let sql = `DELETE FROM tbl_filme_genero WHERE id_filme = ${idFilme}`
+        let sql = `DELETE FROM tbl_filme_ator WHERE id_ator = ${idAtor}`
 
         let result = await knexConex.raw(sql)
 
@@ -187,14 +169,13 @@ const deleteFilmeRelacionalGenero = async (idFilme) => {
 }
 
 module.exports = {
-    insertFilmeGenero,
-    updateFilmeGenero,
-    selectAllFilmeGenero,
-    selectByIdFilmeGenero,
-    selectFilmesByIdGenero,
-    selectGenerosByIdFilme,
-    deleteFilmeGenero,
-    deleteGeneroByIdFilme,
-    deleteGeneroRelacionalFilme,
-    deleteFilmeRelacionalGenero
+    insertFilmeAtor,
+    updateFilmeAtor,
+    selectAllFilmeAtor,
+    selectByIdFilmeAtor,
+    selectFilmesByIdAtor,
+    selectAtoresByIdFilme,
+    deleteFilmeAtor,
+    deleteAtorByIdFilme,
+    deleteFilmeByIdAtor
 }

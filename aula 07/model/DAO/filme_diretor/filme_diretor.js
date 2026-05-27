@@ -79,9 +79,83 @@ const selectByIdFilmeDiretor = async (id) =>{
 
 }
 
+const selectFilmesByIdDiretor = async (idFilme) =>{
+    try {
+        let sql = `SELECT tbl_filme.* 
+                    FROM tbl_filme
+                        INNER JOIN tbl_filme_filme 
+                            ON tbl_filme.id = tbl_filme_filme.id_filme
+                        INNER JOIN tbl_filme
+                            ON tbl_filme.id = tbl_filme_filme.id_filme
+                    WHERE tbl_filme.id = ${idFilme}`
+
+        let result = await knexConex.raw(sql)
+
+        if(Array.isArray(result))
+            return result
+        else
+            return false
+    } catch (error) {
+        return false
+    }
+
+}
+
+const selectDiretoresByIdFilme = async (idFilme) =>{
+    try {
+        let sql = `SELECT tbl_diretor.* 
+                    FROM tbl_filme
+                        INNER JOIN tbl_filme_diretor 
+                            ON tbl_filme.id = tbl_filme_diretor.id_filme
+                        INNER JOIN tbl_diretor
+                            ON tbl_diretor.id = tbl_filme_diretor.id_diretor
+                    WHERE tbl_filme.id = ${idFilme}`
+
+        let result = await knexConex.raw(sql)
+
+        if(Array.isArray(result))
+            return result
+        else
+            return false
+    } catch (error) {
+        return false
+    }
+
+}
+
 const deleteFilmeDiretor = async (id) => {
     try {
         let sql = `DELETE FROM tbl_filme_diretor WHERE id = ${id}`
+
+        let result = await knexConex.raw(sql)
+
+        if(result)
+            return true
+        else
+            return false
+    } catch (error) {
+        return false
+    }
+}
+
+const deleteDiretorByIdFilme = async (idFilme) =>{
+    try {
+        let sql = `DELETE FROM tbl_filme_diretor WHERE id_filme = ${idFilme}`
+
+        let result = await knexConex.raw(sql)
+
+        if(result)
+            return true
+        else
+            return false
+    } catch (error) {
+        return false
+    }
+}
+
+const deleteFilmeByIdDiretor = async (idDiretor) => {
+    try {
+        let sql = `DELETE FROM tbl_filme_diretor WHERE id_diretor = ${idDiretor}`
 
         let result = await knexConex.raw(sql)
 
@@ -99,5 +173,9 @@ module.exports = {
     updateFilmeDiretor,
     selectAllFilmeDiretor,
     selectByIdFilmeDiretor,
-    deleteFilmeDiretor
+    selectFilmesByIdDiretor,
+    selectDiretoresByIdFilme,
+    deleteFilmeDiretor,
+    deleteDiretorByIdFilme,
+    deleteFilmeByIdDiretor
 }
