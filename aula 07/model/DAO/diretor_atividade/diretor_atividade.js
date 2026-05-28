@@ -1,5 +1,5 @@
 /*******************************************************************************************************************************
- * Objetivo: Arquivo responsável pelo CRUD no banco de dados MySQL na tabela diretorNacionalidade
+ * Objetivo: Arquivo responsável pelo CRUD no banco de dados MySQL na tabela diretorAtividade
  * Data: 08/05/2026
  * Autor: Murilo
  * Versão: 1.0
@@ -13,12 +13,11 @@ const knexConfig = require('../../database_config_knex/knexFile.js')
 const knexConex = knex(knexConfig.development)
 
 //funcao de inserir uma nova classificação indicativa
-const insertDiretorNacionalidade = async (diretorNacionalidade) =>{
+const insertDiretorAtividade = async (diretorAtividade) =>{
     try {
-        let sql = ` INSERT INTO tbl_diretor_nacionalidade (id_nacionalidade, id_diretor) VALUES (${diretorNacionalidade.id_nacionalidade + ',' + diretorNacionalidade.id_diretor});`
+        let sql = ` INSERT INTO tbl_diretor_atividade (id_atividade, id_diretor) VALUES (${diretorAtividade.id_atividade + ',' + diretorAtividade.id_diretor});`
         
         let result = await knexConex.raw(sql)
-        
         
         if(result)
             return result[0].insertId
@@ -29,11 +28,11 @@ const insertDiretorNacionalidade = async (diretorNacionalidade) =>{
     }
 }
 
-const updateDiretorNacionalidade = async (diretorNacionalidade, id) =>{
+const updateDiretorAtividade = async (diretorAtividade, id) =>{
     try {
-        let sql = `UPDATE tbl_diretor_nacionalidade set 
-                    id_nacionalidade = ${diretorNacionalidade.id_nacionalidade},
-                    id_diretor = ${diretorNacionalidade.id_diretor}
+        let sql = `UPDATE tbl_diretor_atividade set 
+                    id_atividade = ${diretorAtividade.id_atividade},
+                    id_diretor = ${diretorAtividade.id_diretor}
                    WHERE id = ${id}`
         let result = await knexConex.raw(sql)
         
@@ -48,9 +47,9 @@ const updateDiretorNacionalidade = async (diretorNacionalidade, id) =>{
     }
 }
 
-const selectAllDiretorNacionalidade = async () => {
+const selectAllDiretorAtividade = async () => {
     try {
-        let sql = `SELECT * FROM tbl_diretor_nacionalidade`
+        let sql = `SELECT * FROM tbl_diretor_atividade`
 
         let result = await knexConex.raw(sql)
 
@@ -64,9 +63,9 @@ const selectAllDiretorNacionalidade = async () => {
 
 }
 
-const selectByIdDiretorNacionalidade = async (id) =>{
+const selectByIdDiretorAtividade = async (id) =>{
     try {
-        let sql = `SELECT * FROM tbl_diretor_nacionalidade WHERE id = ${id}`
+        let sql = `SELECT * FROM tbl_diretor_atividade WHERE id = ${id}`
 
         let result = await knexConex.raw(sql)
 
@@ -80,15 +79,15 @@ const selectByIdDiretorNacionalidade = async (id) =>{
 
 }
 
-const selectDiretoresByIdNacionalidade = async (idNacionalidade) =>{
+const selectDiretoresByIdAtividade = async (idAtividade) =>{
     try {
         let sql = `SELECT tbl_diretor.* 
                     FROM tbl_diretor
-                        INNER JOIN tbl_diretor_nacionalidade 
-                            ON tbl_diretor.id = tbl_diretor_nacionalidade.id_diretor
-                        INNER JOIN tbl_nacionalidade
-                            ON tbl_nacionalidade.id = tbl_diretor_nacionalidade.id_nacionalidade
-                    WHERE tbl_nacionalidade.id = ${idNacionalidade}`
+                        INNER JOIN tbl_diretor_atividade 
+                            ON tbl_diretor.id = tbl_diretor_atividade.id_diretor
+                        INNER JOIN tbl_atividade
+                            ON tbl_atividade.id = tbl_diretor_atividade.id_atividade
+                    WHERE tbl_atividade.id = ${idAtividade}`
 
         let result = await knexConex.raw(sql)
 
@@ -102,14 +101,14 @@ const selectDiretoresByIdNacionalidade = async (idNacionalidade) =>{
 
 }
 
-const selectNacionalidadesByIdDiretor = async (idDiretor) =>{
+const selectAtividadesByIdDiretor = async (idDiretor) =>{
     try {
-        let sql = `SELECT tbl_nacionalidade.* 
+        let sql = `SELECT tbl_atividade.* 
                     FROM tbl_diretor
-                        INNER JOIN tbl_diretor_nacionalidade 
-                            ON tbl_diretor.id = tbl_diretor_nacionalidade.id_diretor
-                        INNER JOIN tbl_nacionalidade
-                            ON tbl_nacionalidade.id = tbl_diretor_nacionalidade.id_nacionalidade
+                        INNER JOIN tbl_diretor_atividade 
+                            ON tbl_diretor.id = tbl_diretor_atividade.id_diretor
+                        INNER JOIN tbl_atividade
+                            ON tbl_atividade.id = tbl_diretor_atividade.id_atividade
                     WHERE tbl_diretor.id = ${idDiretor}`
 
         let result = await knexConex.raw(sql)
@@ -124,9 +123,9 @@ const selectNacionalidadesByIdDiretor = async (idDiretor) =>{
 
 }
 
-const deleteDiretorNacionalidade = async (id) => {
+const deleteDiretorAtividade = async (id) => {
     try {
-        let sql = `DELETE FROM tbl_diretor_nacionalidade WHERE id = ${id}`
+        let sql = `DELETE FROM tbl_diretor_atividade WHERE id = ${id}`
 
         let result = await knexConex.raw(sql)
 
@@ -139,9 +138,9 @@ const deleteDiretorNacionalidade = async (id) => {
     }
 }
 
-const deleteDiretorByIdNacionalidade = async (idNacionalidade) =>{
+const deleteDiretorByIdAtividade = async (idAtividade) =>{
     try {
-        let sql = `DELETE FROM tbl_diretor_nacionalidade WHERE id_nacionalidade = ${idNacionalidade}`
+        let sql = `DELETE FROM tbl_diretor_atividade WHERE id_atividade = ${idAtividade}`
 
         let result = await knexConex.raw(sql)
 
@@ -154,9 +153,9 @@ const deleteDiretorByIdNacionalidade = async (idNacionalidade) =>{
     }
 }
 
-const deleteNacionalidadeByIdDiretor = async (idDiretor) => {
+const deleteAtividadeByIdDiretor = async (idDiretor) => {
     try {
-        let sql = `DELETE FROM tbl_diretor_nacionalidade WHERE id_diretor = ${idDiretor}`
+        let sql = `DELETE FROM tbl_diretor_atividade WHERE id_diretor = ${idDiretor}`
 
         
 
@@ -172,13 +171,13 @@ const deleteNacionalidadeByIdDiretor = async (idDiretor) => {
 }
 
 module.exports = {
-    insertDiretorNacionalidade,
-    updateDiretorNacionalidade,
-    selectAllDiretorNacionalidade,
-    selectByIdDiretorNacionalidade,
-    selectNacionalidadesByIdDiretor,
-    selectDiretoresByIdNacionalidade,
-    deleteDiretorByIdNacionalidade,
-    deleteDiretorNacionalidade,
-    deleteNacionalidadeByIdDiretor
+    insertDiretorAtividade,
+    updateDiretorAtividade,
+    selectAllDiretorAtividade,
+    selectByIdDiretorAtividade,
+    selectAtividadesByIdDiretor,
+    selectDiretoresByIdAtividade,
+    deleteDiretorByIdAtividade,
+    deleteDiretorAtividade,
+    deleteAtividadeByIdDiretor
 }

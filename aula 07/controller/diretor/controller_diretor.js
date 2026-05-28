@@ -13,6 +13,7 @@ const diretorDAO = require('../../model/DAO/diretor/diretor.js')
 const diretorNacionalidadeDAO = require('../../model/DAO/diretor_nacionalidade/diretor_nacionalidade.js')
 
 const diretorNacionalidadeController = require('./controller_diretor_nacionalidade.js')
+const diretorAtividadeController = require('./controller_diretor_atividade.js')
 
 
 const inserirNovoDiretor = async (diretor, contentType) =>{
@@ -32,7 +33,7 @@ const inserirNovoDiretor = async (diretor, contentType) =>{
             if(result){ //201
                 diretor.id = result
 
-                 //manipulação de dados para inserir os gêneros do diretor
+                 //manipulação de dados para inserir os nacionalidades do diretor
                 for(nacionalidade of diretor.nacionalidade){
                     //cria o objeto json com os ids do diretor e do nacionalidade
                     let diretorNacionalidadeId = {
@@ -42,9 +43,26 @@ const inserirNovoDiretor = async (diretor, contentType) =>{
 
                     // Chama a controller para inserir diretor_nacionalidade novo
                     let resultInsertNacionalidade = await diretorNacionalidadeController.inserirNovoDiretorNacionalidade(diretorNacionalidadeId)
+                    console.log(resultInsertNacionalidade)
 
                     
                     if(!resultInsertNacionalidade.status)
+                        return message.SUCESS_CREATED_WARNING
+                }
+
+                for(atividade of diretor.atividade){
+                    //cria o objeto json com os ids do diretor e do atividade
+                    let diretorAtividadeId = {
+                        "id_atividade": atividade.id,
+                        "id_diretor": diretor.id
+                    }
+
+                    // Chama a controller para inserir diretor_Atividade novo
+                    let resultInsertAtividade = await diretorAtividadeController.inserirNovoDiretorAtividade(diretorAtividadeId)
+                    
+
+                    
+                    if(!resultInsertAtividade.status)
                         return message.SUCESS_CREATED_WARNING
                 }
 
@@ -79,6 +97,12 @@ const listarDiretor = async () =>{
 
                     if(resultNacionalidade.status)
                         diretor.Nacionalidade = resultNacionalidade.response.diretorNacionalidade
+
+                    //cria objeto de atividade relacionados ao diretor
+                    let resultAtividade = await diretorAtividadeController.buscarAtividadeIdDiretor(diretor.id)
+
+                    if(resultAtividade.status)
+                        diretor.atividade = resultAtividade.response.diretorAtividade
                 }
 
                 message.DEFAULT_MESSAGE.status = message.SUCESS_RESPONSE.status
@@ -118,6 +142,12 @@ const buscarDiretor = async (id) =>{
 
                     if(resultNacionalidade.status)
                         diretor.Nacionalidade = resultNacionalidade.response.diretorNacionalidade
+
+                    //cria objeto de atividade relacionados ao diretor
+                    let resultAtividade = await diretorAtividadeController.buscarAtividadeIdDiretor(diretor.id)
+
+                    if(resultAtividade.status)
+                        diretor.atividade = resultAtividade.response.diretorAtividade
                 }
 
                 message.DEFAULT_MESSAGE.status = message.SUCESS_RESPONSE.status
@@ -181,8 +211,9 @@ const atualizarDiretor = async (diretor, id, contentType) =>{
             if(result){
 
                 let resultDeleteNacionalidade = await diretorNacionalidadeController.excluirNacionalidadeByIdDiretor(id)
+                let resultDeleteAtividade = await diretorAtividadeController.excluirAtividadeByIdDiretor(id)
 
-                if(resultDeleteNacionalidade){
+                if(resultDeleteNacionalidade && resultDeleteAtividade){
                     for(nacionalidade of diretor.nacionalidade){
                         
                         let diretorNacionalidadeId = {
@@ -194,6 +225,20 @@ const atualizarDiretor = async (diretor, id, contentType) =>{
                         let resultInsertNacionalidade = await diretorNacionalidadeController.inserirNovoDiretorNacionalidade(diretorNacionalidadeId)
 
                         if(!resultInsertNacionalidade.status)
+                            return message.SUCESS_CREATED_WARNING
+                    }
+
+                     for(atividade of diretor.atividade){
+                        
+                        let diretorAtividadeId = {
+                            "id_atividade"    : atividade.id,
+                            "id_diretor"      : id
+                        }
+
+                        // Chama a controller para inserir diretor_atividade novo
+                        let resultInsertAtividade = await diretorAtividadeController.inserirNovoDiretorAtividade(diretorAtividadeId)
+
+                        if(!resultInsertAtividade.status)
                             return message.SUCESS_CREATED_WARNING
                     }
                 }
