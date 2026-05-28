@@ -11,6 +11,9 @@ const configMessages = require('../module/configMessages.js')
 //importa o model da classificação indicativa
 const atorDAO = require('../../model/DAO/ator/ator.js')
 
+const atorAtividadeController = require('./controller_ator_atividade.js')
+const atorNacionalidadeController = require('./controller_ator_nacionalidade.js')
+
 const inserirNovoAtor = async (ator, contentType) =>{
     // let message = JSON.parse(JSON.stringify(configMessages))
     let message = JSON.parse(JSON.stringify(configMessages))
@@ -27,6 +30,34 @@ const inserirNovoAtor = async (ator, contentType) =>{
 
             if(result){ //201
                 ator.id = result
+
+                for(atividade of ator.atividade){
+                    //cria o objeto json com os ids do ator e de atividade
+                    let atorAtividadeId = {
+                        "id_atividade": atividade.id,
+                        "id_ator": ator.id
+                    }
+
+                    // Chama a controller para inserir ator_Atividade novo
+                    let resultInsertAtividade = await atorAtividadeController.inserirNovoAtorAtividade(atorAtividadeId)
+
+                    if(!resultInsertAtividade.status)
+                        return message.SUCESS_CREATED_WARNING
+                }
+
+                for(nacionalidade of ator.nacionalidade){
+                    //cria o objeto json com os ids do ator e de nacionalidade
+                    let atorNacionalidadeId = {
+                        "id_nacionalidade": nacionalidade.id,
+                        "id_ator": ator.id
+                    }
+
+                    // Chama a controller para inserir ator_nacionalidade novo
+                    let resultInsertNacionalidade = await atorNacionalidadeController.inserirNovoAtorNacionalidade(atorNacionalidadeId)
+
+                    if(!resultInsertNacionalidade.status)
+                        return message.SUCESS_CREATED_WARNING
+                }
 
                 message.DEFAULT_MESSAGE.status = message.SUCESS_CREATED_ITEM.status
                 message.DEFAULT_MESSAGE.status_code = message.SUCESS_CREATED_ITEM.status_code
@@ -52,6 +83,23 @@ const listarAtor = async () =>{
 
         if(result){
             if(result.length > 0){ 
+
+                for(ator of result[0]){
+                    //cria objeto de atividade relacionados ao ator
+                    let resultAtividade = await atorAtividadeController.buscarAtividadeIdAtor(ator.id)
+
+                    if(resultAtividade.status)
+                        ator.atividade = resultAtividade.response.atorAtividade
+                }
+
+                for(ator of result[0]){
+                    //cria objeto de nacionalidade relacionados ao ator
+                    let resultNacionalidade = await atorNacionalidadeController.buscarNacionalidadeIdAtor(ator.id)
+
+                    if(resultNacionalidade.status)
+                        ator.nacionalidade = resultNacionalidade.response.atorNacionalidade
+                }
+
                 message.DEFAULT_MESSAGE.status = message.SUCESS_RESPONSE.status
                 message.DEFAULT_MESSAGE.status_code = message.SUCESS_RESPONSE.status_code
                 message.DEFAULT_MESSAGE.response = {ator : result[0]}
@@ -82,6 +130,23 @@ const buscarAtor = async (id) =>{
 
         if(result){
             if(result[0].length > 0){
+
+                for(ator of result[0]){
+                    //cria objeto de atividade relacionados ao ator
+                    let resultAtividade = await atorAtividadeController.buscarAtividadeIdAtor(ator.id)
+
+                    if(resultAtividade.status)
+                        ator.atividade = resultAtividade.response.atorAtividade
+                }
+
+                for(ator of result[0]){
+                    //cria objeto de nacionalidade relacionados ao ator
+                    let resultNacionalidade = await atorNacionalidadeController.buscarNacionalidadeIdAtor(ator.id)
+
+                    if(resultNacionalidade.status)
+                        ator.nacionalidade = resultNacionalidade.response.atorNacionalidade
+                }
+
                 message.DEFAULT_MESSAGE.status = message.SUCESS_RESPONSE.status
                 message.DEFAULT_MESSAGE.status_code = message.SUCESS_RESPONSE.status_code
                 message.DEFAULT_MESSAGE.response = {ator: result[0]}
@@ -141,6 +206,37 @@ const atualizarAtor = async (ator, id, contentType) =>{
             let result = await atorDAO.updateAtor(ator, id)
 
             if(result){
+                let resultDeleteAtividade = await atorAtividadeController.excluirAtividadeByIdAtor(id)
+                let resultDeleteNacionalidade = await atorNacionalidadeController.excluirNacionalidadeByIdAtor(id)
+
+                if(resultDeleteAtividade && resultDeleteNacionalidade){
+                    for(atividade of ator.atividade){             
+                        let atorAtividadeId = {
+                            "id_atividade"    : atividade.id,
+                            "id_ator"      : id
+                        }
+
+                        // Chama a controller para inserir ator_atividade novo
+                        let resultInsertAtividade = await atorAtividadeController.inserirNovoAtorAtividade(atorAtividadeId)
+
+                        if(!resultInsertAtividade.status)
+                            return message.SUCESS_CREATED_WARNING
+                    }
+
+                    for(nacionalidade of ator.nacionalidade){             
+                        let atorNacionalidadeId = {
+                            "id_nacionalidade"    : nacionalidade.id,
+                            "id_ator"      : id
+                        }
+
+                        // Chama a controller para inserir ator_Nacionalidade novo
+                        let resultInsertNacionalidade = await atorNacionalidadeController.inserirNovoAtorNacionalidade(atorNacionalidadeId)
+
+                        if(!resultInsertNacionalidade.status)
+                            return message.SUCESS_CREATED_WARNING
+                    }
+                }
+
                 message.DEFAULT_MESSAGE.status = message.SUCESS_UPDATED_ITEM.status
                 message.DEFAULT_MESSAGE.status_code = message.SUCESS_UPDATED_ITEM.status_code
                 message.DEFAULT_MESSAGE.response = ator

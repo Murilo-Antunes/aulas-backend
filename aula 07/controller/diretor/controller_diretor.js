@@ -10,7 +10,6 @@ const configMessages = require('../module/configMessages.js')
 
 //importa o model da classificação indicativa
 const diretorDAO = require('../../model/DAO/diretor/diretor.js')
-const diretorNacionalidadeDAO = require('../../model/DAO/diretor_nacionalidade/diretor_nacionalidade.js')
 
 const diretorNacionalidadeController = require('./controller_diretor_nacionalidade.js')
 const diretorAtividadeController = require('./controller_diretor_atividade.js')
@@ -43,7 +42,7 @@ const inserirNovoDiretor = async (diretor, contentType) =>{
 
                     // Chama a controller para inserir diretor_nacionalidade novo
                     let resultInsertNacionalidade = await diretorNacionalidadeController.inserirNovoDiretorNacionalidade(diretorNacionalidadeId)
-                    console.log(resultInsertNacionalidade)
+                    
 
                     
                     if(!resultInsertNacionalidade.status)
