@@ -42,7 +42,6 @@ const inserirNovoDiretor = async (diretor, contentType) =>{
 
                     // Chama a controller para inserir diretor_nacionalidade novo
                     let resultInsertNacionalidade = await diretorNacionalidadeController.inserirNovoDiretorNacionalidade(diretorNacionalidadeId)
-                    console.log(resultInsertNacionalidade)
                     
 
                     
