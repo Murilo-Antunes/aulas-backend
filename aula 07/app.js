@@ -16,11 +16,9 @@ const express = require('express')
 const cors = require('cors')
 const porta = 8080
 
+//criando um objeto para manipular dados do body da api em formato json
 const bodyParser = require('body-parser')
 const bodyParserJson = bodyParser.json()
-
-//criando um objeto para manipular dados do body da api em formato json
-
 
 const app = express()
 
